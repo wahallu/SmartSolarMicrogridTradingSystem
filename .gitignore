@@ -1,0 +1,26 @@
+# ---- .NET ----
+bin/
+obj/
+*.user
+publish/
+
+# ---- Node / React ----
+node_modules/
+web/dist/
+.env.local
+
+# ---- Android ----
+mobile/.gradle/
+mobile/build/
+mobile/app/build/
+mobile/local.properties
+*.apk
+*.keystore
+
+# ---- IDE / OS ----
+.vs/
+.idea/
+.vscode/
+*.iml
+Thumbs.db
+.DS_Store

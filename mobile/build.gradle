@@ -1,0 +1,14 @@
+/*
+ * =============================================================================
+ * File        : build.gradle  (root)
+ * Project     : Smart Solar Microgrid Trading System - Android Client
+ * Description : Declares the Android Gradle Plugin version used by every module.
+ *               AGP 8.7.3 pairs with Gradle 8.11.x and compileSdk 35.
+ * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Created     : 2026-09-04
+ * =============================================================================
+ */
+
+plugins {
+    id 'com.android.application' version '8.7.3' apply false
+}

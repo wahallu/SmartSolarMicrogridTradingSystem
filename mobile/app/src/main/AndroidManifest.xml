@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : AndroidManifest.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : Declares every activity, permission and service integration of
+                the pure native Android application.
+
+                Permissions and why each is needed:
+                  INTERNET              - all data comes from the central Web API
+                  ACCESS_NETWORK_STATE  - show a clear offline message rather than
+                                          a timeout when the phone has no data
+                  ACCESS_FINE/COARSE_LOCATION - centre the Google Map on the user
+                                          so nearby microgrid nodes can be ranked
+                  CAMERA                - the grid operator scans prosumer QR codes
+
+                usesCleartextTraffic is enabled because the assignment API is
+                demonstrated over plain HTTP on a local IIS server. A production
+                deployment would use HTTPS and drop this flag.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/Theme.SmartSolar"
+        tools:targetApi="35">
+
+        <!-- Google Maps API key, injected from local.properties at build time. -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <!-- ============ Entry point ============ -->
+        <activity
+            android:name=".activities.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SmartSolar.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- ============ Authentication ============ -->
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.LoginActivity"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- ============ Role home screens ============ -->
+        <activity
+            android:name=".activities.ProsumerHomeActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".activities.OperatorHomeActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+
+        <!-- ============ Account management ============ -->
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.ChangePasswordActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- ============ Reservation workflow ============ -->
+        <activity
+            android:name=".activities.NewBookingActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.MyBookingsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.BookingDetailActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.EditBookingActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.BookingSummaryActivity"
+            android:exported="false" />
+
+        <!-- ============ Maps and stations ============ -->
+        <activity
+            android:name=".activities.StationsMapActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.StationDetailActivity"
+            android:exported="false" />
+
+        <!-- ============ Grid operator tools ============ -->
+        <activity
+            android:name=".activities.ScannerActivity"
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
+        <activity
+            android:name=".activities.VerifyResultActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.OperatorBookingsActivity"
+            android:exported="false" />
+
+        <!-- ZXing's capture activity, used by the embedded scanner library. -->
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="android:screenOrientation"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" />
+
+    </application>
+
+</manifest>

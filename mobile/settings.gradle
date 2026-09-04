@@ -1,0 +1,36 @@
+/*
+ * =============================================================================
+ * File        : settings.gradle
+ * Project     : Smart Solar Microgrid Trading System - Android Client
+ * Description : Gradle settings for the pure native Android application. Only
+ *               one module (:app) exists - this is a single module native
+ *               project with no cross platform framework of any kind.
+ * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Created     : 2026-09-04
+ * =============================================================================
+ */
+
+pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "SmartSolarMicrogrid"
+include ':app'
