@@ -1,111 +1,168 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+/**
+ * =============================================================================
+ * File        : index.css
+ * Project     : Smart Solar Microgrid Trading System - Web Application
+ * Description : Tailwind CSS entry point plus the handful of component classes
+ *               that are reused often enough to deserve a name. Everything else
+ *               is written as utility classes directly in the components.
+ * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Created     : 2026-09-04
+ * =============================================================================
+ */
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-800 font-sans antialiased;
+  }
+
+  /* A consistent focus ring across every interactive element. */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-solar-500 ring-offset-2 ring-offset-white;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+@layer components {
+  /* ---- Buttons ---- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold
+           transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  .btn-primary {
+    @apply btn bg-solar-500 text-white hover:bg-solar-600 active:bg-solar-700;
+  }
+
+  .btn-secondary {
+    @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 active:bg-slate-100;
+  }
+
+  .btn-success {
+    @apply btn bg-grid-600 text-white hover:bg-grid-700 active:bg-grid-800;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-700 active:bg-red-800;
+  }
+
+  .btn-ghost {
+    @apply btn text-slate-600 hover:bg-slate-100 hover:text-slate-900;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  /* ---- Form controls ---- */
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-slate-700;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900
+           placeholder:text-slate-400 focus:border-solar-500 focus:ring-1 focus:ring-solar-500
+           disabled:bg-slate-100 disabled:text-slate-500;
+  }
+
+  .input-error {
+    @apply border-red-400 focus:border-red-500 focus:ring-red-500;
+  }
+
+  .field-error {
+    @apply mt-1 text-xs font-medium text-red-600;
+  }
+
+  .select {
+    @apply input pr-9;
+  }
+
+  /* ---- Surfaces ---- */
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-card;
+  }
+
+  .card-header {
+    @apply flex items-center justify-between gap-3 border-b border-slate-200 px-5 py-4;
+  }
+
+  .card-body {
+    @apply px-5 py-4;
+  }
+
+  /* ---- Status pills ---- */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+
+  .badge-pending {
+    @apply badge bg-amber-100 text-amber-800;
+  }
+
+  .badge-approved {
+    @apply badge bg-blue-100 text-blue-800;
+  }
+
+  .badge-completed {
+    @apply badge bg-grid-100 text-grid-800;
+  }
+
+  .badge-cancelled {
+    @apply badge bg-slate-200 text-slate-700;
+  }
+
+  .badge-rejected {
+    @apply badge bg-red-100 text-red-800;
+  }
+
+  .badge-active {
+    @apply badge bg-grid-100 text-grid-800;
+  }
+
+  .badge-inactive {
+    @apply badge bg-slate-200 text-slate-600;
+  }
+
+  /* ---- Tables ---- */
+  .table {
+    @apply w-full text-left text-sm;
+  }
+
+  .table thead th {
+    @apply whitespace-nowrap border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold
+           uppercase tracking-wide text-slate-500;
+  }
+
+  .table tbody td {
+    @apply border-b border-slate-100 px-4 py-3 text-slate-700;
+  }
+
+  .table tbody tr:hover {
+    @apply bg-slate-50;
+  }
+
+  /* ---- Navigation ---- */
+  .nav-link {
+    @apply flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600
+           transition-colors hover:bg-slate-100 hover:text-slate-900;
+  }
+
+  .nav-link-active {
+    @apply bg-solar-50 text-solar-700 hover:bg-solar-50 hover:text-solar-700;
   }
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Leaflet renders its own container; this keeps the map inside rounded corners. */
+.leaflet-container {
+  border-radius: 0.75rem;
+  font-family: inherit;
+  z-index: 0;
 }

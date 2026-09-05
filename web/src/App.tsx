@@ -1,122 +1,117 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+/**
+ * =============================================================================
+ * File        : App.tsx
+ * Project     : Smart Solar Microgrid Trading System - Web Application
+ * Description : Route table for the whole application. The public home page and
+ *               the login page sit outside the shell; every other route is
+ *               wrapped in ProtectedRoute, which redirects an unauthenticated
+ *               visitor to the login page and refuses a role that is not
+ *               permitted.
+ *
+ *               The role lists here mirror the [Authorize] attributes on the C#
+ *               controllers. They keep the UI honest, but the API is the real
+ *               enforcement point - a request from the wrong role is rejected
+ *               server side regardless of what the browser does.
+ * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Created     : 2026-09-04
+ * =============================================================================
+ */
 
-function App() {
-  const [count, setCount] = useState(0)
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ToastProvider } from './components/ui';
+import { Layout } from './components/Layout';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
+import ReservationsPage from './pages/ReservationsPage';
+import ReservationDetailPage from './pages/ReservationDetailPage';
+import StationsPage from './pages/StationsPage';
+import SlotsPage from './pages/SlotsPage';
+import ProsumersPage from './pages/ProsumersPage';
+import PendingActivationsPage from './pages/PendingActivationsPage';
+import UsersPage from './pages/UsersPage';
+import ProfilePage from './pages/ProfilePage';
+import MapPage from './pages/MapPage';
+
+/** Composes the providers and the route table. */
+export default function App() {
+  // AuthProvider must sit above the routes because ProtectedRoute reads the session.
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <BrowserRouter>
+      <AuthProvider>
+        <ToastProvider>
+          <Routes>
+            {/* ---- Public ---- */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
 
-      <div className="ticks"></div>
+            {/* ---- Authenticated shell ---- */}
+            <Route
+              element={
+                <ProtectedRoute>
+                  <Layout />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="/dashboard" element={<DashboardPage />} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+              {/* Every signed in role may work with reservations; the API scopes a
+                  prosumer to their own rows (rule R11). */}
+              <Route path="/reservations" element={<ReservationsPage />} />
+              <Route path="/reservations/:id" element={<ReservationDetailPage />} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+              <Route path="/stations" element={<StationsPage />} />
+              <Route path="/map" element={<MapPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+
+              {/* Booking slots are maintained by staff only. */}
+              <Route
+                path="/slots"
+                element={
+                  <ProtectedRoute roles={['Backoffice', 'GridOperator']}>
+                    <SlotsPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/prosumers"
+                element={
+                  <ProtectedRoute roles={['Backoffice', 'GridOperator']}>
+                    <ProsumersPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* The pending activation queue is a Backoffice responsibility (rule R5). */}
+              <Route
+                path="/prosumers/pending"
+                element={
+                  <ProtectedRoute roles={['Backoffice']}>
+                    <PendingActivationsPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Web user administration is Backoffice only (rule R10). */}
+              <Route
+                path="/users"
+                element={
+                  <ProtectedRoute roles={['Backoffice']}>
+                    <UsersPage />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+
+            {/* Anything unrecognised returns to the landing page. */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </ToastProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
-
-export default App
