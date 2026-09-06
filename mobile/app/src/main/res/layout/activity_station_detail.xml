@@ -63,7 +63,7 @@
                 android:paddingEnd="@dimen/screen_padding"
                 android:paddingBottom="@dimen/space_xl">
 
-                <!-- ---------- Code, status pill, name and address ---------- -->
+                <!-- ========== Code, status pill, name and address ========== -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_station_detail_header"
                     style="@style/Widget.SmartSolar.Card"
@@ -144,7 +144,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <!--
-                  ---------- The node on a map ----------
+                  ========== The node on a map ==========
                   A single marker at the coordinates the API published. Every gesture is
                   disabled in code so this map never competes with the page scroll.
                 -->
@@ -156,7 +156,7 @@
                     android:layout_marginTop="@dimen/space_md"
                     tools:ignore="FragmentTagUsage" />
 
-                <!-- ---------- Capacity, bays, hours and contact ---------- -->
+                <!-- ========== Capacity, bays, hours and contact ========== -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_station_detail_fields"
                     style="@style/Widget.SmartSolar.Card"
@@ -321,7 +321,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <!--
-                  ---------- Book a slot ----------
+                  ========== Book a slot ==========
                   Shown only to a signed in prosumer. Hiding it for staff is presentation
                   only: the API enforces the role rule when a booking is submitted.
                 -->
@@ -338,7 +338,7 @@
                     tools:visibility="visible" />
 
                 <!--
-                  ---------- Directions ----------
+                  ========== Directions ==========
                   Fires the google.navigation intent. The Activity checks
                   resolveActivity first so a device with no maps app cannot crash here.
                 -->

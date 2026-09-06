@@ -59,7 +59,7 @@
             android:paddingBottom="@dimen/space_xl">
 
             <!--
-              ---------- Outcome badge ----------
+              ========== Outcome badge ==========
               The panel background and the icon inside it are both swapped in Java:
               bg_success_panel with ic_check_circle when the action succeeded, and
               bg_error_panel with ic_alert when it did not.
@@ -108,7 +108,7 @@
                 tools:text="Reservation created and is awaiting approval." />
 
             <!--
-              ---------- Booking summary card ----------
+              ========== Booking summary card ==========
               Rendered only when the caller passed the reservation JSON the API
               returned. Hidden whenever that extra is absent or unparsable.
             -->
@@ -217,7 +217,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ---------- Exits ---------- -->
+            <!-- ========== Exits ========== -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_summary_bookings"
                 style="@style/Widget.SmartSolar.Button"

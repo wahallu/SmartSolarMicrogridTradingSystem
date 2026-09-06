@@ -66,7 +66,7 @@
                 android:paddingEnd="@dimen/screen_padding"
                 android:paddingBottom="@dimen/space_xl">
 
-                <!-- ---------- Reference, status pill and countdown ---------- -->
+                <!-- ========== Reference, status pill and countdown ========== -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_detail_header"
                     style="@style/Widget.SmartSolar.Card"
@@ -127,7 +127,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- ---------- Node, slot, window and energy ---------- -->
+                <!-- ========== Node, slot, window and energy ========== -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_detail_fields"
                     style="@style/Widget.SmartSolar.Card"
@@ -264,7 +264,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <!--
-                  ---------- QR code ----------
+                  ========== QR code ==========
                   Shown only for an approved booking that still holds a server issued
                   token. The PNG itself is rendered by the WEB API and arrives base64
                   encoded, so the phone carries no QR generation library at all.
@@ -338,7 +338,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <!--
-                  ---------- 12 hour notice panel ----------
+                  ========== 12 hour notice panel ==========
                   Displayed when the booking is still open (Pending or Approved) but the
                   API answered canModify = false, so the user is told WHY the buttons
                   below are inactive rather than being left guessing.
@@ -373,7 +373,7 @@
                 </LinearLayout>
 
                 <!--
-                  ---------- Prosumer actions ----------
+                  ========== Prosumer actions ==========
                   Enabled state is set in Java from reservation.canModify() and
                   reservation.canCancel(), which are the SERVER's verdicts.
                 -->
@@ -402,7 +402,7 @@
                     tools:visibility="visible" />
 
                 <!--
-                  ---------- Grid operator actions ----------
+                  ========== Grid operator actions ==========
                   Only shown to a signed in Grid Operator looking at a Pending booking.
                   Hiding them for a prosumer is a courtesy: the API enforces the role
                   rule (R10) and refuses these two calls for a prosumer regardless.
@@ -439,7 +439,7 @@
                 </LinearLayout>
 
                 <!--
-                  ---------- Audit trail ----------
+                  ========== Audit trail ==========
                   Whatever the server recorded about this booking: who approved it, who
                   finalised the transfer, the operator's notes and any cancellation or
                   rejection reason. Each row hides itself when the field is absent.

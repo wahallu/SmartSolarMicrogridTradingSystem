@@ -47,7 +47,7 @@ import lk.sliit.smartsolar.util.Constants;
 
 /** Dashboard shown to a signed in Solar Prosumer. */
 public class ProsumerHomeActivity extends BaseActivity
-        implements ReservationAdapter.OnReservationClickListener {
+        implements ReservationAdapter.OnReservationClick {
 
     // Header widgets.
     private TextView textAvatarInitial;
@@ -238,7 +238,7 @@ public class ProsumerHomeActivity extends BaseActivity
 
     /** Opens a booking row in the detail screen. */
     @Override
-    public void onReservationClick(ReservationModel reservation) {
+    public void onClick(ReservationModel reservation) {
         // Only the identifier travels in the intent; the detail screen re-reads the
         // booking from the API so its rule verdicts are always current.
         if (reservation == null) {

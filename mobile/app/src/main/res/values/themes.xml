@@ -141,8 +141,14 @@
         <item name="navigationIconTint">@color/white</item>
     </style>
 
-    <!-- A status pill, tinted per status by the adapters at runtime. -->
-    <style name="Widget.SmartSolar.StatusChip">
+    <!--
+      A status pill, tinted per status by the adapters at runtime.
+
+      The explicit parent matters: Android infers a style's parent from its dotted
+      name when none is given, so without this it would look for a style called
+      "Widget.SmartSolar", which does not exist, and resource linking would fail.
+    -->
+    <style name="Widget.SmartSolar.StatusChip" parent="android:Widget.TextView">
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>
         <item name="android:paddingTop">4dp</item>

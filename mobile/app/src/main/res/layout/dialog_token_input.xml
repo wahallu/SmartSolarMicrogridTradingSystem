@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : dialog_token_input.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : A single field for typing a booking QR token by hand, inflated
+                into an AlertDialog by the scanner screen.
+
+                WHY THIS EXISTS: an emulator has no usable camera, so without a
+                manual entry path the QR verification feature could not be
+                demonstrated at all on a development machine. The typed token
+                travels through exactly the same verification call as a scanned
+                one, so nothing about the flow is faked.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_token_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/space_lg"
+    android:paddingTop="@dimen/space_md"
+    android:paddingEnd="@dimen/space_lg"
+    android:paddingBottom="@dimen/space_sm">
+
+    <!-- The API accepts either the bare token or the whole scanned JSON payload,
+         so this field deliberately places no format restriction on the input. -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_token_input"
+        style="@style/Widget.SmartSolar.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Booking QR token">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/token_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:maxLines="4"
+            android:minLines="2" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_sm"
+        android:text="Paste the token printed under the prosumer's QR code."
+        android:textAppearance="@style/TextAppearance.SmartSolar.Caption" />
+
+</LinearLayout>

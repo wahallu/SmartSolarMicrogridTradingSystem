@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : activity_scanner.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : The grid operator's QR scanning screen. The ZXing
+                DecoratedBarcodeView fills the window and a translucent panel
+                sits over the bottom edge carrying the prompt and the manual
+                entry fallback, so the camera preview is never obscured.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <!-- The camera preview and the scanning viewfinder are both supplied by ZXing. -->
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/barcode_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:zxing_use_texture_view="true" />
+
+    <!-- Back arrow drawn over the preview, since this screen has no toolbar. -->
+    <ImageButton
+        android:id="@+id/btn_scanner_back"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_margin="@dimen/space_md"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/cd_back"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+    <!-- Bottom instruction panel. -->
+    <LinearLayout
+        android:id="@+id/panel_scanner_footer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#CC0F172A"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/space_lg"
+        android:paddingTop="@dimen/space_lg"
+        android:paddingEnd="@dimen/space_lg"
+        android:paddingBottom="@dimen/space_lg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/space_sm"
+            android:gravity="center"
+            android:text="@string/scanner_title"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:drawableTopCompat="@drawable/ic_qr"
+            app:drawableTint="@color/solar_400" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:gravity="center"
+            android:text="@string/scanner_prompt"
+            android:textColor="@color/slate_300"
+            android:textSize="13sp" />
+
+        <!-- The manual path keeps the feature demonstrable on an emulator with no camera. -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_enter_manually"
+            style="@style/Widget.SmartSolar.Button.Secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_md"
+            android:text="Enter code manually"
+            android:textColor="@color/white"
+            app:icon="@drawable/ic_edit"
+            app:iconTint="@color/white"
+            app:strokeColor="@color/slate_500" />
+
+    </LinearLayout>
+
+    <!-- Shown while the scanned token is being verified against the server. -->
+    <FrameLayout
+        android:id="@+id/overlay_verifying"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#B30F172A"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/solar_400" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
