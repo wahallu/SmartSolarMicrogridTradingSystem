@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : activity_station_detail.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : The record of one microgrid node: its code and service status,
+                its name and address, a small Google Map pinned on its
+                coordinates, and the figures the Web API published for it -
+                rated capacity, battery bay availability, operating hours and a
+                contact number that opens the phone dialler.
+
+                The map here is deliberately inert. StationDetailActivity calls
+                setAllGesturesEnabled(false) on it so that dragging inside the
+                map still scrolls this page rather than panning the world.
+
+                NOTE ON LITERAL TEXT: strings.xml is owned by another module of
+                this project and is not edited from here, so the two button
+                captions that have no entry yet are written inline and the
+                HardcodedText check is suppressed on the root for that reason.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
+
+    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.SmartSolar.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <!-- The two screen states occupy the rest of the window, one at a time. -->
+    <FrameLayout
+        android:id="@+id/frame_station_detail_states"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- ================= STATE 1: content ================= -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_station_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/screen_padding"
+                android:paddingTop="@dimen/space_md"
+                android:paddingEnd="@dimen/screen_padding"
+                android:paddingBottom="@dimen/space_xl">
+
+                <!-- ---------- Code, status pill, name and address ---------- -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_station_detail_header"
+                    style="@style/Widget.SmartSolar.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <!-- The node code is monospaced so its digit groups line up. -->
+                            <TextView
+                                android:id="@+id/text_station_detail_code"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:ellipsize="end"
+                                android:fontFamily="monospace"
+                                android:maxLines="1"
+                                android:textColor="@color/slate_900"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                tools:text="STN-001" />
+
+                            <!-- Status name and pill colour both come from the API's value. -->
+                            <TextView
+                                android:id="@+id/text_station_detail_status"
+                                style="@style/Widget.SmartSolar.StatusChip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_sm"
+                                tools:text="Active" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/text_station_detail_name"
+                            style="@style/TextAppearance.SmartSolar.SectionTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_xs"
+                            tools:text="Malabe Solar Hub" />
+
+                        <!-- Street address and city, joined into one line by the Activity. -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_sm"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/img_station_detail_pin"
+                                android:layout_width="@dimen/icon_sm"
+                                android:layout_height="@dimen/icon_sm"
+                                android:contentDescription="@string/cd_station_marker"
+                                android:src="@drawable/ic_map_pin"
+                                app:tint="@color/slate_400" />
+
+                            <TextView
+                                android:id="@+id/text_station_detail_address"
+                                style="@style/TextAppearance.SmartSolar.Body"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_sm"
+                                android:layout_weight="1"
+                                tools:text="120 Kaduwela Road, Malabe" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--
+                  ---------- The node on a map ----------
+                  A single marker at the coordinates the API published. Every gesture is
+                  disabled in code so this map never competes with the page scroll.
+                -->
+                <fragment
+                    android:id="@+id/map_station_detail"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="@dimen/space_md"
+                    tools:ignore="FragmentTagUsage" />
+
+                <!-- ---------- Capacity, bays, hours and contact ---------- -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_station_detail_fields"
+                    style="@style/Widget.SmartSolar.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Rated capacity of the node, in kilowatt hours. -->
+                        <TextView
+                            style="@style/TextAppearance.SmartSolar.FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_capacity" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/img_station_detail_capacity"
+                                android:layout_width="@dimen/icon_sm"
+                                android:layout_height="@dimen/icon_sm"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_bolt"
+                                app:tint="@color/solar_500" />
+
+                            <TextView
+                                android:id="@+id/text_station_detail_capacity"
+                                style="@style/TextAppearance.SmartSolar.FieldValue"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_sm"
+                                android:layout_weight="1"
+                                tools:text="150 kWh" />
+
+                        </LinearLayout>
+
+                        <!-- Battery bay availability, counted by the server. -->
+                        <TextView
+                            style="@style/TextAppearance.SmartSolar.FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:text="@string/label_battery_slots" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/img_station_detail_slots"
+                                android:layout_width="@dimen/icon_sm"
+                                android:layout_height="@dimen/icon_sm"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_battery"
+                                app:tint="@color/grid_600" />
+
+                            <TextView
+                                android:id="@+id/text_station_detail_slots"
+                                style="@style/TextAppearance.SmartSolar.FieldValue"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_sm"
+                                android:layout_weight="1"
+                                tools:text="8 / 12 bays free" />
+
+                        </LinearLayout>
+
+                        <!-- Opening hours as the API published them. -->
+                        <TextView
+                            style="@style/TextAppearance.SmartSolar.FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:text="@string/label_operating_hours" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/img_station_detail_hours"
+                                android:layout_width="@dimen/icon_sm"
+                                android:layout_height="@dimen/icon_sm"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_clock"
+                                app:tint="@color/slate_400" />
+
+                            <TextView
+                                android:id="@+id/text_station_detail_hours"
+                                style="@style/TextAppearance.SmartSolar.FieldValue"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_sm"
+                                android:layout_weight="1"
+                                tools:text="06:00 - 22:00" />
+
+                        </LinearLayout>
+
+                        <!--
+                          Contact number. The whole row is tappable and opens the phone
+                          dialler; it hides itself when the node published no number.
+                        -->
+                        <TextView
+                            style="@style/TextAppearance.SmartSolar.FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:text="@string/label_contact" />
+
+                        <LinearLayout
+                            android:id="@+id/row_station_detail_contact"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center_vertical"
+                            android:minHeight="44dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/img_station_detail_contact"
+                                android:layout_width="@dimen/icon_sm"
+                                android:layout_height="@dimen/icon_sm"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_phone"
+                                app:tint="@color/grid_600" />
+
+                            <TextView
+                                android:id="@+id/text_station_detail_contact"
+                                style="@style/TextAppearance.SmartSolar.FieldValue"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/space_sm"
+                                android:layout_weight="1"
+                                android:textColor="@color/grid_700"
+                                tools:text="011 2345678" />
+
+                            <ImageView
+                                android:id="@+id/img_station_detail_contact_chevron"
+                                android:layout_width="@dimen/icon_sm"
+                                android:layout_height="@dimen/icon_sm"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_chevron_right"
+                                app:tint="@color/slate_300" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--
+                  ---------- Book a slot ----------
+                  Shown only to a signed in prosumer. Hiding it for staff is presentation
+                  only: the API enforces the role rule when a booking is submitted.
+                -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_station_detail_book"
+                    style="@style/Widget.SmartSolar.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:text="Book an energy slot here"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_calendar"
+                    app:iconTint="@color/white"
+                    tools:visibility="visible" />
+
+                <!--
+                  ---------- Directions ----------
+                  Fires the google.navigation intent. The Activity checks
+                  resolveActivity first so a device with no maps app cannot crash here.
+                -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_station_detail_directions"
+                    style="@style/Widget.SmartSolar.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="Directions"
+                    app:icon="@drawable/ic_map_pin"
+                    app:iconTint="@color/slate_700" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- ================= STATE 2: loading ================= -->
+        <ProgressBar
+            android:id="@+id/progress_station_detail"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            tools:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

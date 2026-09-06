@@ -332,6 +332,42 @@ then add a short reflection on how the initial ideas became the final solution.
 
 ---
 
+## Submission checklist
+
+Before zipping, work through this list. Items marked **TODO** need a human.
+
+| Item | Status |
+|---|---|
+| C# Web API, MongoDB, all business rules | done |
+| React web application, all pages | done |
+| Native Android application, all screens | done |
+| Comment header block on every `.cs` file | done |
+| Inline comment at the start of every method | done |
+| Screenshots of all web UIs (`docs/screenshots/web`) | done |
+| Screenshots of all mobile UIs | **TODO** — capture from an emulator or device |
+| Screenshot of the main opening screen | **TODO** — the Android prosumer home screen |
+| High-level, use case and DFD diagrams | done (`docs/diagrams/DIAGRAMS.md`) |
+| Database design | done (report §3) |
+| References | done |
+| Source code pasted as text in the report | **TODO** — paste from the repository |
+| Git repository link | **TODO** — add to this README and the report |
+| Individual contributions per member | **TODO** — must be distinct per member |
+| Declared use of AI tools + reflection | **TODO** — required by the assignment |
+| Challenges section | done (report §14) |
+| 5-minute demonstration video + link | **TODO** |
+
+Then produce the archive. The file name must contain your IT number:
+
+```bash
+git archive --format=zip --output=ITxxxxxxxx.zip HEAD
+```
+
+> `git archive` excludes everything in `.gitignore`, so `node_modules`, `bin`, `obj`
+> and the Gradle build folders are left out automatically. If your marker expects the
+> `docs/screenshots` folder inside the archive, confirm it is committed first.
+
+---
+
 ## References
 
 1. Microsoft. *ASP.NET Core Web API documentation.*

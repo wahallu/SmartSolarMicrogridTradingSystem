@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : activity_stations_map.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : The Google Maps screen. The top half of the window is a
+                SupportMapFragment that plots one marker per microgrid node; the
+                bottom half is a search panel over the same nodes, so a user who
+                would rather read than pinch still gets to every result.
+
+                The radius spinner changes the ?radiusKm= value sent to
+                GET /stations/nearby, so the SERVER decides which nodes fall
+                inside the circle and how far away each one is. The search box
+                below it only narrows rows the server already returned.
+
+                The frame at the bottom holds the three mutually exclusive list
+                states - loading, content and empty - and the amber strip above
+                the panel appears only when the rows came from the SQLite cache.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:orientation="vertical">
+
+    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_stations_map"
+        style="@style/Widget.SmartSolar.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <!--
+      The Google Map itself. StationsMapActivity obtains it with getMapAsync and
+      implements OnMapReadyCallback, so nothing here is touched until the SDK has
+      finished inflating the map. The equal layout_weight of this fragment and the
+      panel underneath gives the map roughly the top half of the window.
+    -->
+    <fragment
+        android:id="@+id/map_fragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:ignore="FragmentTagUsage" />
+
+    <!-- ================= The node panel ================= -->
+    <LinearLayout
+        android:id="@+id/panel_map_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/screen_background"
+        android:orientation="vertical">
+
+        <!--
+          Offline notice. Shown only when the request never reached the API and the
+          rows below were read back out of the local SQLite cache instead.
+        -->
+        <TextView
+            android:id="@+id/text_map_offline"
+            style="@style/TextAppearance.SmartSolar.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/space_sm"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:background="@drawable/bg_warning_panel"
+            android:drawableStart="@drawable/ic_info"
+            android:drawablePadding="@dimen/space_sm"
+            android:drawableTint="@color/warning_amber"
+            android:padding="@dimen/space_sm"
+            android:text="@string/offline_cached_notice"
+            android:textColor="@color/solar_800"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <!--
+          Search radius. The chosen value becomes ?radiusKm= on the next call to
+          GET /stations/nearby; the phone never filters by distance itself.
+        -->
+        <LinearLayout
+            android:id="@+id/row_map_radius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/space_sm"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_map_radius"
+                android:layout_width="@dimen/icon_sm"
+                android:layout_height="@dimen/icon_sm"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_map_pin"
+                app:tint="@color/solar_600" />
+
+            <TextView
+                android:id="@+id/text_map_radius_label"
+                style="@style/TextAppearance.SmartSolar.FieldLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_sm"
+                android:layout_weight="1"
+                android:text="@string/label_radius" />
+
+            <!-- Entries are written in by StationsMapActivity.setupRadiusSpinner. -->
+            <Spinner
+                android:id="@+id/spinner_map_radius"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_input_rounded"
+                android:minHeight="44dp"
+                android:paddingStart="@dimen/space_md"
+                android:paddingEnd="@dimen/space_sm" />
+
+        </LinearLayout>
+
+        <!--
+          Free text search over the nodes already returned. This one narrows rows on
+          the phone rather than calling the API, which is why it needs no debounce.
+        -->
+        <EditText
+            android:id="@+id/input_map_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/screen_padding"
+            android:layout_marginTop="@dimen/space_sm"
+            android:layout_marginEnd="@dimen/screen_padding"
+            android:background="@drawable/bg_input_rounded"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="@dimen/space_sm"
+            android:drawableTint="@color/slate_400"
+            android:hint="@string/action_search"
+            android:imeOptions="actionSearch"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="@dimen/space_md"
+            android:paddingTop="@dimen/space_sm"
+            android:paddingEnd="@dimen/space_md"
+            android:paddingBottom="@dimen/space_sm"
+            android:textColor="@color/slate_800"
+            android:textColorHint="@color/slate_400"
+            android:textSize="14sp" />
+
+        <!-- The three list states occupy the rest of the panel, one at a time. -->
+        <FrameLayout
+            android:id="@+id/frame_map_states"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_sm"
+            android:layout_weight="1">
+
+            <!-- STATE 1: content. One card per node, ordered by the server. -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/station_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/space_md"
+                android:scrollbars="vertical"
+                android:visibility="gone"
+                tools:listitem="@layout/item_station"
+                tools:visibility="visible" />
+
+            <!-- STATE 2: loading, shown while GET /stations/nearby is in flight. -->
+            <ProgressBar
+                android:id="@+id/progress_map"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:visibility="gone" />
+
+            <!-- STATE 3: empty, when the radius holds no node the search term matches. -->
+            <TextView
+                android:id="@+id/text_map_empty"
+                style="@style/TextAppearance.SmartSolar.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/space_xl"
+                android:text="@string/empty_no_stations"
+                android:textColor="@color/slate_500"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
