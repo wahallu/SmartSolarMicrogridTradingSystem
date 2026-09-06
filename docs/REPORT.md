@@ -819,9 +819,29 @@ which suppresses the automatic insertion and pins routing to the correct positio
 
 | Target | Command | Result |
 |---|---|---|
-| Web API | `dotnet build SmartSolar.sln` | Succeeded, 0 warnings, 0 errors |
-| Web application | `npm run build` (`tsc -b && vite build`) | Succeeded, 0 type errors |
-| Android | `./gradlew assembleDebug` | _[record the result]_ |
+| Web API | `dotnet clean && dotnet build SmartSolar.sln` | Succeeded, **0 warnings, 0 errors** |
+| Web application | `npm run build` (`tsc -b && vite build`) | Succeeded, **0 type errors** |
+| Android | `./gradlew assembleDebug` (build directory deleted first) | Succeeded, `app-debug.apk`, **6.7 MB** |
+
+### 10.3 Three further defects found by the Android build
+
+The mobile build surfaced three problems that no amount of reading would have caught:
+
+1. **`--` is not permitted inside an XML comment.** Five layouts used `---- Section ----`
+   dividers inside their comment blocks, which is illegal XML: only the closing `-->`
+   may contain consecutive hyphens. AAPT rejected them with a bare `ParseError` naming
+   only a row and column.
+
+2. **Implicit style inheritance.** `Widget.SmartSolar.StatusChip` was declared without a
+   `parent` attribute. Android infers a style's parent from its dotted name when none is
+   given, so it looked for `Widget.SmartSolar` — which does not exist — and resource
+   linking failed. Adding an explicit `parent="android:Widget.TextView"` fixed it. This
+   is a genuinely surprising rule and worth knowing.
+
+3. **A mismatched adapter callback.** `ProsumerHomeActivity` implemented
+   `ReservationAdapter.OnReservationClickListener` with a method `onReservationClick`,
+   while the adapter declares `OnReservationClick` with `onClick`. Two other screens used
+   the correct names, so only one file was wrong.
 
 ---
 
