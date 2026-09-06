@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : activity_edit_booking.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : Layout for changing an existing energy reservation. The booking
+                as it stands today is shown read only in a card at the top, and
+                below it the prosumer may pick a different date, a different
+                slot at the SAME microgrid node, and a different energy amount.
+
+                The 12 hour notice rule (R2) is NOT evaluated by this layout.
+                EditBookingActivity hides the whole edit section behind
+                panel_locked whenever the API said canModify is false, and the
+                API refuses the PUT in any case.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:orientation="vertical">
+
+    <!-- Amber application bar; the back arrow is wired by BaseActivity.setupToolbar. -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_edit_booking"
+        style="@style/Widget.SmartSolar.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        app:title="@string/action_edit_booking" />
+
+    <!-- The form overflows a small screen once the slot list is populated. -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_edit_booking"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/screen_padding">
+
+            <!-- ============ The booking as it stands today (read only) ============ -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.SmartSolar.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Reference number and the status pill, both straight from the API. -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/text_current_reservation_no"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/slate_900"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            tools:text="RSV-20260904-0001" />
+
+                        <TextView
+                            android:id="@+id/text_current_status"
+                            style="@style/Widget.SmartSolar.StatusChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_sm"
+                            tools:text="Pending" />
+                    </LinearLayout>
+
+                    <!-- The microgrid node. The node itself cannot be changed here: an
+                         alternative slot is always looked up for this same station. -->
+                    <TextView
+                        android:id="@+id/text_current_station"
+                        style="@style/TextAppearance.SmartSolar.Body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        tools:text="STN-001 - Malabe Solar Hub" />
+
+                    <!-- Slot day -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_sm"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_calendar"
+                            app:tint="@color/slate_500" />
+
+                        <TextView
+                            android:id="@+id/text_current_date"
+                            style="@style/TextAppearance.SmartSolar.Caption"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_xs"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            tools:text="Fri, 04 Sep 2026" />
+                    </LinearLayout>
+
+                    <!-- Slot window -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_clock"
+                            app:tint="@color/slate_500" />
+
+                        <TextView
+                            android:id="@+id/text_current_time"
+                            style="@style/TextAppearance.SmartSolar.Caption"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_xs"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            tools:text="S3   08:00 - 10:00" />
+                    </LinearLayout>
+
+                    <!-- Energy currently booked -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="@dimen/icon_sm"
+                            android:layout_height="@dimen/icon_sm"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_bolt"
+                            app:tint="@color/solar_500" />
+
+                        <TextView
+                            android:id="@+id/text_current_energy"
+                            style="@style/TextAppearance.SmartSolar.Caption"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_xs"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            tools:text="18.0 kWh" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ============ The 12 hour notice, stated for the user only ============
+                 The wording lives in strings.xml and says plainly that the server
+                 enforces the rule. Nothing on this screen evaluates it. -->
+            <LinearLayout
+                android:id="@+id/panel_notice_12h"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_warning_panel"
+                android:orientation="horizontal"
+                android:padding="@dimen/space_md">
+
+                <ImageView
+                    android:layout_width="@dimen/icon_md"
+                    android:layout_height="@dimen/icon_md"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_clock"
+                    app:tint="@color/warning_amber" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_sm"
+                    android:text="@string/notice_12_hour"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.Body" />
+            </LinearLayout>
+
+            <!-- ============ Shown when the API said this booking may no longer change ============
+                 EditBookingActivity reveals this panel from reservation.canModify(),
+                 which is the SERVER's verdict on rule R2. -->
+            <LinearLayout
+                android:id="@+id/panel_locked"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:background="@drawable/bg_error_panel"
+                android:orientation="horizontal"
+                android:padding="@dimen/space_md"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:layout_width="@dimen/icon_md"
+                    android:layout_height="@dimen/icon_md"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_lock"
+                    app:tint="@color/error_red" />
+
+                <!-- strings.xml is owned by the shared resources task, so this one
+                     sentence is declared inline. -->
+                <TextView
+                    android:id="@+id/text_locked"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_sm"
+                    android:text="This booking can no longer be changed. The Smart Solar API decided this and it is the only authority on the rule."
+                    android:textAppearance="@style/TextAppearance.SmartSolar.Body"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <!-- ============ The editable part of the screen ============ -->
+            <LinearLayout
+                android:id="@+id/layout_edit_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- ---- Date ---- -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_lg"
+                    android:text="@string/label_select_date"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_edit_date"
+                    style="@style/Widget.SmartSolar.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:hint="@string/label_select_date"
+                    app:startIconContentDescription="@string/label_select_date"
+                    app:startIconDrawable="@drawable/ic_calendar">
+
+                    <!-- Read only: taps open a DatePickerDialog instead of the keyboard. -->
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_edit_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="none" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- The picker bounds only mirror rule R1 as a convenience; the API owns it. -->
+                <TextView
+                    android:id="@+id/text_window_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:text="The picker suggests the next 7 days. The Smart Solar API enforces the booking window and the 12 hour notice rule."
+                    android:textAppearance="@style/TextAppearance.SmartSolar.Caption"
+                    tools:ignore="HardcodedText" />
+
+                <!-- ---- Alternative slots at the same node ---- -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_lg"
+                    android:text="@string/label_select_slot"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+                <!-- Loading state for the slot query. -->
+                <ProgressBar
+                    android:id="@+id/progress_edit_slots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:visibility="gone" />
+
+                <!-- Content state: one selectable card per slot the API returned. -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_edit_slots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="gone"
+                    tools:itemCount="3"
+                    tools:listitem="@android:layout/simple_list_item_1"
+                    tools:visibility="visible" />
+
+                <!-- Empty state, reused to report a failed slot load. -->
+                <LinearLayout
+                    android:id="@+id/panel_edit_slots_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:background="@drawable/bg_warning_panel"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_md"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_clock"
+                        app:tint="@color/warning_amber" />
+
+                    <TextView
+                        android:id="@+id/text_edit_slots_empty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_sm"
+                        android:text="No alternative slots are free at this node on the chosen date. Keep the current slot or try another date."
+                        android:textAppearance="@style/TextAppearance.SmartSolar.Body"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+
+                <!-- ---- Energy amount ---- -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_lg"
+                    android:text="@string/label_energy_kwh"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_edit_energy"
+                    style="@style/Widget.SmartSolar.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:hint="@string/label_energy_kwh"
+                    app:helperTextEnabled="true"
+                    app:startIconContentDescription="@string/label_energy_kwh"
+                    app:startIconDrawable="@drawable/ic_bolt">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/input_edit_energy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
+                        android:maxLength="8" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- ---- Save ---- -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_save_changes"
+                    style="@style/Widget.SmartSolar.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_lg"
+                    android:text="@string/action_save" />
+
+                <!-- Shown while the PUT is in flight; the button is disabled at the same time. -->
+                <ProgressBar
+                    android:id="@+id/progress_edit_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:layout_marginBottom="@dimen/space_md"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

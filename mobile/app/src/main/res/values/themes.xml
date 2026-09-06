@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : themes.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : Application theme plus the reusable widget styles the layouts
+                apply. Basing the theme on Material 3 gives the app modern
+                defaults for buttons, text fields and dialogs without hand
+                styling every screen.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="Theme.SmartSolar" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/solar_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/solar_100</item>
+        <item name="colorOnPrimaryContainer">@color/solar_800</item>
+
+        <item name="colorSecondary">@color/grid_600</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/grid_100</item>
+        <item name="colorOnSecondaryContainer">@color/grid_800</item>
+
+        <item name="colorError">@color/error_red</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/slate_800</item>
+        <item name="android:colorBackground">@color/slate_50</item>
+
+        <item name="android:statusBarColor">@color/solar_600</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+    </style>
+
+    <!-- Splash screen: the amber brand colour fills the window while the app decides
+         whether a stored SQLite session exists. -->
+    <style name="Theme.SmartSolar.Splash" parent="Theme.SmartSolar">
+        <item name="android:windowBackground">@color/solar_500</item>
+        <item name="android:statusBarColor">@color/solar_500</item>
+    </style>
+
+    <!-- ================= Text styles ================= -->
+
+    <style name="TextAppearance.SmartSolar.PageTitle" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/slate_900</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TextAppearance.SmartSolar.SectionTitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/slate_800</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.SmartSolar.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/slate_700</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.SmartSolar.Caption" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/slate_500</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- A small uppercase label used above a value in the detail screens. -->
+    <style name="TextAppearance.SmartSolar.FieldLabel" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textColor">@color/slate_500</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
+
+    <style name="TextAppearance.SmartSolar.FieldValue" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/slate_800</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <!-- ================= Widgets ================= -->
+
+    <style name="Widget.SmartSolar.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">14dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="contentPadding">16dp</item>
+        <item name="strokeColor">@color/slate_200</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="Widget.SmartSolar.Button" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/solar_500</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.01</item>
+    </style>
+
+    <style name="Widget.SmartSolar.Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/slate_700</item>
+        <item name="strokeColor">@color/slate_300</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="Widget.SmartSolar.Button.Danger" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/error_red</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">10dp</item>
+    </style>
+
+    <style name="Widget.SmartSolar.Button.Success" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/grid_600</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">10dp</item>
+    </style>
+
+    <style name="Widget.SmartSolar.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="boxStrokeColor">@color/solar_500</item>
+        <item name="hintTextColor">@color/slate_500</item>
+        <item name="errorTextColor">@color/error_red</item>
+    </style>
+
+    <!-- The amber bar that sits at the top of every inner screen. -->
+    <style name="Widget.SmartSolar.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/solar_600</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/solar_100</item>
+        <item name="navigationIconTint">@color/white</item>
+    </style>
+
+    <!-- A status pill, tinted per status by the adapters at runtime. -->
+    <style name="Widget.SmartSolar.StatusChip">
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/bg_status_chip</item>
+    </style>
+
+</resources>

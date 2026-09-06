@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : dialog_reason_input.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : A single free text field wrapped in a Material text input, meant
+                to be inflated into an AlertDialog whenever a screen needs the
+                user to type a short reason before an action is sent to the Web
+                API - for example the deactivation request raised from the
+                profile screen, or a cancellation note.
+
+                It is deliberately generic: the hosting dialog supplies the
+                title and the buttons, this file supplies only the field, so any
+                screen that needs a reason can reuse it unchanged.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_reason_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/space_lg"
+    android:paddingTop="@dimen/space_md"
+    android:paddingEnd="@dimen/space_lg"
+    android:paddingBottom="@dimen/space_sm">
+
+    <!-- The reason itself. It is optional on the API, so no error is shown when empty. -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_reason_input"
+        style="@style/Widget.SmartSolar.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/label_deactivation_reason">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reason_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLines="4"
+            android:minLines="2" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

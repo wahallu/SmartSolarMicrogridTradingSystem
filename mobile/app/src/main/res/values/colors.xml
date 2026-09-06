@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : colors.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : The application colour palette. The amber "solar" ramp is the
+                brand colour and the green "grid" ramp signals healthy grid
+                state, matching the web application so the two clients look
+                like one product.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<resources>
+
+    <!-- Brand: solar amber -->
+    <color name="solar_50">#FFFBEB</color>
+    <color name="solar_100">#FEF3C7</color>
+    <color name="solar_200">#FDE68A</color>
+    <color name="solar_300">#FCD34D</color>
+    <color name="solar_400">#FBBF24</color>
+    <color name="solar_500">#F59E0B</color>
+    <color name="solar_600">#D97706</color>
+    <color name="solar_700">#B45309</color>
+    <color name="solar_800">#92400E</color>
+
+    <!-- Secondary: grid green -->
+    <color name="grid_50">#ECFDF5</color>
+    <color name="grid_100">#D1FAE5</color>
+    <color name="grid_500">#10B981</color>
+    <color name="grid_600">#059669</color>
+    <color name="grid_700">#047857</color>
+    <color name="grid_800">#065F46</color>
+
+    <!-- Neutrals -->
+    <color name="slate_50">#F8FAFC</color>
+    <color name="slate_100">#F1F5F9</color>
+    <color name="slate_200">#E2E8F0</color>
+    <color name="slate_300">#CBD5E1</color>
+    <color name="slate_400">#94A3B8</color>
+    <color name="slate_500">#64748B</color>
+    <color name="slate_600">#475569</color>
+    <color name="slate_700">#334155</color>
+    <color name="slate_800">#1E293B</color>
+    <color name="slate_900">#0F172A</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Status colours, matching the badge colours used on the web client -->
+    <color name="status_pending_bg">#FEF3C7</color>
+    <color name="status_pending_text">#92400E</color>
+    <color name="status_approved_bg">#DBEAFE</color>
+    <color name="status_approved_text">#1E40AF</color>
+    <color name="status_completed_bg">#D1FAE5</color>
+    <color name="status_completed_text">#065F46</color>
+    <color name="status_cancelled_bg">#E2E8F0</color>
+    <color name="status_cancelled_text">#334155</color>
+    <color name="status_rejected_bg">#FEE2E2</color>
+    <color name="status_rejected_text">#991B1B</color>
+
+    <!-- Feedback -->
+    <color name="error_red">#DC2626</color>
+    <color name="error_red_bg">#FEE2E2</color>
+    <color name="warning_amber">#D97706</color>
+    <color name="warning_amber_bg">#FEF3C7</color>
+    <color name="success_green">#059669</color>
+    <color name="info_blue">#2563EB</color>
+    <color name="info_blue_bg">#DBEAFE</color>
+
+    <!-- Semantic aliases used throughout the layouts -->
+    <color name="colorPrimary">@color/solar_500</color>
+    <color name="colorPrimaryDark">@color/solar_700</color>
+    <color name="colorAccent">@color/grid_500</color>
+    <color name="screen_background">@color/slate_50</color>
+    <color name="surface">@color/white</color>
+    <color name="text_primary">@color/slate_800</color>
+    <color name="text_secondary">@color/slate_500</color>
+    <color name="divider">@color/slate_200</color>
+
+</resources>

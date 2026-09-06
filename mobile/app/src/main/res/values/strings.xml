@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : strings.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : Every user facing string in the application. Keeping text out of
+                the layouts and the Java sources means wording can be reviewed in
+                one place and the app could be translated without touching code.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<resources>
+
+    <string name="app_name">Smart Solar</string>
+    <string name="app_full_name">Smart Solar Microgrid</string>
+    <string name="app_tagline">Trade your rooftop solar with the grid</string>
+
+    <!-- ==== Authentication ==== -->
+    <string name="login_title">Welcome back</string>
+    <string name="login_subtitle">Sign in to manage your energy trading</string>
+    <string name="hint_identifier">NIC, username or e-mail</string>
+    <string name="hint_password">Password</string>
+    <string name="action_login">Sign in</string>
+    <string name="action_register">Create an account</string>
+    <string name="no_account_prompt">New prosumer?</string>
+
+    <string name="register_title">Register as a prosumer</string>
+    <string name="register_subtitle">Your NIC is your account identifier</string>
+    <string name="hint_nic">National Identity Card number</string>
+    <string name="hint_full_name">Full name</string>
+    <string name="hint_email">E-mail address</string>
+    <string name="hint_phone">Phone number</string>
+    <string name="hint_address">Address</string>
+    <string name="hint_confirm_password">Confirm password</string>
+    <string name="action_create_account">Create account</string>
+    <string name="have_account_prompt">Already registered?</string>
+    <string name="register_pending_notice">Your account will be reviewed by a Backoffice officer before you can sign in.</string>
+
+    <!-- ==== Home / dashboard ==== -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="greeting_morning">Good morning</string>
+    <string name="greeting_afternoon">Good afternoon</string>
+    <string name="greeting_evening">Good evening</string>
+    <string name="stat_pending">Pending</string>
+    <string name="stat_approved_upcoming">Approved &amp; upcoming</string>
+    <string name="stat_completed">Completed</string>
+    <string name="stat_energy">Energy traded</string>
+    <string name="stat_today">Today</string>
+    <string name="section_upcoming">Upcoming bookings</string>
+    <string name="section_quick_actions">Quick actions</string>
+
+    <!-- ==== Navigation / actions ==== -->
+    <string name="action_new_booking">New booking</string>
+    <string name="action_my_bookings">My bookings</string>
+    <string name="action_nearby_nodes">Nearby nodes</string>
+    <string name="action_profile">Profile</string>
+    <string name="action_scan_qr">Scan QR code</string>
+    <string name="action_station_bookings">Node bookings</string>
+    <string name="action_logout">Sign out</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_retry">Try again</string>
+    <string name="action_close">Close</string>
+    <string name="action_done">Done</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_search">Search</string>
+    <string name="action_back">Back</string>
+
+    <!-- ==== Bookings ==== -->
+    <string name="bookings_title">My bookings</string>
+    <string name="tab_current">Current</string>
+    <string name="tab_pending">Pending</string>
+    <string name="tab_history">History</string>
+    <string name="tab_all">All</string>
+    <string name="hint_search_bookings">Search by reference, node or status</string>
+
+    <string name="new_booking_title">New energy booking</string>
+    <string name="label_select_station">Microgrid node</string>
+    <string name="label_select_date">Date</string>
+    <string name="label_select_slot">Energy slot</string>
+    <string name="label_energy_kwh">Energy (kWh)</string>
+    <string name="action_submit_booking">Request booking</string>
+    <string name="booking_window_notice">Bookings must start within the next 7 days.</string>
+
+    <string name="booking_detail_title">Booking details</string>
+    <string name="action_edit_booking">Change booking</string>
+    <string name="action_cancel_booking">Cancel booking</string>
+    <string name="action_show_qr">Show QR code</string>
+    <string name="qr_instruction">Show this code to the grid operator at the node.</string>
+    <string name="notice_12_hour">Changes and cancellations require at least 12 hours notice. This is enforced by the server.</string>
+    <string name="confirm_cancel_booking">Cancel this booking? This cannot be undone.</string>
+
+    <string name="summary_title">Summary</string>
+    <string name="summary_booking_created">Booking requested</string>
+    <string name="summary_booking_updated">Booking updated</string>
+    <string name="summary_booking_cancelled">Booking cancelled</string>
+    <string name="summary_transfer_completed">Energy transfer finalised</string>
+
+    <!-- ==== Map / stations ==== -->
+    <string name="map_title">Nearby microgrid nodes</string>
+    <string name="label_radius">Search radius</string>
+    <string name="station_detail_title">Node details</string>
+    <string name="label_capacity">Capacity</string>
+    <string name="label_battery_slots">Battery bays</string>
+    <string name="label_operating_hours">Operating hours</string>
+    <string name="label_contact">Contact</string>
+    <string name="permission_location_rationale">Location access lets the app rank microgrid nodes by how close they are to you.</string>
+
+    <!-- ==== Operator ==== -->
+    <string name="operator_home_title">Operator console</string>
+    <string name="scanner_title">Scan prosumer QR code</string>
+    <string name="scanner_prompt">Point the camera at the prosumer\'s booking QR code</string>
+    <string name="verify_title">Verify booking</string>
+    <string name="action_finalise_transfer">Finalise transfer</string>
+    <string name="label_delivered_kwh">Energy delivered (kWh)</string>
+    <string name="label_operator_notes">Notes (optional)</string>
+    <string name="permission_camera_rationale">Camera access is required to scan booking QR codes.</string>
+
+    <!-- ==== Profile ==== -->
+    <string name="profile_title">My profile</string>
+    <string name="action_edit_profile">Edit profile</string>
+    <string name="action_change_password">Change password</string>
+    <string name="action_request_deactivation">Request account deactivation</string>
+    <string name="confirm_request_deactivation">Ask a Backoffice officer to deactivate your account? You will be signed out once it is approved.</string>
+    <string name="deactivation_pending_notice">A deactivation request is awaiting Backoffice review.</string>
+    <string name="hint_current_password">Current password</string>
+    <string name="hint_new_password">New password</string>
+    <string name="label_deactivation_reason">Reason (optional)</string>
+
+    <!-- ==== Shared feedback ==== -->
+    <string name="loading">Loading…</string>
+    <string name="error_generic">Something went wrong. Please try again.</string>
+    <string name="error_network">No internet connection. Please check your network.</string>
+    <string name="error_session_expired">Your session has expired. Please sign in again.</string>
+    <string name="empty_no_bookings">No bookings yet</string>
+    <string name="empty_no_bookings_message">Reserve an energy slot at a nearby microgrid node to get started.</string>
+    <string name="empty_no_stations">No microgrid nodes found</string>
+    <string name="offline_cached_notice">Showing saved data from your device.</string>
+
+    <!-- Content descriptions for accessibility -->
+    <string name="cd_app_logo">Smart Solar logo</string>
+    <string name="cd_back">Navigate back</string>
+    <string name="cd_qr_code">Booking QR code</string>
+    <string name="cd_station_marker">Microgrid node marker</string>
+
+</resources>

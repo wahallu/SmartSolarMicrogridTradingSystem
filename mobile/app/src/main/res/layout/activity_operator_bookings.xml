@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : activity_operator_bookings.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : The booking list a Grid Operator sees for the microgrid node they
+                are assigned to. A single selection chip row picks the status that
+                is asked of GET /reservations (All, Pending, Approved, Completed)
+                and a rounded search box passes free text to the same endpoint as
+                its ?search= parameter.
+
+                Both filters are SERVER side: the chips and the search box only
+                change the query string, they never slice a list on the phone.
+                The frame at the bottom holds the four mutually exclusive states
+                the screen can be in - loading, content, empty and error.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:orientation="vertical">
+
+    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_operator_bookings"
+        style="@style/Widget.SmartSolar.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <!--
+      The node this operator is posted to. The code is written in by the Activity
+      from the session stored in local SQLite, and the whole strip is hidden when
+      the account carries no assigned node.
+    -->
+    <LinearLayout
+        android:id="@+id/panel_operator_node"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/screen_padding"
+        android:paddingTop="@dimen/space_sm"
+        android:paddingEnd="@dimen/screen_padding"
+        android:paddingBottom="@dimen/space_sm">
+
+        <ImageView
+            android:id="@+id/img_operator_node"
+            android:layout_width="@dimen/icon_sm"
+            android:layout_height="@dimen/icon_sm"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_station"
+            app:tint="@color/solar_600" />
+
+        <TextView
+            android:id="@+id/text_operator_node"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_sm"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAppearance="@style/TextAppearance.SmartSolar.Caption"
+            android:textColor="@color/slate_700"
+            tools:text="NODE-COL-001" />
+
+    </LinearLayout>
+
+    <!--
+      Status filter chips. Exactly one is selectable at a time and the selection
+      becomes the ?status= value of the next request, so "Pending" is answered by
+      the API's own index rather than by filtering rows already on the phone.
+      The row scrolls horizontally so it never wraps on a narrow handset.
+    -->
+    <HorizontalScrollView
+        android:id="@+id/scroll_operator_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingStart="@dimen/screen_padding"
+        android:paddingEnd="@dimen/screen_padding"
+        android:paddingBottom="@dimen/space_sm"
+        android:scrollbars="none">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chips_operator_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:chipSpacingHorizontal="@dimen/space_sm"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true">
+
+            <!-- Chip captions are applied in Java; see OperatorBookingsActivity.applyChipLabels. -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_operator_all"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:checked="true"
+                tools:text="@string/tab_all" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_operator_pending"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                tools:text="@string/tab_pending" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_operator_approved"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                tools:text="Approved" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_operator_completed"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                tools:text="@string/stat_completed" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
+
+    <!--
+      Free text search. The typed value is sent to the API as ?search=, which
+      matches the prosumer name, the NIC and the reservation reference server
+      side. The Activity waits for a pause in typing before it calls.
+    -->
+    <EditText
+        android:id="@+id/input_operator_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_padding"
+        android:layout_marginTop="@dimen/space_md"
+        android:layout_marginEnd="@dimen/screen_padding"
+        android:background="@drawable/bg_input_rounded"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="@dimen/space_sm"
+        android:drawableTint="@color/slate_400"
+        android:hint="@string/action_search"
+        android:imeOptions="actionSearch"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingStart="@dimen/space_md"
+        android:paddingTop="@dimen/space_md"
+        android:paddingEnd="@dimen/space_md"
+        android:paddingBottom="@dimen/space_md"
+        android:textColor="@color/slate_800"
+        android:textColorHint="@color/slate_400"
+        android:textSize="14sp" />
+
+    <!-- The four screen states occupy the rest of the window, one at a time. -->
+    <FrameLayout
+        android:id="@+id/frame_operator_states"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_sm"
+        android:layout_weight="1">
+
+        <!-- STATE 1: content. Pull down anywhere on the list to re-query the API. -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_operator_bookings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_operator_bookings"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/space_sm"
+                android:paddingBottom="@dimen/space_lg"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/item_reservation" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <!-- STATE 2: loading. -->
+        <ProgressBar
+            android:id="@+id/progress_operator_bookings"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone" />
+
+        <!-- STATE 3: empty. Scrolls so it stays reachable on a short screen. -->
+        <ScrollView
+            android:id="@+id/state_operator_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/space_xl">
+
+                <ImageView
+                    android:id="@+id/img_operator_empty"
+                    android:layout_width="@dimen/icon_lg"
+                    android:layout_height="@dimen/icon_lg"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="@color/slate_300" />
+
+                <TextView
+                    android:id="@+id/text_operator_empty_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:text="@string/empty_no_bookings"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <!-- STATE 4: error, showing the wording the API itself supplied, plus retry. -->
+        <ScrollView
+            android:id="@+id/state_operator_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/space_xl">
+
+                <ImageView
+                    android:id="@+id/img_operator_error"
+                    android:layout_width="@dimen/icon_lg"
+                    android:layout_height="@dimen/icon_lg"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_alert"
+                    app:tint="@color/error_red" />
+
+                <TextView
+                    android:id="@+id/text_operator_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:gravity="center"
+                    android:text="@string/error_generic"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.Body" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_operator_retry"
+                    style="@style/Widget.SmartSolar.Button.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:text="@string/action_retry" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </FrameLayout>
+
+</LinearLayout>

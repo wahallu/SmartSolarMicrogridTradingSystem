@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : activity_my_bookings.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : The booking list owned by a prosumer. A four tab strip selects the scope
+                that is asked of GET /reservations/my (Current, Pending, History,
+                All), a rounded search box filters the rows already on screen and
+                the RecyclerView below shows one card per booking. The frame at
+                the bottom holds the four mutually exclusive states the screen can
+                be in: loading, content, empty and error.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:orientation="vertical">
+
+    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_my_bookings"
+        style="@style/Widget.SmartSolar.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <!--
+      Scope tabs. Each tab maps onto one Constants.SCOPE_* value and re-queries
+      the API; the app never slices the list itself to produce "history".
+    -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs_bookings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:tabIndicatorColor="@color/solar_600"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/solar_700"
+        app:tabTextColor="@color/slate_500">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_bookings_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_current" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_bookings_pending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_pending" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_bookings_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_history" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab_bookings_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_all" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <!-- Rounded search box that filters the rows currently held in memory. -->
+    <LinearLayout
+        android:id="@+id/row_bookings_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_padding"
+        android:layout_marginTop="@dimen/space_md"
+        android:layout_marginEnd="@dimen/screen_padding"
+        android:background="@drawable/bg_input_rounded"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_md"
+        android:paddingEnd="@dimen/space_md">
+
+        <ImageView
+            android:id="@+id/img_bookings_search"
+            android:layout_width="@dimen/icon_sm"
+            android:layout_height="@dimen/icon_sm"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_search"
+            app:tint="@color/slate_400" />
+
+        <EditText
+            android:id="@+id/input_bookings_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_sm"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="@string/hint_search_bookings"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingTop="@dimen/space_md"
+            android:paddingBottom="@dimen/space_md"
+            android:textColor="@color/slate_800"
+            android:textColorHint="@color/slate_400"
+            android:textSize="14sp"
+            android:importantForAutofill="no" />
+
+    </LinearLayout>
+
+    <!--
+      Offline banner. Shown only when the API could not be reached and the rows
+      below were read back out of the local SQLite cache instead.
+    -->
+    <LinearLayout
+        android:id="@+id/panel_bookings_offline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_padding"
+        android:layout_marginTop="@dimen/space_sm"
+        android:layout_marginEnd="@dimen/screen_padding"
+        android:background="@drawable/bg_warning_panel"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/space_md"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/img_bookings_offline"
+            android:layout_width="@dimen/icon_sm"
+            android:layout_height="@dimen/icon_sm"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_alert"
+            app:tint="@color/warning_amber" />
+
+        <TextView
+            android:id="@+id/text_bookings_offline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_sm"
+            android:text="@string/offline_cached_notice"
+            android:textAppearance="@style/TextAppearance.SmartSolar.Caption"
+            android:textColor="@color/solar_800" />
+
+    </LinearLayout>
+
+    <!-- The four screen states occupy the rest of the window, one at a time. -->
+    <FrameLayout
+        android:id="@+id/frame_bookings_states"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_sm"
+        android:layout_weight="1">
+
+        <!-- STATE 1: content. Pull down anywhere on the list to refresh it. -->
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_bookings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_bookings"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/space_sm"
+                android:paddingBottom="@dimen/space_lg"
+                android:scrollbars="vertical" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <!-- STATE 2: loading. -->
+        <ProgressBar
+            android:id="@+id/progress_bookings"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="gone" />
+
+        <!-- STATE 3: empty. Scrolls so it stays reachable on a short screen. -->
+        <ScrollView
+            android:id="@+id/state_bookings_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/space_xl">
+
+                <ImageView
+                    android:id="@+id/img_bookings_empty"
+                    android:layout_width="@dimen/icon_lg"
+                    android:layout_height="@dimen/icon_lg"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="@color/slate_300" />
+
+                <TextView
+                    android:id="@+id/text_bookings_empty_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:text="@string/empty_no_bookings"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+                <TextView
+                    android:id="@+id/text_bookings_empty_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xs"
+                    android:gravity="center"
+                    android:text="@string/empty_no_bookings_message"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.Caption" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <!-- STATE 4: error, showing the wording the API itself supplied, plus retry. -->
+        <ScrollView
+            android:id="@+id/state_bookings_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/space_xl">
+
+                <ImageView
+                    android:id="@+id/img_bookings_error"
+                    android:layout_width="@dimen/icon_lg"
+                    android:layout_height="@dimen/icon_lg"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_alert"
+                    app:tint="@color/error_red" />
+
+                <TextView
+                    android:id="@+id/text_bookings_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:gravity="center"
+                    android:text="@string/error_generic"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.Body" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_bookings_retry"
+                    style="@style/Widget.SmartSolar.Button.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:text="@string/action_retry" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </FrameLayout>
+
+</LinearLayout>

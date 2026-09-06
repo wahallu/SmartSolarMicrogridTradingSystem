@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Allows plain HTTP to the development API hosts only. 10.0.2.2 is the Android
+  emulator's alias for the host machine's localhost, which is where the C# Web
+  API runs during development. A production deployment would serve the API over
+  HTTPS and this file would be removed.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <!-- Common private ranges, so a physical phone can reach a laptop on the same Wi-Fi. -->
+        <domain includeSubdomains="true">192.168.1.1</domain>
+        <domain includeSubdomains="true">192.168.0.1</domain>
+        <domain includeSubdomains="true">192.168.8.1</domain>
+    </domain-config>
+</network-security-config>

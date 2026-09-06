@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : item_slot.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : One selectable energy slot in the booking slot picker. The card
+                header carries the slot code and its window, then the transfer
+                direction, the tradeable capacity and the battery bay. SlotAdapter
+                repaints the card background and stroke to mark the selection, and
+                dims the whole row when the API says the slot is not bookable.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_slot"
+    style="@style/Widget.SmartSolar.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/space_md"
+    android:layout_marginEnd="@dimen/space_md"
+    android:layout_marginBottom="@dimen/space_sm"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Slot code, window, and the disabled marker -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_slot_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/slate_900"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <!-- Shown only when the API reports the slot as not bookable. The wording is inline
+                 because strings.xml is owned by the shared resources task and must not be edited. -->
+            <TextView
+                android:id="@+id/text_unavailable"
+                style="@style/TextAppearance.SmartSolar.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_sm"
+                android:text="Unavailable"
+                android:textColor="@color/error_red"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <!-- Transfer direction -->
+        <TextView
+            android:id="@+id/text_slot_type"
+            style="@style/TextAppearance.SmartSolar.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:ellipsize="end"
+            android:maxLines="1" />
+
+        <!-- Tradeable capacity and battery bay -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_sm"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/icon_sm"
+                android:layout_height="@dimen/icon_sm"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_bolt"
+                app:tint="@color/solar_500" />
+
+            <TextView
+                android:id="@+id/text_capacity"
+                style="@style/TextAppearance.SmartSolar.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:maxLines="1" />
+
+            <ImageView
+                android:layout_width="@dimen/icon_sm"
+                android:layout_height="@dimen/icon_sm"
+                android:layout_marginStart="@dimen/space_md"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_battery"
+                app:tint="@color/grid_600" />
+
+            <TextView
+                android:id="@+id/text_bay"
+                style="@style/TextAppearance.SmartSolar.Caption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

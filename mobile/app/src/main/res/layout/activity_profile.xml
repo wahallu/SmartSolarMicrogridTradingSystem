@@ -1,0 +1,727 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : activity_profile.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : The signed in account screen. It shows the identity header
+                (avatar, name, role chip and account status chip), a read only
+                details card, an edit form, a change password form, the account
+                deactivation request and the sign out button.
+
+                The screen holds the three states every data screen in this app
+                handles - loading, content and error - as sibling blocks that
+                BaseActivity.showOnly swaps between.
+
+                Nothing on this page decides a rule. The account status chip
+                mirrors whatever the Web API reported, and the deactivation
+                button only RAISES a request: rule R5 reserves the actual
+                deactivation for a Backoffice officer.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:orientation="vertical">
+
+    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_profile"
+        style="@style/Widget.SmartSolar.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ================= STATE 1: loading ================= -->
+            <LinearLayout
+                android:id="@+id/layout_profile_loading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/space_xl">
+
+                <ProgressBar
+                    android:id="@+id/progress_profile_loading"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true" />
+
+                <TextView
+                    android:id="@+id/text_profile_loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="@string/loading"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.Caption" />
+
+            </LinearLayout>
+
+            <!-- ================= STATE 2: error ================= -->
+            <LinearLayout
+                android:id="@+id/layout_profile_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/screen_padding"
+                android:background="@drawable/bg_error_panel"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/space_lg"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/img_profile_error"
+                    android:layout_width="@dimen/icon_lg"
+                    android:layout_height="@dimen/icon_lg"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_alert"
+                    app:tint="@color/error_red" />
+
+                <TextView
+                    android:id="@+id/text_profile_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:gravity="center"
+                    android:text="@string/error_generic"
+                    android:textAppearance="@style/TextAppearance.SmartSolar.Body" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_profile_retry"
+                    style="@style/Widget.SmartSolar.Button.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:text="@string/action_retry" />
+
+            </LinearLayout>
+
+            <!-- ================= STATE 3: content ================= -->
+            <LinearLayout
+                android:id="@+id/layout_profile_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/screen_padding"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <!-- ===== Identity header ===== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_profile_identity"
+                    style="@style/Widget.SmartSolar.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <!-- Avatar circle carrying the first letter of the account holder name. -->
+                        <TextView
+                            android:id="@+id/text_profile_initial"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:background="@drawable/bg_circle_solar"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            tools:text="N" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_md"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/text_profile_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:maxLines="2"
+                                android:textColor="@color/slate_900"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                tools:text="Nimal Perera" />
+
+                            <!-- Role and account status, both reported by the Web API. -->
+                            <LinearLayout
+                                android:id="@+id/row_profile_chips"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/space_sm"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/text_profile_role"
+                                    style="@style/Widget.SmartSolar.StatusChip"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    tools:text="Prosumer" />
+
+                                <TextView
+                                    android:id="@+id/text_profile_status"
+                                    style="@style/Widget.SmartSolar.StatusChip"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/space_sm"
+                                    tools:text="Active" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--
+                  Deactivation request banner. Shown when the profile returned by
+                  the API already carries deactivationRequested = true, and again
+                  right after a request is accepted. Only a Backoffice officer can
+                  complete the deactivation (rule R5), so this is a notice, never
+                  a state the phone decided.
+                -->
+                <LinearLayout
+                    android:id="@+id/panel_deactivation_pending"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:background="@drawable/bg_warning_panel"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_md"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/img_deactivation_pending"
+                        android:layout_width="@dimen/icon_sm"
+                        android:layout_height="@dimen/icon_sm"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_alert"
+                        app:tint="@color/warning_amber" />
+
+                    <TextView
+                        android:id="@+id/text_deactivation_pending"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_sm"
+                        android:layout_weight="1"
+                        android:text="@string/deactivation_pending_notice"
+                        android:textAppearance="@style/TextAppearance.SmartSolar.Body"
+                        android:textColor="@color/solar_800" />
+
+                </LinearLayout>
+
+                <!-- ===== Read only account details ===== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_profile_details"
+                    style="@style/Widget.SmartSolar.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/text_details_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Account details"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+                        <!-- NIC: the prosumer primary key, never editable from the phone. -->
+                        <TextView
+                            android:id="@+id/label_detail_nic"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:text="NIC"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.FieldLabel" />
+
+                        <TextView
+                            android:id="@+id/text_detail_nic"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.FieldValue"
+                            tools:text="200145678912" />
+
+                        <View
+                            android:id="@+id/divider_detail_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:background="@color/divider" />
+
+                        <TextView
+                            android:id="@+id/label_detail_username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:text="Username"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.FieldLabel" />
+
+                        <TextView
+                            android:id="@+id/text_detail_username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.FieldValue"
+                            tools:text="nimal.perera" />
+
+                        <View
+                            android:id="@+id/divider_detail_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:background="@color/divider" />
+
+                        <TextView
+                            android:id="@+id/label_detail_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:text="@string/hint_email"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.FieldLabel" />
+
+                        <TextView
+                            android:id="@+id/text_detail_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.FieldValue"
+                            tools:text="nimal@example.lk" />
+
+                        <View
+                            android:id="@+id/divider_detail_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:background="@color/divider" />
+
+                        <TextView
+                            android:id="@+id/label_detail_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:text="@string/hint_phone"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.FieldLabel" />
+
+                        <TextView
+                            android:id="@+id/text_detail_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.FieldValue"
+                            tools:text="+94 71 234 5678" />
+
+                        <View
+                            android:id="@+id/divider_detail_4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:background="@color/divider" />
+
+                        <TextView
+                            android:id="@+id/label_detail_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:text="@string/hint_address"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.FieldLabel" />
+
+                        <TextView
+                            android:id="@+id/text_detail_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.FieldValue"
+                            tools:text="12 Solar Lane, Malabe" />
+
+                        <!--
+                          Assigned microgrid node. Only a Grid Operator account has
+                          one, so the Activity hides this whole block for a prosumer.
+                        -->
+                        <LinearLayout
+                            android:id="@+id/row_detail_station"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="visible">
+
+                            <View
+                                android:id="@+id/divider_detail_5"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="@dimen/space_md"
+                                android:background="@color/divider" />
+
+                            <TextView
+                                android:id="@+id/label_detail_station"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/space_md"
+                                android:text="Assigned node"
+                                android:textAppearance="@style/TextAppearance.SmartSolar.FieldLabel" />
+
+                            <TextView
+                                android:id="@+id/text_detail_station"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:textAppearance="@style/TextAppearance.SmartSolar.FieldValue"
+                                tools:text="STN-001" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--
+                  Staff notice. A Grid Operator or Backoffice account is created and
+                  maintained by a Backoffice officer in the web application, so the
+                  edit form below is replaced by this panel for those roles.
+                -->
+                <LinearLayout
+                    android:id="@+id/panel_staff_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:background="@drawable/bg_info_panel"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/space_md"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/img_staff_profile"
+                        android:layout_width="@dimen/icon_sm"
+                        android:layout_height="@dimen/icon_sm"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_info"
+                        app:tint="@color/info_blue" />
+
+                    <TextView
+                        android:id="@+id/text_staff_profile"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_sm"
+                        android:layout_weight="1"
+                        android:text="Staff profiles are maintained by a Backoffice officer in the Smart Solar web application. You can still change your password here."
+                        android:textAppearance="@style/TextAppearance.SmartSolar.Body" />
+
+                </LinearLayout>
+
+                <!-- ===== Edit profile (prosumers only) ===== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_edit_profile"
+                    style="@style/Widget.SmartSolar.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/text_edit_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/action_edit_profile"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_profile_full_name"
+                            style="@style/Widget.SmartSolar.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:hint="@string/hint_full_name">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_profile_full_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionNext"
+                                android:inputType="textPersonName|textCapWords"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_profile_email"
+                            style="@style/Widget.SmartSolar.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:hint="@string/hint_email"
+                            app:startIconDrawable="@drawable/ic_email">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_profile_email"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionNext"
+                                android:inputType="textEmailAddress"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_profile_phone"
+                            style="@style/Widget.SmartSolar.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:hint="@string/hint_phone"
+                            app:startIconDrawable="@drawable/ic_phone">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_profile_phone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionNext"
+                                android:inputType="phone"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_profile_address"
+                            style="@style/Widget.SmartSolar.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:hint="@string/hint_address"
+                            app:startIconDrawable="@drawable/ic_map_pin">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_profile_address"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionDone"
+                                android:inputType="textPostalAddress|textMultiLine"
+                                android:maxLines="3" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_save_profile"
+                            style="@style/Widget.SmartSolar.Button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_lg"
+                            android:text="@string/action_save" />
+
+                        <!-- Visible only while the PUT /prosumers/{nic} call is in flight. -->
+                        <ProgressBar
+                            android:id="@+id/progress_save_profile"
+                            style="?android:attr/progressBarStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:indeterminate="true"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ===== Change password (every role) ===== -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_change_password"
+                    style="@style/Widget.SmartSolar.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/text_password_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/action_change_password"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_current_password"
+                            style="@style/Widget.SmartSolar.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:hint="@string/hint_current_password"
+                            app:endIconMode="password_toggle"
+                            app:startIconDrawable="@drawable/ic_lock">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_current_password"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionNext"
+                                android:inputType="textPassword"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_new_password"
+                            style="@style/Widget.SmartSolar.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:hint="@string/hint_new_password"
+                            app:endIconMode="password_toggle"
+                            app:startIconDrawable="@drawable/ic_lock">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_new_password"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionNext"
+                                android:inputType="textPassword"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_confirm_new_password"
+                            style="@style/Widget.SmartSolar.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:hint="@string/hint_confirm_password"
+                            app:endIconMode="password_toggle"
+                            app:startIconDrawable="@drawable/ic_lock">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_confirm_new_password"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:imeOptions="actionDone"
+                                android:inputType="textPassword"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_change_password"
+                            style="@style/Widget.SmartSolar.Button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_lg"
+                            android:text="@string/action_change_password" />
+
+                        <!-- Visible only while the POST /auth/change-password call is in flight. -->
+                        <ProgressBar
+                            android:id="@+id/progress_change_password"
+                            style="?android:attr/progressBarStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:indeterminate="true"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--
+                  Deactivation request (prosumers only). Tapping the button opens a
+                  dialog that inflates dialog_reason_input and posts the reason to
+                  POST /prosumers/{nic}/request-deactivation. The account is NOT
+                  deactivated by this call - rule R5 leaves that to a Backoffice
+                  officer, and the API is the only place that decides it.
+                -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_deactivate"
+                    style="@style/Widget.SmartSolar.Card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/text_deactivate_heading"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/action_request_deactivation"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+                        <TextView
+                            android:id="@+id/text_deactivate_note"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_xs"
+                            android:text="@string/confirm_request_deactivation"
+                            android:textAppearance="@style/TextAppearance.SmartSolar.Caption" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_request_deactivation"
+                            style="@style/Widget.SmartSolar.Button.Danger"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/space_md"
+                            android:text="@string/action_request_deactivation" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- ===== Sign out ===== -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_profile_logout"
+                    style="@style/Widget.SmartSolar.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_lg"
+                    android:layout_marginBottom="@dimen/space_lg"
+                    android:text="@string/action_logout"
+                    app:icon="@drawable/ic_logout"
+                    app:iconTint="@color/slate_700" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

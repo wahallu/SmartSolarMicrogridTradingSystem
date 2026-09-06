@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : activity_new_booking.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : Layout for the prosumer's four step booking flow:
+                  1. pick an Active microgrid node,
+                  2. pick a date inside the 7 day window,
+                  3. pick one of the slots the API says are bookable,
+                  4. enter the energy amount and send the request.
+                The slot section carries the loading / content / empty states
+                that NewBookingActivity toggles with showOnly().
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:orientation="vertical">
+
+    <!-- Amber application bar; the back arrow is wired by BaseActivity.setupToolbar. -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.SmartSolar.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        app:title="@string/new_booking_title" />
+
+    <!-- The form can overflow on a small screen, so the whole body scrolls. -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_booking"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/screen_padding">
+
+            <!-- ============ Booking window notice ============
+                 Rule R1 is stated here for the user's benefit only. The Web API
+                 is the authority and rejects anything outside the window. -->
+            <LinearLayout
+                android:id="@+id/panel_window_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_info_panel"
+                android:orientation="horizontal"
+                android:padding="@dimen/space_md">
+
+                <ImageView
+                    android:layout_width="@dimen/icon_md"
+                    android:layout_height="@dimen/icon_md"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_info"
+                    android:tint="@color/info_blue"
+                    tools:ignore="UseAppTint" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_sm"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/booking_window_notice"
+                        android:textAppearance="@style/TextAppearance.SmartSolar.Body"
+                        android:textStyle="bold" />
+
+                    <!-- strings.xml is frozen for this screen, so this one sentence is
+                         declared inline. It records that the rule is server side. -->
+                    <TextView
+                        android:id="@+id/text_window_enforced"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:text="The date picker only suggests these days. The Smart Solar API enforces the rule and will reject any request outside the window."
+                        android:textAppearance="@style/TextAppearance.SmartSolar.Caption"
+                        tools:ignore="HardcodedText" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ============ Step 1: the microgrid node ============ -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:text="@string/label_select_station"
+                android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+            <Spinner
+                android:id="@+id/spinner_station"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:background="@drawable/bg_input_rounded"
+                android:minHeight="52dp"
+                android:paddingStart="@dimen/space_md"
+                android:paddingEnd="@dimen/space_md" />
+
+            <ProgressBar
+                android:id="@+id/progress_stations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/space_sm"
+                android:visibility="gone" />
+
+            <!-- ============ Step 2: the date ============ -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:text="@string/label_select_date"
+                android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_date"
+                style="@style/Widget.SmartSolar.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:hint="@string/label_select_date"
+                app:startIconContentDescription="@string/label_select_date"
+                app:startIconDrawable="@drawable/ic_calendar">
+
+                <!-- Read only: taps open a DatePickerDialog instead of the keyboard. -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="none" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- ============ Step 3: the energy slot ============ -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:text="@string/label_select_slot"
+                android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+            <!-- Loading state for the slot query. -->
+            <ProgressBar
+                android:id="@+id/progress_slots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/space_md"
+                android:visibility="gone" />
+
+            <!-- Content state: one selectable card per bookable slot. -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_slots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone"
+                tools:itemCount="3"
+                tools:listitem="@android:layout/simple_list_item_1" />
+
+            <!-- Empty state, also reused to show a slot loading failure. -->
+            <LinearLayout
+                android:id="@+id/empty_slots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:background="@drawable/bg_warning_panel"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/space_md"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="@dimen/icon_md"
+                    android:layout_height="@dimen/icon_md"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_clock"
+                    android:tint="@color/warning_amber"
+                    tools:ignore="UseAppTint" />
+
+                <!-- strings.xml is frozen for this screen, so the empty wording is inline. -->
+                <TextView
+                    android:id="@+id/text_slots_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_sm"
+                    android:text="No energy slots are available at this node for the chosen date. Try another date or another node."
+                    android:textAppearance="@style/TextAppearance.SmartSolar.Body"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <!-- ============ Step 4: the energy amount ============ -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:text="@string/label_energy_kwh"
+                android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_energy"
+                style="@style/Widget.SmartSolar.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:hint="@string/label_energy_kwh"
+                app:helperTextEnabled="true"
+                app:startIconContentDescription="@string/label_energy_kwh"
+                app:startIconDrawable="@drawable/ic_bolt">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_energy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="numberDecimal"
+                    android:maxLength="8" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- ============ Submit ============ -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_submit"
+                style="@style/Widget.SmartSolar.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:enabled="false"
+                android:text="@string/action_submit_booking" />
+
+            <!-- Shown while the POST is in flight; the button is disabled at the same time. -->
+            <ProgressBar
+                android:id="@+id/progress_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/space_md"
+                android:layout_marginBottom="@dimen/space_md"
+                android:visibility="gone" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
