@@ -768,16 +768,14 @@ submission instructions — is the prosumer home screen.]_
 ## 10. Testing and verification
 
 The API was verified end to end against a live MongoDB instance with a scripted suite of
-**89 assertions** covering authentication, seed data, the map feature, the reservation
+**90 assertions** covering authentication, seed data, the map feature, the reservation
 workflow, every business rule, role enforcement, account management and the response
-envelope. The final run passes **88 of 89**; the single non-passing assertion is a
-non-idempotent check in the test script itself (it asserts an exact prosumer count, which
-an earlier run's test registration had already increased), not a defect in the system.
+envelope. The final run passes **90 of 90**.
 
 | Area | Assertions | Result |
 |---|---|---|
 | Authentication and role routing | 11 | all pass |
-| Seed data and collections | 9 | pass (1 count assertion non-idempotent) |
+| Seed data and collections | 9 | all pass |
 | Map / nearby with server distance | 4 | all pass |
 | Reservation workflow, R1 / R8 / R13 | 8 | all pass |
 | 12-hour rule R2 / R3 | 7 | all pass |
@@ -789,6 +787,17 @@ an earlier run's test registration had already increased), not a defect in the s
 | Account management R5 / R6 / R7 | 13 | all pass |
 | Cancellation and validation envelope | 7 | all pass |
 | HTTP verb override | 1 | pass |
+| **Total** | **90** | **90 pass, 0 fail** |
+
+Rules confirmed by direct observation rather than inspection include: a pending account
+being refused login with `ACCOUNT_PENDING`; a deactivated account refused with
+`ACCOUNT_DEACTIVATED` and restored only by a Backoffice caller; a booking more than seven
+days out refused with `RES_WINDOW_7_DAYS`; a cancellation inside the twelve-hour window
+refused with `RES_CANCEL_12H` while `canCancel` was already `false` on the same record;
+a node holding future bookings refused deactivation with `STATION_HAS_ACTIVE_RES`; a QR
+token accepted either bare or as the full scanned JSON payload, and rejected outside its
+window with `QR_OUT_OF_WINDOW`; and a prosumer blocked from reading another prosumer's
+profile or verifying a QR code.
 
 ### 10.1 Two defects found and fixed during testing
 

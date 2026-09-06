@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  =============================================================================
+  File        : activity_booking_summary.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : The shared "what just happened" page the marking scheme asks for
+                after every reservation action. A large badge reports success or
+                failure, the title and the message underneath are supplied by the
+                caller (the message is the WEB API's own wording, never text this
+                screen invents), and the optional card below repeats the booking
+                exactly as the server returned it.
+
+                Two exits are offered so the page is never a dead end: the
+                bookings list, and the role home screen. There is deliberately no
+                back arrow on the toolbar - see BookingSummaryActivity for why the
+                form the user just submitted must not be returned to.
+
+                NOTE ON LITERAL TEXT: strings.xml is owned by another module of
+                this project and is not edited from here, so the handful of
+                captions that have no entry yet are written inline and the
+                HardcodedText check is suppressed on the root for that reason.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  =============================================================================
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
+
+    <!-- The amber application bar. BaseActivity wires it up WITHOUT a back arrow. -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_booking_summary"
+        style="@style/Widget.SmartSolar.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height" />
+
+    <!-- The result can be taller than a small screen once the booking card is shown. -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_summary"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/screen_padding"
+            android:paddingTop="@dimen/space_xl"
+            android:paddingEnd="@dimen/screen_padding"
+            android:paddingBottom="@dimen/space_xl">
+
+            <!--
+              ---------- Outcome badge ----------
+              The panel background and the icon inside it are both swapped in Java:
+              bg_success_panel with ic_check_circle when the action succeeded, and
+              bg_error_panel with ic_alert when it did not.
+            -->
+            <FrameLayout
+                android:id="@+id/panel_summary_badge"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:background="@drawable/bg_success_panel">
+
+                <ImageView
+                    android:id="@+id/img_summary_icon"
+                    android:layout_width="@dimen/icon_lg"
+                    android:layout_height="@dimen/icon_lg"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/summary_title"
+                    android:src="@drawable/ic_check_circle"
+                    app:tint="@color/grid_600" />
+            </FrameLayout>
+
+            <!-- Headline supplied by the calling screen, e.g. "Booking requested". -->
+            <TextView
+                android:id="@+id/text_summary_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:gravity="center"
+                android:textColor="@color/slate_900"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                tools:text="@string/summary_booking_created" />
+
+            <!--
+              The Web API's own message. It is displayed verbatim because the
+              server already words its verdicts for an end user, including the
+              rule violations such as the 12 hour notice period.
+            -->
+            <TextView
+                android:id="@+id/text_summary_message"
+                style="@style/TextAppearance.SmartSolar.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:gravity="center"
+                android:textColor="@color/slate_600"
+                tools:text="Reservation created and is awaiting approval." />
+
+            <!--
+              ---------- Booking summary card ----------
+              Rendered only when the caller passed the reservation JSON the API
+              returned. Hidden whenever that extra is absent or unparsable.
+            -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_summary_booking"
+                style="@style/Widget.SmartSolar.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- The reference is monospaced so its digit groups line up. -->
+                    <TextView
+                        android:id="@+id/text_summary_reservation_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:fontFamily="monospace"
+                        android:maxLines="1"
+                        android:textColor="@color/slate_900"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="RSV-20260904-0001" />
+
+                    <!-- Status name and pill colour both come from the API's status value. -->
+                    <TextView
+                        android:id="@+id/text_summary_status"
+                        style="@style/Widget.SmartSolar.StatusChip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_sm"
+                        tools:text="Pending" />
+
+                    <!-- Microgrid node: name on top, code beneath it. -->
+                    <TextView
+                        style="@style/TextAppearance.SmartSolar.FieldLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_md"
+                        android:text="@string/label_select_station" />
+
+                    <TextView
+                        android:id="@+id/text_summary_station_name"
+                        style="@style/TextAppearance.SmartSolar.FieldValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="Malabe Solar Hub" />
+
+                    <TextView
+                        android:id="@+id/text_summary_station_code"
+                        style="@style/TextAppearance.SmartSolar.Caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="STN-001" />
+
+                    <!-- Slot day, formatted from the server's reservationStartUtc. -->
+                    <TextView
+                        style="@style/TextAppearance.SmartSolar.FieldLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_md"
+                        android:text="@string/label_select_date" />
+
+                    <TextView
+                        android:id="@+id/text_summary_date"
+                        style="@style/TextAppearance.SmartSolar.FieldValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="04 Sep 2026" />
+
+                    <!-- Slot window, sent by the server already formatted. -->
+                    <TextView
+                        style="@style/TextAppearance.SmartSolar.FieldLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_md"
+                        android:text="Time window" />
+
+                    <TextView
+                        android:id="@+id/text_summary_time"
+                        style="@style/TextAppearance.SmartSolar.FieldValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="08:00 - 10:00" />
+
+                    <!-- Energy traded, or the delivered figure once a transfer was finalised. -->
+                    <TextView
+                        style="@style/TextAppearance.SmartSolar.FieldLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_md"
+                        android:text="@string/label_energy_kwh" />
+
+                    <TextView
+                        android:id="@+id/text_summary_energy"
+                        style="@style/TextAppearance.SmartSolar.FieldValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="18.0 kWh" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ---------- Exits ---------- -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_summary_bookings"
+                style="@style/Widget.SmartSolar.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xl"
+                android:text="@string/action_my_bookings"
+                app:icon="@drawable/ic_calendar"
+                app:iconTint="@color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_summary_home"
+                style="@style/Widget.SmartSolar.Button.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm"
+                android:text="Back to home"
+                app:icon="@drawable/ic_home"
+                app:iconTint="@color/slate_700" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
