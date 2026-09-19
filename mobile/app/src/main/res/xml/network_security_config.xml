@@ -1,18 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Allows plain HTTP to the development API hosts only. 10.0.2.2 is the Android
-  emulator's alias for the host machine's localhost, which is where the C# Web
-  API runs during development. A production deployment would serve the API over
-  HTTPS and this file would be removed.
+  =============================================================================
+  File        : network_security_config.xml
+  Project     : Smart Solar Microgrid Trading System - Android Client
+  Description : Controls which hosts this application may reach over plain HTTP.
+
+                Since Android 9 (API 28) cleartext HTTP is blocked by default.
+                The assignment's C# Web API is demonstrated over plain HTTP on a
+                development machine or an IIS server on the local network, so
+                cleartext has to be permitted for the app to reach it at all.
+
+                WHY A BLANKET base-config RATHER THAN A HOST LIST:
+                the earlier version of this file listed individual addresses,
+                which does not survive contact with reality. A domain entry
+                matches a host name exactly - listing 192.168.1.1 does NOT cover
+                192.168.1.6 - and the laptop's address changes every time the
+                project moves to a different network, so a hard-coded list
+                silently breaks the app at exactly the wrong moment. Permitting
+                cleartext once, deliberately and in one place, is both simpler to
+                explain and far less brittle.
+
+                PRODUCTION NOTE: a deployed system would serve the API over
+                HTTPS, and this entire file would be deleted along with the
+                android:usesCleartextTraffic flag in the manifest. It is here
+                purely so the assignment can be demonstrated end to end.
+  Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+  Created     : 2026-09-04
+  References  : https://developer.android.com/privacy-and-security/security-config
+  =============================================================================
 -->
 <network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">10.0.2.2</domain>
-        <domain includeSubdomains="true">localhost</domain>
-        <domain includeSubdomains="true">127.0.0.1</domain>
-        <!-- Common private ranges, so a physical phone can reach a laptop on the same Wi-Fi. -->
-        <domain includeSubdomains="true">192.168.1.1</domain>
-        <domain includeSubdomains="true">192.168.0.1</domain>
-        <domain includeSubdomains="true">192.168.8.1</domain>
-    </domain-config>
+
+    <!--
+      Applies to every host the app talks to. The three deployment targets this
+      needs to cover are:
+        127.0.0.1    - a physical device reached through "adb reverse tcp:5218 tcp:5218"
+        10.0.2.2     - the Android emulator's alias for the host machine
+        192.168.x.x  - the laptop or IIS server on the local Wi-Fi network
+    -->
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <!-- The device's own CA store, i.e. the normal set of public roots. -->
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
 </network-security-config>

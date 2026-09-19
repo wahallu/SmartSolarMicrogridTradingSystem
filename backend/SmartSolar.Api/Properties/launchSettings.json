@@ -29,6 +29,16 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+
+    "device": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://0.0.0.0:5218",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
