@@ -7,7 +7,7 @@
  *               such as "a prosumer may only touch their own reservations", but
  *               it must not depend on ASP.NET's HttpContext. This small object
  *               carries exactly the facts the rules need and nothing else.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */
@@ -24,6 +24,9 @@ public class CurrentUser
     public string Username { get; init; } = string.Empty;
     public string FullName { get; init; } = string.Empty;
     public UserRole Role { get; init; } = UserRole.Prosumer;
+
+    /// <summary>Account lifecycle status projected from the JWT claim.</summary>
+    public string? Status { get; init; }
 
     /// <summary>NIC of the caller when the caller is a prosumer, otherwise null.</summary>
     public string? Nic { get; init; }
@@ -42,6 +45,9 @@ public class CurrentUser
 
     /// <summary>Backoffice and GridOperator together are treated as staff.</summary>
     public bool IsStaff => IsBackoffice || IsGridOperator;
+
+    /// <summary>True when the account status claim is Active.</summary>
+    public bool IsActive => string.Equals(Status, "Active", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>Represents an unauthenticated caller for anonymous endpoints.</summary>
     public static CurrentUser Anonymous { get; } = new();
@@ -68,6 +74,7 @@ public class CurrentUser
             Username = principal.FindFirstValue(ClaimTypes.Name) ?? string.Empty,
             FullName = principal.FindFirstValue(AppClaimTypes.FullName) ?? string.Empty,
             Role = role,
+            Status = principal.FindFirstValue(AppClaimTypes.Status),
             Nic = principal.FindFirstValue(AppClaimTypes.Nic),
             AssignedStationId = principal.FindFirstValue(AppClaimTypes.StationId),
             AssignedStationCode = principal.FindFirstValue(AppClaimTypes.StationCode)

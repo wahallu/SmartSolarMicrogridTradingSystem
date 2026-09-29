@@ -7,7 +7,7 @@
  *               The token carries the caller's identity, role, NIC and assigned
  *               station so that authorisation decisions never need a database
  *               round trip on each call.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */
