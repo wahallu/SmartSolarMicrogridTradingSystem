@@ -13,7 +13,7 @@
  *               as coarse role gates and are truly enforced inside the FAT
  *               service, so neither the React client nor the Android client can
  *               bypass them.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

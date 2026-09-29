@@ -10,7 +10,7 @@
  *               an account to Active), R7 (NIC is unique), R10 (only Backoffice
  *               may create, activate, deactivate or delete) and R11 (a prosumer
  *               may only read or edit their own profile).
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */
