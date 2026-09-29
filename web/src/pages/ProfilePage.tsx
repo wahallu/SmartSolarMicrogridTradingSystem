@@ -9,7 +9,7 @@
  *               uniqueness, whether the account may be edited at all and the
  *               fate of a pending deactivation request are all API rulings, and
  *               this screen only forwards the request and renders the answer.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */
