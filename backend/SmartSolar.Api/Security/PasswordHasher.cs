@@ -6,7 +6,7 @@
  *               generated per account, 100,000 iterations are applied, and the
  *               verification compares in fixed time so the comparison itself
  *               leaks nothing about the stored hash.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * References  : PBKDF2 usage follows the pattern documented by Microsoft at
  *               https://learn.microsoft.com/aspnet/core/security/data-protection/consumer-apis/password-hashing
@@ -37,6 +37,8 @@ public class PasswordHasher : IPasswordHasher
     /// <summary>Generates a cryptographically random salt and derives the hash from it.</summary>
     public (string Hash, string Salt) Hash(string password)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(password);
+
         // A per account salt means two users with the same password never share a hash.
         var salt = RandomNumberGenerator.GetBytes(SaltSizeBytes);
         var hash = Rfc2898DeriveBytes.Pbkdf2(password, salt, Iterations, HashAlgorithmName.SHA256, HashSizeBytes);
@@ -46,8 +48,8 @@ public class PasswordHasher : IPasswordHasher
     /// <summary>Re-derives the hash from the candidate password and compares it in fixed time.</summary>
     public bool Verify(string password, string hash, string salt)
     {
-        // Malformed stored material must fail closed rather than throw during a login.
-        if (string.IsNullOrWhiteSpace(hash) || string.IsNullOrWhiteSpace(salt))
+        // Malformed stored material or empty password must fail closed rather than throw during a login.
+        if (string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(hash) || string.IsNullOrWhiteSpace(salt))
         {
             return false;
         }
