@@ -277,6 +277,13 @@ public class SlotService : ISlotService
             return ServiceResult<SlotDto>.NotFound("Microgrid node not found.");
         }
 
+        if (!CanManageSlotsAt(caller, request.StationId))
+        {
+            return ServiceResult<SlotDto>.Forbidden(
+                "A Grid Operator may only publish slots at their assigned microgrid node.",
+                ErrorCodes.Forbidden);
+        }
+
         try
         {
             var station = await _db.Stations
@@ -403,6 +410,13 @@ public class SlotService : ISlotService
         if (!ObjectId.TryParse(request.StationId, out _))
         {
             return ServiceResult<GenerateSlotsResultDto>.NotFound("Microgrid node not found.");
+        }
+
+        if (!CanManageSlotsAt(caller, request.StationId))
+        {
+            return ServiceResult<GenerateSlotsResultDto>.Forbidden(
+                "A Grid Operator may only generate slots at their assigned microgrid node.",
+                ErrorCodes.Forbidden);
         }
 
         try
@@ -623,6 +637,13 @@ public class SlotService : ISlotService
                 return ServiceResult<SlotDto>.NotFound("Booking slot not found.");
             }
 
+            if (!CanManageSlotsAt(caller, existing.StationId))
+            {
+                return ServiceResult<SlotDto>.Forbidden(
+                    "A Grid Operator may only edit slots at their assigned microgrid node.",
+                    ErrorCodes.Forbidden);
+            }
+
             // Moving a slot that prosumers have already booked would silently change the instant they
             // agreed to, so the time window and the battery bay are frozen once a booking exists.
             var movesTheSlot =
@@ -748,6 +769,19 @@ public class SlotService : ISlotService
             // already exist on the slot - those prosumers keep their agreement and must be cancelled
             // explicitly through the reservation workflow, which applies the 12 hour notice rule R3.
             var idFilter = Builders<EnergyBookingSlot>.Filter.Eq(s => s.Id, id);
+            var existing = await _db.Slots.Find(idFilter).FirstOrDefaultAsync(ct);
+            if (existing is null)
+            {
+                return ServiceResult<SlotDto>.NotFound("Booking slot not found.");
+            }
+
+            if (!CanManageSlotsAt(caller, existing.StationId))
+            {
+                return ServiceResult<SlotDto>.Forbidden(
+                    "A Grid Operator may only block slots at their assigned microgrid node.",
+                    ErrorCodes.Forbidden);
+            }
+
             var update = Builders<EnergyBookingSlot>.Update
                 .Set(s => s.Status, SlotStatus.Blocked)
                 .Set(s => s.UpdatedAt, _clock.UtcNow)
@@ -809,6 +843,13 @@ public class SlotService : ISlotService
                 return ServiceResult<bool>.NotFound("Booking slot not found.");
             }
 
+            if (!CanManageSlotsAt(caller, existing.StationId))
+            {
+                return ServiceResult<bool>.Forbidden(
+                    "A Grid Operator may only delete slots at their assigned microgrid node.",
+                    ErrorCodes.Forbidden);
+            }
+
             // Deleting a booked slot would orphan the reservations that point at it, so the slot is
             // kept and the operator is told to block it instead.
             if (existing.BookedCount > 0)
@@ -841,6 +882,18 @@ public class SlotService : ISlotService
     // =========================================================================
     // Private helpers
     // =========================================================================
+
+    /// <summary>Checks whether a staff caller may mutate slots at one microgrid node.</summary>
+    /// <param name="caller">Authenticated staff caller.</param>
+    /// <param name="stationId">Node that owns the slot or generation request.</param>
+    /// <returns>True for Backoffice, or for a Grid Operator assigned to this exact node.</returns>
+    private static bool CanManageSlotsAt(CurrentUser caller, string stationId)
+    {
+        return caller.IsBackoffice ||
+               (caller.IsGridOperator &&
+                !string.IsNullOrWhiteSpace(caller.AssignedStationId) &&
+                string.Equals(caller.AssignedStationId, stationId, StringComparison.OrdinalIgnoreCase));
+    }
 
     /// <summary>
     /// Turns a calendar day plus a "HH:mm" wall clock string into the absolute instant
