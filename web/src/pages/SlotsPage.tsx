@@ -135,7 +135,7 @@ function describeError(err: unknown): string {
 export default function SlotsPage() {
   // Grid Operators are pinned to their own node; Backoffice officers pick any.
   const toast = useToast();
-  const { user } = useAuth();
+  const { user, isGridOperator } = useAuth();
   const assignedStationId: string = user?.assignedStationId ?? '';
 
   /* ---- lookup data ---- */
@@ -187,8 +187,8 @@ export default function SlotsPage() {
     setReloadKey((current) => current + 1);
   }
 
-  // Loads the node list once, then pre-selects the operator's own node when they
-  // have one and otherwise the first node in the list.
+  // A Grid Operator receives only their assigned node. Backoffice officers keep
+  // the full selector because they are allowed to manage every node.
   useEffect(() => {
     let cancelled = false;
 
@@ -197,17 +197,36 @@ export default function SlotsPage() {
       setStationsError(null);
 
       try {
+        if (isGridOperator) {
+          if (assignedStationId === '') {
+            setStations([]);
+            setStationId('');
+            setStationsError('This Grid Operator account is not assigned to a microgrid node.');
+            return;
+          }
+
+          const assignedStation = await stationsApi.get(assignedStationId);
+          if (cancelled) return;
+
+          setStations([assignedStation]);
+          setStationId(assignedStation.id);
+          return;
+        }
+
         const paged = await stationsApi.list({ pageSize: 100 });
         if (cancelled) return;
 
         setStations(paged.items);
         const fallback = paged.items.length > 0 ? paged.items[0].id : '';
-        const preferred = paged.items.some((station) => station.id === assignedStationId)
-          ? assignedStationId
-          : fallback;
-        setStationId((current) => (current === '' ? preferred : current));
+        setStationId((current) =>
+          paged.items.some((station) => station.id === current) ? current : fallback,
+        );
       } catch (err) {
-        if (!cancelled) setStationsError(describeError(err));
+        if (!cancelled) {
+          setStations([]);
+          setStationId('');
+          setStationsError(describeError(err));
+        }
       } finally {
         if (!cancelled) setStationsLoading(false);
       }
@@ -217,7 +236,7 @@ export default function SlotsPage() {
     return () => {
       cancelled = true;
     };
-  }, [assignedStationId]);
+  }, [assignedStationId, isGridOperator]);
 
   // Re-runs whenever a filter or the page changes. The cancelled guard stops a
   // slow reply from writing into a component that has already been unmounted.
@@ -498,7 +517,7 @@ export default function SlotsPage() {
               id="slot-station"
               className="select"
               value={stationId}
-              disabled={stationsLoading || stations.length === 0}
+              disabled={stationsLoading || stations.length === 0 || isGridOperator}
               onChange={(event) => {
                 setStationId(event.target.value);
                 setPage(1);
