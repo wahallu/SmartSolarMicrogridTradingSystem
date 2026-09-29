@@ -50,6 +50,9 @@ public class ReservationService : IReservationService
     /// <summary>
     /// Serialiser settings for the QR payload. The naming policy is deliberately left
     /// null so the anonymous object's member names (v, t, r, n, s, e) are written to
+///
+/// In short: passing null keeps the anonymous object's original member names
+/// (v, t, r, n, s, e) in the output.
     /// the JSON verbatim - the contract fixes those single letter names exactly.
     /// </summary>
     private static readonly JsonSerializerOptions QrPayloadJsonOptions = new()

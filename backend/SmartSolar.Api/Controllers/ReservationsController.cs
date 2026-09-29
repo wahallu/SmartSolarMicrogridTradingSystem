@@ -38,6 +38,10 @@ namespace SmartSolar.Api.Controllers;
 /// staff-only gates (the search grid and the approve / reject / scan actions)
 /// are declared here with [Authorize(Roles = ...)], and the service repeats the
 /// same check so the rule survives if this controller is ever re-hosted.
+///
+/// In short: the controller enforces authentication plus two staff-only gates,
+/// while ownership and lifecycle rules (R11) live in the service, which also
+/// re-checks the role gates to stay safe if re-hosted.
 /// </summary>
 [ApiController]
 [Authorize]
@@ -74,8 +78,12 @@ public class ReservationsController : ControllerBase
 
     /// <summary>
     /// Paged and filtered reservation list for the staff search screens. NIC,
-    /// node, status, date range, free text and paging all arrive on the query
-    /// string and are interpreted by the service, never here.
+/// node, status, date range, free text and paging all arrive on the query
+/// string and are interpreted by the service, never here.
+///
+/// In short: this endpoint just forwards the query string filters (NIC, node,
+/// status, date range, free text, paging) to the service, which does all the
+/// interpreting.
     /// </summary>
     /// <param name="query">NIC, station, status, from/to dates, search text and paging.</param>
     /// <param name="ct">Cancellation token flowed through to the service.</param>
