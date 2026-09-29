@@ -11,7 +11,7 @@
  *
  *               The table holds at most one row (primary key fixed at 1), so a
  *               new login simply replaces the previous session.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

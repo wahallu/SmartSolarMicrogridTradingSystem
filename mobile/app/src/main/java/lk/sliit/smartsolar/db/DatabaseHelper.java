@@ -20,7 +20,7 @@
  *                 stations     - cached microgrid nodes for the map and pickers
  *                 reservations - cached bookings for the list screens
  *                 sync_log     - an audit trail of what was cached and when
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * References  : SQLiteOpenHelper usage follows the Android developer guide at
  *               https://developer.android.com/training/data-storage/sqlite
