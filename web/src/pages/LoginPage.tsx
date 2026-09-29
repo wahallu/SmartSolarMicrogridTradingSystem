@@ -8,7 +8,7 @@
  *               redirect the marking scheme asks for. Account state failures
  *               (Pending, Deactivated) are surfaced with the API's own wording.
  *               No credential rule is evaluated here; the API is the authority.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

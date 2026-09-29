@@ -8,7 +8,7 @@
  *               heading), and hides screens the signed in role may not use.
  *               Serves the "role based access - Backoffice / Grid Operator"
  *               marking requirement on the client side.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

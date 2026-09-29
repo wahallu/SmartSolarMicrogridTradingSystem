@@ -7,7 +7,7 @@
  *               kept in local storage so a page refresh does not sign the user
  *               out; on start-up the token is re-validated against GET /auth/me
  *               so a session revoked on the server does not linger in the UI.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */
