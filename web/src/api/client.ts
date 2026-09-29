@@ -89,7 +89,7 @@ http.interceptors.request.use((config) => {
 http.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiResponse<unknown>>) => {
-    // No response at all means DNS, CORS, a timeout or a stopped API.
+    // The complete absence of any response indicates that the issue could be DNS failure, a CORS restriction, a timeout, or an API that has stopped runnin
     if (!error.response) {
       return Promise.reject(
         new ApiError(
@@ -147,7 +147,7 @@ export async function unwrapWithMessage<T>(
   return { data: body.data as T, message: body.message };
 }
 
-/** Drops empty, null and undefined values so optional filters can be passed freely. */
+/** It filters out empty, null, and undefined values so optional filters can be passed without worry. */
 export function cleanParams(params: Record<string, unknown>): Record<string, unknown> {
   // Without this every unset filter would be sent as "?status=" and confuse the API.
   return Object.fromEntries(
