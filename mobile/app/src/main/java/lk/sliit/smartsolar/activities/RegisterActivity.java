@@ -9,7 +9,7 @@
  *               immediate field level feedback and posts to POST /auth/register.
  *               The account is created Pending by the server under rule R6 and a
  *               duplicate NIC is refused by the server under rule R7.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

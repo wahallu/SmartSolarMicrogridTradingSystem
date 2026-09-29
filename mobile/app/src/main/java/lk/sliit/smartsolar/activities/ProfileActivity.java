@@ -13,7 +13,7 @@
  *               the deactivation flag are all values the Web API reported; the
  *               deactivation button only raises a request because rule R5
  *               reserves the actual deactivation for a Backoffice officer.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

@@ -12,7 +12,7 @@
  *               Nothing here duplicates a business rule; the 7 day window, the
  *               12 hour notice period and slot availability are all decided by
  *               the server.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */
