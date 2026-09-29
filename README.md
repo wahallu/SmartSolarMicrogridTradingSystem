@@ -316,10 +316,10 @@ The demonstration (maximum 5 minutes) should cover:
 
 | IT number | Name | Contribution |
 |---|---|---|
-| ITxxxxxxxx | | Web API: authentication, users, prosumers; JWT and password hashing |
-| ITxxxxxxxx | | Web API: stations, slots, reservations, QR issue/verify; MongoDB schema and seeding |
-| ITxxxxxxxx | | React web application: all screens, routing, Tailwind design system |
-| ITxxxxxxxx | | Android application: all activities, SQLite, Google Maps, QR scanner |
+| ITxxxxxxxx | **Chathushka** | **Identity, Access Control & Local Session:** C# Web API (AuthService, UserService, ProsumerService, PasswordHasher, JwtTokenService, CurrentUser), Web application (AuthContext, ProtectedRoute, LoginPage, UsersPage, ProsumersPage, PendingActivationsPage, ProfilePage), Native Android client (SplashActivity, LoginActivity, RegisterActivity, ProfileActivity, DatabaseHelper SQLite session, SessionManager, ValidationUtils), and business rules R5, R6, R7, R10, R11 |
+| ITxxxxxxxx | **Nisal** | **Microgrid Nodes, Slots & Geolocation:** C# Web API (StationService, SlotService, Haversine nearby), Web (StationsPage, SlotsPage, MapPage), Android (StationsMapActivity, StationDetailActivity, Google Maps SDK), and rules R4, R8, R12 |
+| ITxxxxxxxx | **Akash** | **Reservation Workflow & Business Rules:** C# Web API (ReservationService core, ServiceResult, ErrorCodes, IClock), Web (ReservationsPage, ReservationDetailPage), Android (NewBookingActivity, EditBookingActivity, BookingDetailActivity, BookingSummaryActivity), and rules R1, R2, R3, R13 |
+| ITxxxxxxxx | **Sandun** | **QR Verification, Dashboards & Platform:** C# Web API (QrCodeGenerator, QR verification/complete, MongoDbContext, DataSeeder, Middleware, IIS hosting), Web (client layer, DashboardPage, HomePage), Android (ScannerActivity, VerifyResultActivity, ApiClient, Dashboards), and rule R9 |
 
 ### Declared use of AI tools
 

@@ -826,10 +826,10 @@ or documentation you cannot explain or modify may receive reduced or zero
 individual marks**.
 
 ### Chathushka
-- **Tools used:** _______________________
-- **Stage(s) used:** _______________________
-- **What it was used for:** _______________________
-- **Reflection — how did the initial idea become the final solution?** _______________________
+- **Tools used:** Claude / ChatGPT / Google AI Studio (planning stage only).
+- **Stage(s) used:** Architecture & Planning Stage (initial schema brainstorming and security design).
+- **What it was used for:** Exploring PBKDF2 iteration recommendations (100,000 rounds) vs Argon2 for .NET 8 compatibility, designing the uniform response envelope for auth failures without leaking account enumeration vectors, and evaluating SQLite schema options on Android for single-row session caching.
+- **Reflection — how did the initial idea become the final solution?** The initial design used SharedPreferences for token storage, but after reviewing the coursework marking guide requiring SQLite session persistence, I designed the dedicated `session` table in `DatabaseHelper` with fixed primary key 1 and `CONFLICT_REPLACE` upsert semantics. For the API, the plan originally had separate endpoints for prosumer and staff logins, but consolidating into a single identifier regex lookup supporting NIC, username, and email significantly streamlined both clients while strictly enforcing rules R5 (deactivated) and R6 (pending approval) in the FAT service layer.
 
 ### Nisal
 - **Tools used:** _______________________
