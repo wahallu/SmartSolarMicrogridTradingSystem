@@ -16,6 +16,7 @@
  * =============================================================================
  */
 
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
@@ -223,6 +224,19 @@ public class StationService : IStationService
                 "Available battery slots cannot exceed the total number of battery slots.");
         }
 
+        var operatingHoursError = ValidateTimeWindow(
+            request.OperatingHours.OpenTime, request.OperatingHours.CloseTime);
+        if (operatingHoursError is not null)
+        {
+            return ServiceResult<StationDto>.Invalid(
+                "The default operating hours are invalid.",
+                ErrorCodes.ValidationFailed,
+                new Dictionary<string, List<string>>
+                {
+                    ["operatingHours"] = new List<string> { operatingHoursError }
+                });
+        }
+
         // A caller supplied schedule must be complete; otherwise a sensible open-all-week default is generated.
         List<DaySchedule> weeklySchedule;
         if (request.WeeklySchedule is { Count: > 0 })
@@ -309,6 +323,19 @@ public class StationService : IStationService
         {
             return ServiceResult<StationDto>.Invalid(
                 "Available battery slots cannot exceed the total number of battery slots.");
+        }
+
+        var operatingHoursError = ValidateTimeWindow(
+            request.OperatingHours.OpenTime, request.OperatingHours.CloseTime);
+        if (operatingHoursError is not null)
+        {
+            return ServiceResult<StationDto>.Invalid(
+                "The default operating hours are invalid.",
+                ErrorCodes.ValidationFailed,
+                new Dictionary<string, List<string>>
+                {
+                    ["operatingHours"] = new List<string> { operatingHoursError }
+                });
         }
 
         var newName = (request.Name ?? string.Empty).Trim();
@@ -413,23 +440,22 @@ public class StationService : IStationService
 
         // On every day the node is open the closing time must genuinely come after the opening time.
         var timeErrors = new Dictionary<string, List<string>>();
+        var operatingHoursError = ValidateTimeWindow(
+            request.OperatingHours.OpenTime, request.OperatingHours.CloseTime);
+        if (operatingHoursError is not null)
+        {
+            timeErrors["operatingHours"] = new List<string> { operatingHoursError };
+        }
+
         foreach (var day in request.WeeklySchedule.Where(d => d.IsOpen))
         {
             var field = $"weeklySchedule[{day.DayOfWeek}]";
-            if (!TimeSpan.TryParse(day.OpenTime, out var open) || !TimeSpan.TryParse(day.CloseTime, out var close))
+            var dayError = ValidateTimeWindow(day.OpenTime, day.CloseTime);
+            if (dayError is not null)
             {
                 timeErrors[field] = new List<string>
                 {
-                    $"{DomainMapper.DayName(day.DayOfWeek)} has an opening or closing time that is not in HH:mm format."
-                };
-                continue;
-            }
-
-            if (close <= open)
-            {
-                timeErrors[field] = new List<string>
-                {
-                    $"{DomainMapper.DayName(day.DayOfWeek)} closing time must be later than its opening time."
+                    $"{DomainMapper.DayName(day.DayOfWeek)}: {dayError}"
                 };
             }
         }
@@ -751,6 +777,23 @@ public class StationService : IStationService
     {
         // Kept as a named helper so the Haversine formula above reads like the textbook version.
         return degrees * Math.PI / 180.0;
+    }
+
+    /// <summary>Validates one same-day opening and closing time pair.</summary>
+    /// <param name="openTime">Opening time in HH:mm form.</param>
+    /// <param name="closeTime">Closing time in HH:mm form.</param>
+    /// <returns>A field error when invalid, otherwise null.</returns>
+    private static string? ValidateTimeWindow(string openTime, string closeTime)
+    {
+        const string format = @"hh\:mm";
+
+        if (!TimeSpan.TryParseExact(openTime, format, CultureInfo.InvariantCulture, out var open) ||
+            !TimeSpan.TryParseExact(closeTime, format, CultureInfo.InvariantCulture, out var close))
+        {
+            return "Opening and closing times must use HH:mm.";
+        }
+
+        return close <= open ? "Closing time must be later than opening time." : null;
     }
 
     /// <summary>Checks that a weekly schedule carries exactly seven distinct days numbered 0 to 6.</summary>
