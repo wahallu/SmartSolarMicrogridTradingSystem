@@ -302,7 +302,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ---- Upcoming reservations ---- */}
+        {/* Upcoming reservations  */}
         <div className="card">
           <div className="card-header">
             <h2 className="text-sm font-semibold text-slate-900">Upcoming reservations</h2>
@@ -353,7 +353,7 @@ export default function DashboardPage() {
                         {formatDateTime(reservation.reservationStartUtc)}
                       </td>
                       <td>
-                        {/* The status pill is exactly what the server reported - the UI
+                        {/* 
                             never recomputes a booking's state. */}
                         <span className={reservationBadgeClass(reservation.status)}>
                           {reservation.status}

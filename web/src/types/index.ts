@@ -33,7 +33,7 @@ export interface PagedResult<T> {
   hasNext: boolean;
 }
 
-/** The three principals recognised by the system. */
+
 export type UserRole = 'Backoffice' | 'GridOperator' | 'Prosumer';
 
 /** Life cycle state of any account. */
@@ -144,7 +144,7 @@ export interface Slot {
   bookedCount: number;
   remainingCapacity: number;
   status: SlotStatus;
-  /** Server verdict on rule R8 - obeyed by the UI, never recomputed. */
+  /** Server verdict on rule R8 -  */
   isBookable: boolean;
 }
 

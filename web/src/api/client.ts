@@ -77,7 +77,7 @@ export const http: AxiosInstance = axios.create({
 
 // Attaches the bearer token to every outgoing request.
 http.interceptors.request.use((config) => {
-  // Reading from storage on each call means a fresh login takes effect immediately.
+  
   const token = localStorage.getItem(TOKEN_KEY);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

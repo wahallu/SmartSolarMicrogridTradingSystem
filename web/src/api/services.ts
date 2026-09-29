@@ -32,7 +32,7 @@ import type {
 } from '../types';
 
 /* ===========================================================================
- * Authentication
+ * Auth
  * =========================================================================== */
 
 export const authApi = {
@@ -110,7 +110,7 @@ export const usersApi = {
 };
 
 /* ===========================================================================
- * Solar prosumers (keyed by NIC)
+ * Solar prosumers 
  * =========================================================================== */
 
 export const prosumersApi = {
@@ -177,7 +177,7 @@ export const stationsApi = {
       }),
     ),
 
-  /** Registers a new node. */
+  /** Registers with a new node. */
   create: (payload: Record<string, unknown>) =>
     unwrapWithMessage<Station>(http.post<ApiResponse<Station>>('/stations', payload)),
 
