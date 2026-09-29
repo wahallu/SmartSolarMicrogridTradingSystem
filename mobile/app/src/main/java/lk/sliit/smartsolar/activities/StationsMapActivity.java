@@ -360,12 +360,9 @@ public class StationsMapActivity extends BaseActivity implements OnMapReadyCallb
         markerStations.clear();
         markersByStationId.clear();
 
+        // Latitude and longitude are validated by the API. Zero is a valid value for each
+        // coordinate, including the real intersection at 0,0, so it is never a missing-data sentinel.
         for (StationModel station : visibleStations) {
-            // A node with no coordinates cannot be plotted; it still appears in the list.
-            if (station.getLatitude() == 0 && station.getLongitude() == 0) {
-                continue;
-            }
-
             // Amber for a node in service, blue for one that is out of service, so the map
             // reads the same way as the dimmed cards in the list below it.
             float hue = station.isActive()
