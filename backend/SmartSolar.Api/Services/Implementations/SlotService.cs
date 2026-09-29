@@ -424,6 +424,15 @@ public class SlotService : ISlotService
                     ErrorCodes.StationInactive);
             }
 
+            // One generated row is published per requested battery bay. Refuse a request that
+            // names bays the node does not physically own rather than storing impossible slot data.
+            if (request.BatterySlots > station.TotalBatterySlots)
+            {
+                return ServiceResult<GenerateSlotsResultDto>.Invalid(
+                    $"Cannot generate {request.BatterySlots} battery slot(s) per window because this node " +
+                    $"has only {station.TotalBatterySlots} battery slot(s).");
+            }
+
             var fromDate = request.FromDate.Date;
             var toDate = request.ToDate.Date;
 
