@@ -64,24 +64,24 @@ time for it.
 
 | Member | Slice | Owns end-to-end | Individual marks in scope |
 |---|---|---|---|
-| **M1** | Identity, Access Control & Local Session | Auth, web users, prosumers, SQLite session | A(8) + B(9) + F.SQLite(3) = **20** |
-| **M2** | Microgrid Nodes, Slots & Geolocation | Stations, booking slots, Google Maps | A(5) + E.map(5) + F.Maps(3) = **13** |
-| **M3** | Reservation Workflow & Business Rules | Create/update/cancel, the 7-day and 12-hour rules | A(5) + C(9) + D.filter(2) = **16** |
-| **M4** | QR Verification, Dashboards & Platform | QR lifecycle, dashboards, API client layer, deployment | D(8) + E.QR(2) + F(6) = **16** |
+| **Chathushka** | Identity, Access Control & Local Session | Auth, web users, prosumers, SQLite session | A(8) + B(9) + F.SQLite(3) = **20** |
+| **Nisal** | Microgrid Nodes, Slots & Geolocation | Stations, booking slots, Google Maps | A(5) + E.map(5) + F.Maps(3) = **13** |
+| **Akash** | Reservation Workflow & Business Rules | Create/update/cancel, the 7-day and 12-hour rules | A(5) + C(9) + D.filter(2) = **16** |
+| **Sandun** | QR Verification, Dashboards & Platform | QR lifecycle, dashboards, API client layer, deployment | D(8) + E.QR(2) + F(6) = **16** |
 | | | | **65 total** |
 
-**A note on M2's number.** 13 is lower than the others, but the map is the single
+**A note on Nisal's number.** 13 is lower than the others, but the map is the single
 largest line item in Table 2 (5 marks) and the hardest integration in the
 project — Google Maps SDK, runtime location permission, FusedLocationProvider,
 and the async `getMapAsync` race. Effort and marks don't line up perfectly here.
-To balance total workload, **M2 should lead the group deliverables** in section 7
+To balance total workload, **Nisal should lead the group deliverables** in section 7
 (the report, diagrams and deployment write-up — 35 group marks).
 
 ---
 
-## 2. Member 1 — Identity, Access Control & Local Session
+## 2. Chathushka — Identity, Access Control & Local Session
 
-**Name:** _______________________  **IT Number:** _______________________
+**Name:** Chathushka  **IT Number:** _______________________
 
 ### 2.1 Scope
 
@@ -238,9 +238,9 @@ the `TokenValidationParameters`.
 
 ---
 
-## 3. Member 2 — Microgrid Nodes, Slots & Geolocation
+## 3. Nisal — Microgrid Nodes, Slots & Geolocation
 
-**Name:** _______________________  **IT Number:** _______________________
+**Name:** Nisal  **IT Number:** _______________________
 
 ### 3.1 Scope
 
@@ -392,9 +392,9 @@ the API over HTTPS and delete the file entirely.
 
 ---
 
-## 4. Member 3 — Reservation Workflow & Business Rules
+## 4. Akash — Reservation Workflow & Business Rules
 
-**Name:** _______________________  **IT Number:** _______________________
+**Name:** Akash  **IT Number:** _______________________
 
 ### 4.1 Scope
 
@@ -409,7 +409,7 @@ window and the 12-hour modification notice.
 | File | Responsibility |
 |---|---|
 | `Services/Implementations/ReservationService.cs` | `CreateAsync`, `UpdateAsync`, `CancelAsync`, `ApproveAsync`, `RejectAsync`, `GetReservationsAsync`, `GetMyReservationsAsync`, `GetHistoryAsync` |
-| `Controllers/ReservationsController.cs` | 13 endpoints (shared with M4 for the QR half) |
+| `Controllers/ReservationsController.cs` | 13 endpoints (shared with Sandun for the QR half) |
 | `Models/EnergyReservation.cs` | The `EnergyReservation` collection |
 | `DTOs/Reservations/ReservationDtos.cs` | Contracts, incl. `canModify` / `canCancel` |
 | `Common/ServiceResult.cs`, `Common/ErrorCodes.cs`, `Common/IClock.cs` | The result type, the error-code catalogue, the testable clock |
@@ -553,9 +553,9 @@ keystroke.
 
 ---
 
-## 5. Member 4 — QR Verification, Dashboards & Platform
+## 5. Sandun — QR Verification, Dashboards & Platform
 
-**Name:** _______________________  **IT Number:** _______________________
+**Name:** Sandun  **IT Number:** _______________________
 
 ### 5.1 Scope
 
@@ -789,17 +789,17 @@ These are marked once for the group, but somebody has to do them.
 
 | Deliverable | Lead | Support |
 |---|---|---|
-| Report §1–2 (introduction, architecture, FAT-service justification) | M2 | M4 |
-| Report §3 (database design) | M4 | M2 |
-| Report §4 (business rules) | M3 | M1 |
+| Report §1–2 (introduction, architecture, FAT-service justification) | Nisal | Sandun |
+| Report §3 (database design) | Sandun | Nisal |
+| Report §4 (business rules) | Akash | Chathushka |
 | Report §5–7 (API, web, mobile walkthroughs) | each writes their own slice | — |
-| All diagrams (`docs/diagrams/DIAGRAMS.md` → export PNGs) | M2 | M3 |
-| Web screenshots (already captured, `docs/screenshots/web`) | M4 | — |
-| **Mobile screenshots + opening-screen shot** | M1 | M3 |
-| Deployment / IIS section + reproducible steps | M4 | M2 |
-| README, repo hygiene, meaningful commit history | M2 | all |
+| All diagrams (`docs/diagrams/DIAGRAMS.md` → export PNGs) | Nisal | Akash |
+| Web screenshots (already captured, `docs/screenshots/web`) | Sandun | — |
+| **Mobile screenshots + opening-screen shot** | Chathushka | Akash |
+| Deployment / IIS section + reproducible steps | Sandun | Nisal |
+| README, repo hygiene, meaningful commit history | Nisal | all |
 | Source code pasted as text into the report | all — own slice | — |
-| **5-minute demonstration video** | M3 narrates | all appear |
+| **5-minute demonstration video** | Akash narrates | all appear |
 
 ### Still outstanding
 
@@ -825,25 +825,25 @@ structured questions about your work and your use of AI, and **any code, diagram
 or documentation you cannot explain or modify may receive reduced or zero
 individual marks**.
 
-### Member 1
+### Chathushka
 - **Tools used:** _______________________
 - **Stage(s) used:** _______________________
 - **What it was used for:** _______________________
 - **Reflection — how did the initial idea become the final solution?** _______________________
 
-### Member 2
+### Nisal
 - **Tools used:** _______________________
 - **Stage(s) used:** _______________________
 - **What it was used for:** _______________________
 - **Reflection:** _______________________
 
-### Member 3
+### Akash
 - **Tools used:** _______________________
 - **Stage(s) used:** _______________________
 - **What it was used for:** _______________________
 - **Reflection:** _______________________
 
-### Member 4
+### Sandun
 - **Tools used:** _______________________
 - **Stage(s) used:** _______________________
 - **What it was used for:** _______________________
