@@ -422,6 +422,13 @@ public class StationService : IStationService
             return ServiceResult<StationDto>.NotFound("Microgrid node not found.");
         }
 
+        if (!CanManageOperationsAt(caller, id))
+        {
+            return ServiceResult<StationDto>.Forbidden(
+                "A Grid Operator may only change the schedule of their assigned microgrid node.",
+                ErrorCodes.Forbidden);
+        }
+
         var idFilter = Builders<SolarStationInfo>.Filter.Eq(s => s.Id, id);
         var existing = await _db.Stations.Find(idFilter).FirstOrDefaultAsync(ct);
         if (existing is null)
@@ -514,6 +521,13 @@ public class StationService : IStationService
         if (!ObjectId.TryParse(id, out _))
         {
             return ServiceResult<StationDto>.NotFound("Microgrid node not found.");
+        }
+
+        if (!CanManageOperationsAt(caller, id))
+        {
+            return ServiceResult<StationDto>.Forbidden(
+                "A Grid Operator may only update availability at their assigned microgrid node.",
+                ErrorCodes.Forbidden);
         }
 
         var idFilter = Builders<SolarStationInfo>.Filter.Eq(s => s.Id, id);
@@ -777,6 +791,18 @@ public class StationService : IStationService
     {
         // Kept as a named helper so the Haversine formula above reads like the textbook version.
         return degrees * Math.PI / 180.0;
+    }
+
+    /// <summary>Checks whether a staff caller may maintain operational data for one node.</summary>
+    /// <param name="caller">Authenticated staff caller.</param>
+    /// <param name="stationId">Node whose schedule or availability would change.</param>
+    /// <returns>True for Backoffice, or for a Grid Operator assigned to this exact node.</returns>
+    private static bool CanManageOperationsAt(CurrentUser caller, string stationId)
+    {
+        return caller.IsBackoffice ||
+               (caller.IsGridOperator &&
+                !string.IsNullOrWhiteSpace(caller.AssignedStationId) &&
+                string.Equals(caller.AssignedStationId, stationId, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>Validates one same-day opening and closing time pair.</summary>
