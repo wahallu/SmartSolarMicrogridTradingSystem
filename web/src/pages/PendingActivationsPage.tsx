@@ -12,7 +12,7 @@
  *               chooses which buttons to draw from the server state it was given
  *               (status, deactivationRequested) and shows the API's own message
  *               after each action.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

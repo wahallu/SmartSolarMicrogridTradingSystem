@@ -8,7 +8,7 @@
  *               rule behind those actions (R5 reactivation, R7 NIC uniqueness,
  *               the booking-history delete guard) is decided by the C# API and
  *               this screen only renders the verdict it is handed.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

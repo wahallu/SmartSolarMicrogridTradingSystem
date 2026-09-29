@@ -8,7 +8,7 @@
  *               management" marking criterion. Rule R10 (only Backoffice may
  *               touch these records) and the self delete guard live in the C#
  *               API; this screen only calls the endpoints and shows the verdict.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */
