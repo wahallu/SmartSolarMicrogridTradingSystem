@@ -9,7 +9,7 @@
  *               returned ServiceResult onto a status code. Every credential
  *               check and every account state rule (R5, R6, R7) lives in the
  *               service, which is what keeps this a FAT service architecture.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

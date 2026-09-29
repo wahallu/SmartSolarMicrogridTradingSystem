@@ -10,7 +10,7 @@
  *               NIC self registrations (rule R7) and changing a caller's own
  *               password. Controllers only translate the returned ServiceResult
  *               into an HTTP status code - no rule is ever repeated in a client.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */
@@ -106,6 +106,7 @@ public class AuthService : IAuthService
             // Rule R6 - self registered prosumers stay Pending until a Backoffice officer approves them.
             if (user.Status == AccountStatus.Pending)
             {
+                _logger.LogWarning("Login rejected for {Username}: account status is Pending (Rule R6).", user.Username);
                 return ServiceResult<AuthResponse>.Forbidden(
                     "Your account is awaiting activation by a Backoffice officer. Please try again once it has been approved.",
                     ErrorCodes.AccountPending);
@@ -114,6 +115,7 @@ public class AuthService : IAuthService
             // Rule R5 - a deactivated account is blocked and only the back office may reactivate it.
             if (user.Status == AccountStatus.Deactivated)
             {
+                _logger.LogWarning("Login rejected for {Username}: account status is Deactivated (Rule R5).", user.Username);
                 return ServiceResult<AuthResponse>.Forbidden(
                     "This account has been deactivated. Only a Backoffice officer can reactivate it.",
                     ErrorCodes.AccountDeactivated);
