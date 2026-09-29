@@ -9,7 +9,7 @@
  *               in the local SQLite database, or to the login form when it does
  *               not. This is the entry point for the marked "session persistence
  *               in SQLite" and "role based routing" requirements.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

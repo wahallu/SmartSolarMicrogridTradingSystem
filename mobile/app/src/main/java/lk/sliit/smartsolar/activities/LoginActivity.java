@@ -9,7 +9,7 @@
  *               routing the marking scheme asks for. Refusals such as a pending
  *               or deactivated account are decided entirely by the API (rules R6
  *               and R5) and are only explained here.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */
