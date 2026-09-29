@@ -11,7 +11,7 @@
  *               Backoffice officer may create or modify web users and toggle
  *               account state) is declared here as a role gate and re-enforced
  *               inside the FAT service, so no client can bypass it.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */

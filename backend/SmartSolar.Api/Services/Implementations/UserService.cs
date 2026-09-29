@@ -10,7 +10,7 @@
  *               the service (FAT service) so the controller stays a thin adapter.
  *               Prosumers are deliberately out of scope - they are keyed by NIC
  *               and are managed by ProsumerService instead.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
  * Created     : 2026-09-04
  * =============================================================================
  */
