@@ -141,6 +141,9 @@ public class StationsMapActivity extends BaseActivity implements OnMapReadyCallb
     /** Radius sent as ?radiusKm=, chosen with the spinner. */
     private int radiusKm = (int) Constants.DEFAULT_RADIUS_KM;
 
+    /** Identifies the newest nearby-node request so an older reply cannot replace it. */
+    private int stationRequestGeneration;
+
     /** Builds the screen, attaches the map fragment and starts the permission flow. */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -508,6 +511,8 @@ public class StationsMapActivity extends BaseActivity implements OnMapReadyCallb
      * is the server's distanceKm value, displayed verbatim.
      */
     private void loadStations() {
+        final int requestGeneration = ++stationRequestGeneration;
+
         // The loading state is shown first so a stale list is never left on screen.
         showOnly(progressStations, recyclerStations, textEmpty);
 
@@ -525,6 +530,13 @@ public class StationsMapActivity extends BaseActivity implements OnMapReadyCallb
             /** Receives the node list on the main thread. */
             @Override
             public void onResult(ApiResult result) {
+                // Radius changes can leave more than one request in flight. Only the newest
+                // response represents the spinner selection currently visible to the user.
+                if (requestGeneration != stationRequestGeneration
+                        || isFinishing() || isDestroyed()) {
+                    return;
+                }
+
                 // ApiClient posts callbacks to the main looper, so views are touched directly.
                 if (result.isSuccess()) {
                     handleLoadSuccess(result);
