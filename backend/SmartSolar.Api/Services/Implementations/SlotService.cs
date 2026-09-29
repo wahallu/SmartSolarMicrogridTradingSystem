@@ -644,6 +644,23 @@ public class SlotService : ISlotService
                     ErrorCodes.Forbidden);
             }
 
+            var station = await _db.Stations
+                .Find(Builders<SolarStationInfo>.Filter.Eq(s => s.Id, existing.StationId))
+                .FirstOrDefaultAsync(ct);
+
+            if (station is null)
+            {
+                return ServiceResult<SlotDto>.NotFound("The slot's microgrid node no longer exists.");
+            }
+
+            // Editing must enforce the same physical bay limit as publishing a new slot.
+            if (request.BatterySlotNumber > station.TotalBatterySlots)
+            {
+                return ServiceResult<SlotDto>.Invalid(
+                    $"Battery slot number {request.BatterySlotNumber} does not exist at this node, " +
+                    $"which has {station.TotalBatterySlots} battery slot(s).");
+            }
+
             // Moving a slot that prosumers have already booked would silently change the instant they
             // agreed to, so the time window and the battery bay are frozen once a booking exists.
             var movesTheSlot =
