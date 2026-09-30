@@ -126,7 +126,8 @@ export default function DashboardPage() {
     };
   }, [scopedStationId, reloadIndex]);
 
-  // Re-runs the effect above; the spinner on the button follows `refreshing`.
+  // triggers the effect again, and the button's spinner reflects the
+// `refreshing` flag.
   const handleRefresh = useCallback(() => {
     setRefreshing(true);
     setReloadIndex((index) => index + 1);
