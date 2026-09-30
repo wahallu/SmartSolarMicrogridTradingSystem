@@ -90,11 +90,9 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Empty state                                                                 */
-/* -------------------------------------------------------------------------- */
 
-/** Friendly placeholder shown when a list came back with no records. */
+
+/** the message displayed when a list is empty. */
 export function EmptyState({
   icon: Icon,
   title,

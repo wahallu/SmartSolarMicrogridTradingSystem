@@ -59,7 +59,7 @@ function greetingFor(hour: number): string {
   return 'Good evening';
 }
 
-/** Expands a role code into the wording used on screen. */
+/** turns a role code into its display label.. */
 function roleLabel(role: UserRole): string {
   // The API's enum names are not phrases to put in front of a user.
   switch (role) {
@@ -97,8 +97,8 @@ export default function DashboardPage() {
     user?.role === 'GridOperator' && user.assignedStationId ? user.assignedStationId : undefined;
 
   useEffect(() => {
-    // The guard stops a slow response from setting state after the user has
-    // navigated away from the dashboard.
+    // it prevents late responses from updating state after the user
+// has left the dashboard.
     let cancelled = false;
 
     async function load(): Promise<void> {
