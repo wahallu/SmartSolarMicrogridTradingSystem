@@ -332,7 +332,7 @@ export const reservationsApi = {
       http.patch<ApiResponse<Reservation>>(`/reservations/${id}/reject`, { reason }),
     ),
 
-  /** Fetches the QR payload and rendered PNG for an approved booking. */
+  /** gets both the QR payload and its PNG image for an approved booking. */
   qr: (id: string) => unwrap<QrCode>(http.get<ApiResponse<QrCode>>(`/reservations/${id}/qr`)),
 
   /** Validates a scanned token against the server (rule R9). */

@@ -132,6 +132,9 @@ export async function unwrap<T>(promise: Promise<{ data: ApiResponse<T> }>): Pro
 /**
  * Same as unwrap but also hands back the server's message, which several screens
  * display verbatim in a toast (for example the wording of a rule violation).
+ *
+ * In short: like unwrap, but also returns the server's message so screens can
+ * show it as-is in a toast.
  */
 export async function unwrapWithMessage<T>(
   promise: Promise<{ data: ApiResponse<T> }>,

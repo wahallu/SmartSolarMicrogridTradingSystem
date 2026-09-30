@@ -201,7 +201,13 @@ export interface QrCode {
   issuedAt: string | null;
 }
 
-/** Live counters shown on the dashboards. */
+/**
+ * Live counters shown on the dashboards.
+ *
+ * These are the real-time figures surfaced on the dashboard screens, kept
+ * up to date as the underlying data changes so the user always sees the
+ * current state at a glance.
+ */
 export interface Dashboard {
   pendingReservations: number;
   /** The "count of approved future reservations" the marking scheme names. */
