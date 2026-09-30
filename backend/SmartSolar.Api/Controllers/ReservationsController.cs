@@ -187,8 +187,6 @@ public class ReservationsController : ControllerBase
     /// <summary>
     /// Places a new energy reservation against a published slot. ***RULES R1, R8,
     /// R12 and R13*** - the seven day booking window, slot capacity, the node's
-    /// weekly schedule and the "one active booking per slot per prosumer" guard
-    /// are all evaluated in the service. A prosumer caller cannot book for anybody
     /// else: the service overwrites ProsumerNic with the NIC on the token (R11).
     /// </summary>
     /// <param name="request">Node, slot, requested energy and optional notes.</param>
@@ -245,9 +243,12 @@ public class ReservationsController : ControllerBase
 
     /// <summary>
     /// Finalises an energy transfer after a successful scan: the operator records
-    /// the kWh actually delivered and the reservation moves to Completed. The same
-    /// rule R9 checks are re-applied by the service, so a token that has drifted
-    /// out of its window between the scan and the confirmation is still refused.
+/// the kWh actually delivered and the reservation moves to Completed. The same
+/// rule R9 checks are re-applied by the service, so a token that has drifted
+/// out of its window between the scan and the confirmation is still refused.
+///
+/// In short: confirms the transfer and marks it Completed, with the service
+/// re-running rule R9 so a token that expired since the scan is still rejected.
     /// </summary>
     /// <param name="request">Token, delivered energy in kWh and optional operator notes.</param>
     /// <param name="ct">Cancellation token flowed through to the service.</param>
@@ -331,8 +332,6 @@ public class ReservationsController : ControllerBase
     /// only while its status is Pending or Approved AND at least twelve hours of
     /// notice remain before the slot starts. When that is not the case the service
     /// returns a ValidationError, which this controller reports as HTTP 400 with
-    /// errorCode "RES_UPDATE_12H". That 400 is the rule working correctly - both
-    /// clients are expected to show the returned message to the user. The clients
     /// never compute the twelve hours themselves; they read ReservationDto.CanModify,
     /// which the server has already evaluated.
     /// </summary>
@@ -413,8 +412,7 @@ public class ReservationsController : ControllerBase
     }
 
     /// <summary>
-    /// Refuses a reservation with a mandatory reason, which the prosumer sees in
-    /// the mobile app. Releasing the capacity the booking was holding on its slot
+   
     /// is part of the same service operation.
     /// </summary>
     /// <param name="id">Mongo identifier of the reservation to reject.</param>

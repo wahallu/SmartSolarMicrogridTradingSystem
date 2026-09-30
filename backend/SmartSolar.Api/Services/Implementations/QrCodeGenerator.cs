@@ -39,7 +39,6 @@ public class QrCodeGenerator : IQrCodeGenerator
 
     /// <summary>
     /// Encodes the supplied payload as a QR image and returns the PNG bytes in
-    /// base64, without a data URI prefix - the contract states the clients add
     /// their own prefix when they need one.
     /// </summary>
     /// <param name="payload">Exact string to encode, normally the reservation qrPayload JSON.</param>
