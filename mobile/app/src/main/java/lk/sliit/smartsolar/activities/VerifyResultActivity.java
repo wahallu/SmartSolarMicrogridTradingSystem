@@ -158,9 +158,7 @@ public class VerifyResultActivity extends BaseActivity {
         }
     }
 
-    // =====================================================================
-    // Rendering
-    // =====================================================================
+    
 
     /** Fills the booking card and prefills the delivered energy field. */
     private void bindReservation() {
@@ -184,7 +182,7 @@ public class VerifyResultActivity extends BaseActivity {
         inputDelivered.setText(toEditableNumber(reservation.getEnergyKwh()));
     }
 
-    /** Writes the status name into the pill and tints the pill to match. */
+    /** sets the pill's text and colour to reflect the status. */
     private void bindStatusChip(String status) {
         // One rounded drawable (bg_status_chip) is reused for all five statuses and its
         // solid fill is replaced at runtime, exactly as ReservationAdapter does on a row.
