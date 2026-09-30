@@ -71,7 +71,7 @@ public class ExceptionHandlingMiddleware
         }
         catch (Exception ex)
         {
-            // The method and path are logged with the exception so a 500 can be traced to one endpoint.
+            
             _logger.LogError(
                 ex,
                 "Unhandled exception while processing {Method} {Path}.",

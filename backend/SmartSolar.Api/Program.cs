@@ -146,7 +146,8 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 
-    // A rejected token must still produce the standard JSON envelope.
+    // even a rejected token gets the same standard JSON envelope as
+// everything else.
     options.Events = new JwtBearerEvents
     {
         OnChallenge = async context =>
