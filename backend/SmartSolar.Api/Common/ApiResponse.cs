@@ -57,7 +57,7 @@ public static class ApiResponse
     /// <summary>Successful envelope with a null payload.</summary>
     public static ApiResponse<object?> Ok(string message = "Request completed successfully.")
     {
-        // Used by activate / deactivate style endpoints that only report an outcome.
+        
         return ApiResponse<object?>.Ok(null, message);
     }
 

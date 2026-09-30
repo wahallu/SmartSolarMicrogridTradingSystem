@@ -33,9 +33,8 @@ public class ExceptionHandlingMiddleware
     private const string GenericMessage = "An unexpected error occurred while processing your request.";
 
     /// <summary>
-    /// Serialiser options shared by every failure written here. CamelCase is used so the
-    /// error envelope matches exactly the casing MVC emits for successful responses; a
-    /// PascalCase "Success" field would be read as null by both clients.
+    /// In short: CamelCase keeps the error envelope identical in casing to MVC's
+/// success responses; PascalCase "Success" would deserialise as null on both clients.
     /// </summary>
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {
