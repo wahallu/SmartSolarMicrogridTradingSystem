@@ -200,7 +200,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* ---- Reservation counters (read live from the API) ---- */}
+      {/* ---- the reservation totals, fetched live from the API.---- */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Pending reservations"
@@ -228,7 +228,7 @@ export default function DashboardPage() {
         />
       </section>
 
-      {/* ---- Estate wide counters, meaningful to the back office only ---- */}
+      {/* ---- estate-wide totals that only matter to the back office. ---- */}
       {isBackoffice && (
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
@@ -303,7 +303,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Upcoming reservations  */}
+        {/* reservations that haven't started yet.  */}
         <div className="card">
           <div className="card-header">
             <h2 className="text-sm font-semibold text-slate-900">Upcoming reservations</h2>
