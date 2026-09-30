@@ -74,7 +74,7 @@ public class EnergyReservation
     [BsonRepresentation(BsonType.String)]
     public SlotType SlotType { get; set; } = SlotType.Charging;
 
-    /// <summary>Energy the prosumer asked to trade, in kWh.</summary>
+    /// <summary></summary>
     [BsonElement("energyKwh")]
     public double EnergyKwh { get; set; }
 
