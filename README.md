@@ -220,8 +220,7 @@ immediately.
 | `200234501122` | `Prosumer@123` | Prosumer | **Pending** — demonstrates rule R6 |
 | `199756403311` | `Prosumer@123` | Prosumer | **Deactivated** — demonstrates rule R5 |
 
-Prosumers sign in with their **NIC**, which is their primary key. Staff sign in with
-a username. The login endpoint accepts a NIC, a username or an e-mail address.
+Prosumers authenticate via their NIC, which is their primary key. Staff authenticate via a username. The login endpoint accepts any one of the three identifiers: a NIC, a username, or an e-mail address.
 
 ---
 
