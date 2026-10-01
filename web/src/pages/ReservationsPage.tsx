@@ -704,11 +704,13 @@ export default function ReservationsPage() {
         }
       >
         <label className="label" htmlFor="reject-reason">
-          Reason
+          Reason <span className="text-red-500">*</span>
         </label>
         <textarea
           id="reject-reason"
           rows={3}
+          aria-required="true"
+          aria-invalid={rejectError !== null}
           className={rejectError ? 'input input-error' : 'input'}
           value={rejectReason}
           placeholder="Explain why this booking cannot be honoured."
