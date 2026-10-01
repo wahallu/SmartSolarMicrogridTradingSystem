@@ -284,7 +284,8 @@ export default function ReservationsPage() {
     setPage(1);
   }
 
-  // Approves a Pending booking; the API issues the QR token and returns the wording.
+  // Approves a Pending booking; the API issues the cryptographically secure QR token
+  // and returns confirmation wording. Only Backoffice and GridOperator may invoke this.
   async function handleApprove(reservation: Reservation) {
     setBusyId(reservation.id);
     try {
@@ -583,6 +584,8 @@ export default function ReservationsPage() {
                                   className="btn-success btn-sm"
                                   onClick={() => void handleApprove(reservation)}
                                   disabled={busy}
+                                  aria-label={`Approve reservation ${reservation.reservationNo}`}
+                                  aria-busy={busy}
                                 >
                                   {busy ? (
                                     <Spinner size="sm" />
