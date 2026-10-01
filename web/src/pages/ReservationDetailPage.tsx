@@ -407,7 +407,11 @@ export default function ReservationDetailPage() {
     <div className="space-y-6">
       {/* ---- Header ---- */}
       <div className="space-y-3">
-        <Link to="/reservations" className="btn-ghost btn-sm w-fit">
+        <Link
+          to="/reservations"
+          className="btn-ghost btn-sm w-fit"
+          aria-label="Back to reservations listing"
+        >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to reservations
         </Link>
@@ -420,7 +424,8 @@ export default function ReservationDetailPage() {
             <Badge status={reservation.status} kind="reservation" />
             {loading && <Spinner size="sm" />}
           </div>
-          {/* hoursUntilStart is calculated by the API; this only phrases it. */}
+          {/* hoursUntilStart is calculated centrally by the API (DomainMapper);
+              the UI only renders the human-friendly phrasing, adhering to the FAT-service rule. */}
           <p className="text-sm font-medium text-slate-500">
             Starts {describeHoursUntil(reservation.hoursUntilStart)}
           </p>
