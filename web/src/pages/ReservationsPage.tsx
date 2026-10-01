@@ -33,6 +33,12 @@ import type { PagedResult, Reservation, ReservationStatus, Slot, Station, User }
 /** How many rows the list requests per page. */
 const PAGE_SIZE = 10;
 
+/** How many milliseconds to debounce text input in the search field to avoid excessive API requests. */
+const SEARCH_DEBOUNCE_MS = 400;
+
+/** Default starting page for paginated reservation queries. */
+const INITIAL_PAGE = 1;
+
 /** The status values the filter offers, mirroring the ReservationStatus union. */
 const STATUS_OPTIONS: ReservationStatus[] = [
   'Pending',
@@ -131,13 +137,13 @@ export default function ReservationsPage() {
   }
 
   // Debounces the search box: without this every keystroke would fire its own
-  // request. The cleanup clears the pending timer, so only the last 400ms of
-  // typing reaches the API. The page returns to 1 because the result set changes.
+  // request. The cleanup clears the pending timer, so only the last SEARCH_DEBOUNCE_MS of
+  // typing reaches the API. The page returns to INITIAL_PAGE because the result set changes.
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setSearch(searchInput.trim());
-      setPage(1);
-    }, 400);
+      setPage(INITIAL_PAGE);
+    }, SEARCH_DEBOUNCE_MS);
 
     return () => window.clearTimeout(timer);
   }, [searchInput]);
