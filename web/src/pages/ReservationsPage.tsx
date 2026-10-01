@@ -277,7 +277,7 @@ export default function ReservationsPage() {
     };
   }, [createOpen, form.stationId]);
 
-  // Returns every filter to its default and goes back to the first page.
+  // Returns every filter criteria to its default value and resets view to INITIAL_PAGE.
   function clearFilters() {
     setSearchInput('');
     setSearch('');
@@ -285,7 +285,7 @@ export default function ReservationsPage() {
     setStationId('');
     setFromDate('');
     setToDate('');
-    setPage(1);
+    setPage(INITIAL_PAGE);
   }
 
   // Approves a Pending booking; the API issues the cryptographically secure QR token
@@ -499,10 +499,15 @@ export default function ReservationsPage() {
         </div>
 
         <div className="flex items-center justify-between gap-3 border-t border-slate-200 px-5 py-3">
-          <p className="text-xs font-medium text-slate-500">
+          <p className="text-xs font-medium text-slate-500" aria-live="polite">
             {result ? `${result.totalCount} matching reservation(s)` : 'Applying filters...'}
           </p>
-          <button type="button" className="btn-secondary btn-sm" onClick={clearFilters}>
+          <button
+            type="button"
+            className="btn-secondary btn-sm"
+            onClick={clearFilters}
+            disabled={!hasFilters}
+          >
             Clear filters
           </button>
         </div>
