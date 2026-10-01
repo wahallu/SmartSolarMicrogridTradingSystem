@@ -52,6 +52,21 @@ const STATUS_OPTIONS: ReservationStatus[] = [
 const CANCEL_REASON = 'Cancelled by staff from the web console.';
 
 /**
+ * Filter parameters supported by the reservation query endpoints.
+ * Note: Under rule R11, prosumer callers are scoped server-side to their own NIC
+ * regardless of query criteria, while staff have access to multi-node filters.
+ */
+export interface ReservationFilterQuery {
+  search?: string;
+  status?: string;
+  stationId?: string;
+  fromDate?: string;
+  toDate?: string;
+  page: number;
+  pageSize: number;
+}
+
+/**
  * Wording shown on a disabled Cancel button. The UI never works out whether the
  * 12 hour notice has passed - it simply explains the server's canCancel verdict.
  */
