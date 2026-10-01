@@ -228,7 +228,9 @@ export default function ReservationsPage() {
 
     async function loadProsumers() {
       try {
-        // Only Active accounts may hold a booking (rule R5 is enforced server side).
+        // Enforce business rules R5 & R6: only prosumers with status 'Active'
+        // are eligible to hold slot reservations. Pending and Deactivated accounts
+        // are excluded by the backend query filter.
         const paged = await prosumersApi.list({ status: 'Active', pageSize: 100 });
         if (!cancelled) setProsumers(paged.items);
       } catch (err) {
@@ -775,13 +777,14 @@ export default function ReservationsPage() {
           <div className="space-y-4">
             <div>
               <label className="label" htmlFor="create-prosumer">
-                Prosumer
+                Prosumer <span className="text-red-500">*</span>
               </label>
               <select
                 id="create-prosumer"
                 className="select"
                 value={form.prosumerNic}
                 required
+                aria-label="Select registered active prosumer"
                 onChange={(event) => setForm({ ...form, prosumerNic: event.target.value })}
               >
                 <option value="">Select an active prosumer</option>
