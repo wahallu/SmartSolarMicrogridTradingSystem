@@ -324,8 +324,9 @@ export default function ReservationsPage() {
     }
   }
 
-  // Cancels a booking. The 12 hour rule R3 lives in the API: if it refuses with
-  // RES_CANCEL_12H the server's own sentence is shown, never a guess made here.
+  // Cancels a booking. Business rule R3 (requiring >= 12 hours notice before slot
+  // start) is enforced strictly by the backend ReservationService. If the notice
+  // period has expired, the API returns HTTP 400 with error code RES_CANCEL_12H.
   async function handleCancel() {
     if (!cancelTarget) return;
 
@@ -729,7 +730,7 @@ export default function ReservationsPage() {
       <ConfirmDialog
         open={cancelTarget !== null}
         title="Cancel reservation"
-        message={`Cancel ${cancelTarget?.reservationNo ?? ''} for ${cancelTarget?.prosumerName ?? ''}? The slot is released back to the node straight away.`}
+        message={`Cancel ${cancelTarget?.reservationNo ?? ''} for ${cancelTarget?.prosumerName ?? ''}? Note: Rule R3 requires at least 12 hours notice prior to slot start. Upon cancellation, the slot is released back to the node immediately.`}
         confirmLabel="Cancel booking"
         tone="danger"
         busy={busyId !== null}
