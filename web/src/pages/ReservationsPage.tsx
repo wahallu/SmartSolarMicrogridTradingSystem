@@ -257,7 +257,9 @@ export default function ReservationsPage() {
       setSlotsLoading(true);
       try {
         const available = await slotsApi.available(node);
-        // isBookable is the server's rule R8 verdict; the UI only hides the rest.
+        // Under business rule R8, the backend DomainMapper flags isBookable = true only when:
+        // node is active, slot status is Available, remaining capacity > 0, and startUtc > now.
+        // The UI filters on isBookable without duplicating scheduling rules in the browser.
         if (!cancelled) setSlots(available.filter((slot) => slot.isBookable));
       } catch (err) {
         if (!cancelled) {
@@ -826,13 +828,14 @@ export default function ReservationsPage() {
 
             <div>
               <label className="label" htmlFor="create-slot">
-                Energy slot
+                Energy slot <span className="text-red-500">*</span>
               </label>
               <select
                 id="create-slot"
                 className="select"
                 value={form.slotId}
                 required
+                aria-label="Select bookable energy slot"
                 disabled={form.stationId === '' || slotsLoading}
                 onChange={(event) => setForm({ ...form, slotId: event.target.value })}
               >
