@@ -632,13 +632,19 @@ export default function ReservationDetailPage() {
                   <div className="space-y-3">
                     <img
                       src={qrDataUri}
-                      alt={`QR code for reservation ${qr.reservationNo}`}
-                      className="w-full max-w-[220px] mx-auto"
+                      alt={`Verification QR code for reservation ${qr.reservationNo}`}
+                      className="w-full max-w-[220px] mx-auto rounded border border-slate-100 p-1"
+                      loading="lazy"
                     />
                     <p className="text-center font-mono text-sm font-semibold text-slate-800">
                       {qr.reservationNo}
                     </p>
-                    <a className="btn-secondary btn-sm w-full" href={qrDataUri} download={`${qr.reservationNo}.png`}>
+                    <a
+                      className="btn-secondary btn-sm w-full"
+                      href={qrDataUri}
+                      download={`${qr.reservationNo}.png`}
+                      aria-label={`Download QR code for reservation ${qr.reservationNo} as PNG`}
+                    >
                       <Download className="h-3.5 w-3.5" aria-hidden="true" />
                       Download PNG
                     </a>
