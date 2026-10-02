@@ -57,8 +57,14 @@ function errorMessage(err: unknown): string {
   return err instanceof ApiError ? err.message : 'Something went wrong';
 }
 
-/** One label / value pair inside a details card. */
-function DetailRow({ label, value }: { label: string; value: ReactNode }) {
+/** Props for DetailRow component rendering structured description list pairs. */
+interface DetailRowProps {
+  label: string;
+  value: ReactNode;
+}
+
+/** One label / value pair inside a details card with responsive flex layout. */
+function DetailRow({ label, value }: DetailRowProps) {
   // Stacks on a phone and becomes two columns from the sm breakpoint upwards.
   return (
     <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-4">
@@ -443,9 +449,11 @@ export default function ReservationDetailPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           {/* ---- Booking details ---- */}
-          <section className="card">
+          <section className="card" aria-labelledby="booking-details-heading">
             <div className="card-header">
-              <h2 className="text-base font-semibold text-slate-900">Booking details</h2>
+              <h2 id="booking-details-heading" className="text-base font-semibold text-slate-900">
+                Booking details
+              </h2>
             </div>
             <dl className="card-body space-y-3">
               <DetailRow
