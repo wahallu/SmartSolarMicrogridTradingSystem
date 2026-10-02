@@ -36,9 +36,12 @@ import type { QrCode, Reservation, Slot, Station } from '../types';
 /** Which action is currently in flight, so only that button shows a spinner. */
 type ActionKey = 'approve' | 'reject' | 'edit' | 'cancel';
 
-/** One dot on the audit trail. */
-interface TimelineEntry {
-  key: string;
+/** Audit trail event stage identifiers. */
+export type TimelineStage = 'created' | 'approved' | 'completed' | 'cancelled' | 'rejected';
+
+/** One dot on the audit trail representing an immutable state transition. */
+export interface TimelineEntry {
+  key: TimelineStage;
   title: string;
   timestamp: string | null;
   detail: string | null;
@@ -67,7 +70,11 @@ function DetailRow({ label, value }: { label: string; value: ReactNode }) {
   );
 }
 
-/** Collects whichever audit fields the server actually populated. */
+/**
+ * Collects whichever audit fields the server actually populated.
+ * Records state transitions (Created -> Approved -> Completed/Cancelled/Rejected)
+ * with associated actor and timestamp details for full auditability.
+ */
 function buildTimeline(reservation: Reservation): TimelineEntry[] {
   // Nothing is inferred here - an entry appears only when the API sent its field.
   const entries: TimelineEntry[] = [
