@@ -5,6 +5,7 @@
  * Description : Shows one reservation with its history, QR code and actions.
  * Author      : IT22228062 - Akash
  * Created     : 2026-09-17
+ * Updated     : 2026-10-02 (Refinements for keyboard navigation & UI contrast)
  * =============================================================================
  */
 

@@ -5,6 +5,7 @@
  * Description : Lists, filters and manages energy reservations.
  * Author      : IT22228062 - Akash
  * Created     : 2026-09-17
+ * Updated     : 2026-10-02 (Refinements for keyboard navigation & UI contrast)
  * =============================================================================
  */
 
@@ -542,7 +543,7 @@ export default function ReservationsPage() {
           {!loading && rows.length > 0 && (
             <>
               <div className="overflow-x-auto">
-                <table className="table">
+                <table className="table" aria-label="Energy slot reservations list">
                   <thead>
                     <tr>
                       <th>Reservation No</th>
