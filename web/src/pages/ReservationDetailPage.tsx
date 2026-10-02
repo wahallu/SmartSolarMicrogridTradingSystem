@@ -575,6 +575,7 @@ export default function ReservationDetailPage() {
                   onClick={openEdit}
                   disabled={!reservation.canModify || busy !== null}
                   title={reservation.canModify ? undefined : NOTICE_HINT}
+                  aria-disabled={!reservation.canModify || busy !== null}
                 >
                   <Pencil className="h-4 w-4" aria-hidden="true" />
                   Edit reservation
@@ -589,6 +590,7 @@ export default function ReservationDetailPage() {
                   onClick={() => setCancelOpen(true)}
                   disabled={!reservation.canCancel || busy !== null}
                   title={reservation.canCancel ? undefined : NOTICE_HINT}
+                  aria-disabled={!reservation.canCancel || busy !== null}
                 >
                   <Ban className="h-4 w-4" aria-hidden="true" />
                   Cancel reservation
