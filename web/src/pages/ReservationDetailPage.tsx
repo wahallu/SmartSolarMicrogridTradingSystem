@@ -787,6 +787,7 @@ export default function ReservationDetailPage() {
               type="number"
               min="0.1"
               step="0.1"
+              aria-label="Energy amount in kilowatt-hours"
               className={editError ? 'input input-error' : 'input'}
               value={editEnergy}
               onChange={(event) => {
@@ -797,11 +798,11 @@ export default function ReservationDetailPage() {
             {editError && <p className="field-error">{editError}</p>}
           </div>
 
-          {/* The dialog only assembles a request; the API re-checks rule R2 and the
-              slot capacity before it accepts the change. */}
+          {/* Business rule R2: Updates require >= 12 hours notice prior to slot start time.
+              The backend service checks this rule and the target slot capacity before committing changes. */}
           <p className="text-xs text-slate-500">
-            The service checks the 12 hour notice period and the slot capacity again when this is
-            saved, and will refuse the change with its own message if either rule blocks it.
+            The service enforces rule R2 (12-hour notice period) and validates slot capacity again
+            when saving. Direct API requests that violate the notice window are rejected with HTTP 400.
           </p>
         </div>
       </Modal>
