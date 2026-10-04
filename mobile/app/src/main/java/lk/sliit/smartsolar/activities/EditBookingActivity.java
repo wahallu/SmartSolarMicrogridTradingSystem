@@ -1,21 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : EditBookingActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Lets a solar prosumer change an existing reservation: a
- *               different date, a different energy slot at the SAME microgrid
- *               node, and a different energy amount. The edit is sent as
- *               PUT /reservations/{id} and only the fields that actually
- *               changed are placed in the body.
- *
- *               This screen is a UI layer only. The 12 hour notice rule (R2) is
- *               owned entirely by the Web API: the buttons here are gated on the
- *               canModify flag the SERVER sent, and a PUT that the server still
- *               refuses comes back as Constants.ERR_RES_UPDATE_12H, which is
- *               shown to the user in the server's own words.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Edit Booking
+ * Description : Lets a prosumer change the slot or energy amount of a booking.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-16
  * =============================================================================
  */
 

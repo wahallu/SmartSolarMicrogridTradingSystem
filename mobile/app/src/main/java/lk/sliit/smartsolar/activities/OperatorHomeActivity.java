@@ -1,19 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : OperatorHomeActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Console shown to a signed in Grid Operator. It names the node the
- *               operator is assigned to, shows the node scoped counters returned
- *               by GET /reservations/dashboard, gives the QR scanner - the
- *               operator's main job - a full width primary card, and lists the
- *               bookings at that node that are still waiting for approval.
- *
- *               This screen is a pure UI layer. Every counter and every booking
- *               row is a value the Web API calculated; nothing is counted,
- *               scored or ruled upon here.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Operator Home
+ * Description : Presents the operator dashboard and shortcuts to daily work.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-23
  * =============================================================================
  */
 

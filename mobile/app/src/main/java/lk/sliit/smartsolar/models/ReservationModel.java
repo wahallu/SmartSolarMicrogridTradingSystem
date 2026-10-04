@@ -1,18 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : ReservationModel.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : models
- * Description : Client side representation of the ReservationDto returned by the
- *               Web API.
- *
- *               IMPORTANT: canModify and canCancel are NOT computed here. The
- *               server evaluates the 12 hour notice rule (R2 / R3) and ships the
- *               answer as a boolean, and this app simply enables or disables the
- *               matching button. That is what keeps the business logic in the FAT
- *               service and out of the client, as the assignment requires.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Models / Reservation Model
+ * Description : Parses reservation details returned by the Web API.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-17
  * =============================================================================
  */
 

@@ -2,14 +2,9 @@
  * File        : PasswordHasher.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Security
- * Description : Salted PBKDF2-SHA256 password hashing. A fresh 16 byte salt is
- *               generated per account, 100,000 iterations are applied, and the
- *               verification compares in fixed time so the comparison itself
- *               leaks nothing about the stored hash.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
+ * Description : Hashes passwords and verifies submitted credentials.
+ * Author      : IT22049872 - Chathushka
  * Created     : 2026-09-04
- * References  : PBKDF2 usage follows the pattern documented by Microsoft at
- *               https://learn.microsoft.com/aspnet/core/security/data-protection/consumer-apis/password-hashing
  * =============================================================================
  */
 

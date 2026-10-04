@@ -2,12 +2,10 @@
  * File        : AuthDtos.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : DTOs / Auth
- * Description : Request and response contracts for logging in, self registering
- *               as a solar prosumer and changing a password. Entities are never
- *               exposed directly - a DTO keeps the password hash and salt off
- *               the wire and lets the JSON shape stay stable.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Contains request and response models used during
+ *               authentication.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-03
  * =============================================================================
  */
 

@@ -2,15 +2,8 @@
  * File        : UserService.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Implementations
- * Description : Administration of the two web facing account types - Backoffice
- *               officers and Grid Operators. Rule R10 says only a Backoffice
- *               officer may create, edit, activate, deactivate or delete these
- *               accounts, and rule R5 says only a Backoffice officer may return a
- *               deactivated account to Active; both rules are enforced here in
- *               the service (FAT service) so the controller stays a thin adapter.
- *               Prosumers are deliberately out of scope - they are keyed by NIC
- *               and are managed by ProsumerService instead.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
+ * Description : Implements staff-account administration and access checks.
+ * Author      : IT22049872 - Chathushka
  * Created     : 2026-09-04
  * =============================================================================
  */

@@ -2,17 +2,9 @@
  * File        : QrCodeGenerator.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Implementations
- * Description : Produces the two pieces of QR material a reservation needs once
- *               it is approved: the opaque token stored on the document, and the
- *               PNG image the prosumer's phone displays at the microgrid node.
- *               The renderer is PngByteQRCode, which is pure managed code, so
- *               the API runs unchanged on Windows, Linux and macOS containers.
- *               Rule R9 (token exists, Approved, inside the scan window) is
- *               enforced by ReservationService - this class only mints and draws.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
- * References  : QRCoder PngByteQRCode renderer -
- *               https://github.com/codebude/QRCoder/wiki/Advanced-usage---QR-Code-renderers
+ * Description : Creates reservation tokens and their PNG QR images.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-23
  * =============================================================================
  */
 

@@ -1,18 +1,10 @@
 /* =============================================================================
  * File        : StationsController.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Controllers / Stations
- * Description : HTTP surface for the microgrid nodes (solar grid hubs): listing
- *               and searching, the map "nearby" projection, node registration,
- *               editing, weekly schedule and battery bay maintenance, and the
- *               activate / deactivate / delete life cycle. The controller is
- *               deliberately THIN - it binds a DTO, calls exactly one
- *               IStationService method and maps the returned ServiceResult onto
- *               a status code. Every rule (R4 deactivation guard, R10 back
- *               office privilege, schedule validation, Haversine distances)
- *               lives in the FAT service and is never re-implemented here.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Controllers / Stations Controller
+ * Description : Exposes station search, map and maintenance endpoints.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-10
  * =============================================================================
  */
 

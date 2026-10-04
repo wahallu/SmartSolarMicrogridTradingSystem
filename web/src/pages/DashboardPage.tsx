@@ -1,14 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/DashboardPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The operational home screen for every signed in role. Every
- *               figure on it is read live from GET /reservations/dashboard, which
- *               is what the marking scheme asks for: the pending reservation
- *               count and the count of approved future reservations are server
- *               computed and simply displayed here, never derived in the browser.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Dashboard
+ * Description : Shows live booking totals and upcoming reservation activity.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-20
  * =============================================================================
  */
 

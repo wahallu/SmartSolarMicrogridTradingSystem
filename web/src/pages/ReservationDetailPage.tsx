@@ -1,16 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/ReservationDetailPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The full record of one energy reservation, reached at
- *               /reservations/:id. It shows the booking, the prosumer, an audit
- *               trail and the approved QR code, and hosts the approve, reject,
- *               edit and cancel actions. Every action button is enabled purely
- *               from a server verdict (status, canModify, canCancel), which is
- *               how the marking scheme's "web app holds no business logic"
- *               requirement is satisfied.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Reservation Detail
+ * Description : Shows one reservation with its history, QR code and actions.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-17
  * =============================================================================
  */
 

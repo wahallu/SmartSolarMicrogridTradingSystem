@@ -1,16 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : LoginActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Sign in screen. It posts the identifier and password to
- *               POST /auth/login, stores the returned JWT and user profile in the
- *               local SQLite session table, and then performs the role based
- *               routing the marking scheme asks for. Refusals such as a pending
- *               or deactivated account are decided entirely by the API (rules R6
- *               and R5) and are only explained here.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Module      : Activities / Login
+ * Description : Signs users in and sends them to the correct home screen.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-07
  * =============================================================================
  */
 

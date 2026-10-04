@@ -1,15 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : StationAdapter.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : adapters
- * Description : RecyclerView adapter for the microgrid node lists - the nearby
- *               node search and the station picker used when creating a
- *               booking. Each row shows the node code, a status pill, the
- *               address, the rated capacity, battery bay availability and, when
- *               the API supplied one, the distance from the user.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Adapters / Station Adapter
+ * Description : Binds nearby station details to station list rows.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-11
  * =============================================================================
  */
 

@@ -2,16 +2,9 @@
  * File        : AuthService.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Implementations
- * Description : The authentication half of the FAT service layer. It owns every
- *               decision taken while a principal signs in or joins the system:
- *               resolving a login identifier (NIC, username or e-mail), checking
- *               the PBKDF2 password, refusing accounts that are still Pending
- *               (rule R6) or already Deactivated (rule R5), rejecting duplicate
- *               NIC self registrations (rule R7) and changing a caller's own
- *               password. Controllers only translate the returned ServiceResult
- *               into an HTTP status code - no rule is ever repeated in a client.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Description : Implements sign-in, registration and password management.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-03
  * =============================================================================
  */
 

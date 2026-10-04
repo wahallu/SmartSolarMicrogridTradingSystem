@@ -1,14 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : UserModel.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : models
- * Description : Client side representation of the UserDto returned by the Web
- *               API. Parsing lives in fromJson so every screen deals with typed
- *               getters instead of scattered optString calls, and a field rename
- *               on the server is fixed in exactly one place.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Models / User Model
+ * Description : Parses account and profile details returned by the Web API.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-06
  * =============================================================================
  */
 

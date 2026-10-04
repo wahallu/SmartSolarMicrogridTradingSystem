@@ -1,14 +1,10 @@
-/**
- * =============================================================================
- * File        : context/AuthContext.tsx
+/* =============================================================================
+ * File        : src/context/AuthContext.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Holds the signed in user for the whole application and exposes
- *               login / logout to every screen. The token and the profile are
- *               kept in local storage so a page refresh does not sign the user
- *               out; on start-up the token is re-validated against GET /auth/me
- *               so a session revoked on the server does not linger in the UI.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Module      : Context / Auth Context
+ * Description : Keeps the current user and sign-in state available to the app.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-07
  * =============================================================================
  */
 

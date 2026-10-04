@@ -1,15 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/ReservationsPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The slot booking management screen. Lists energy reservations
- *               with the server side filter criteria the marking scheme asks
- *               for (search, status, node, date range) and offers the approve,
- *               reject, cancel and create actions. Every rule - the 12 hour
- *               notice, the 7 day window, slot capacity - is decided by the C#
- *               API; this screen only obeys the verdict it is handed.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Reservations
+ * Description : Lists, filters and manages energy reservations.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-17
  * =============================================================================
  */
 

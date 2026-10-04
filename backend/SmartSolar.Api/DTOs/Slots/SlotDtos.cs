@@ -2,12 +2,10 @@
  * File        : SlotDtos.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : DTOs / Slots
- * Description : Contracts for the energy booking slots offered by a microgrid
- *               node, including the bulk generator that lays out a whole date
- *               range of slots in one call so operators do not have to create
- *               them one at a time.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Contains the API models used to view and maintain booking
+ *               slots.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-11
  * =============================================================================
  */
 

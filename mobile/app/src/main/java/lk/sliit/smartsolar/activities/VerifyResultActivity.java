@@ -1,22 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : VerifyResultActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : The second half of the "read QR code and update the job as done"
- *               requirement. It displays the booking the Web API returned for a
- *               verified QR token, then lets the grid operator record what was
- *               actually delivered and close the job.
- *
- *               THIS SCREEN IS A UI LAYER ONLY. It did not decide that the code
- *               was valid: the scanner posted the token to the API and rule R9
- *               in the FAT service produced this reservation, which arrives here
- *               as untouched JSON and is only rendered. Finalising is the same
- *               story - POST reservations/complete performs the state change,
- *               writes the audit fields and retires the QR token, and this
- *               screen simply reports the server's own message afterwards.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Verify Result
+ * Description : Shows a verified booking and completes the energy transfer.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-19
  * =============================================================================
  */
 

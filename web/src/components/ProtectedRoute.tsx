@@ -1,15 +1,11 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/components/ProtectedRoute.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Route guard for the authenticated area of the web application.
- *               It waits for the stored token to be re-validated, bounces an
- *               anonymous visitor to the login page (remembering where they were
- *               heading), and hides screens the signed in role may not use.
- *               Serves the "role based access - Backoffice / Grid Operator"
- *               marking requirement on the client side.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Module      : Components / Protected Route
+ * Description : Keeps signed-out or unauthorised users away from protected
+ *               pages.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-08
  * =============================================================================
  */
 

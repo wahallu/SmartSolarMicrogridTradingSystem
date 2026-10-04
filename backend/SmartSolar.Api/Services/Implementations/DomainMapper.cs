@@ -2,14 +2,9 @@
  * File        : DomainMapper.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Implementations
- * Description : Hand written entity to DTO projections. No mapping library is
- *               used on purpose - the mappings are explicit and reviewable, and
- *               they are the single place where the server decides what the
- *               clients are allowed to see (for example a password hash never
- *               appears here, and CanModify / CanCancel are computed here from
- *               the 12 hour rule so no client has to).
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Converts stored domain records into client-facing API models.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-21
  * =============================================================================
  */
 

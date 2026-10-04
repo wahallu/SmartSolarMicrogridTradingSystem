@@ -2,13 +2,9 @@
  * File        : IServices.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Interfaces
- * Description : The complete service layer contract. Every business rule in the
- *               system is reachable only through one of these methods, which is
- *               what makes this a FAT service - controllers merely translate a
- *               ServiceResult into an HTTP status code, and the web and Android
- *               clients hold no domain logic whatsoever.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Defines the service contracts used by the API controllers.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-20
  * =============================================================================
  */
 

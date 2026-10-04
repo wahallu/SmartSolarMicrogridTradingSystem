@@ -1,20 +1,10 @@
 /* =============================================================================
  * File        : SlotsController.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Controllers / Slots
- * Description : HTTP surface for the bookable energy windows published at a
- *               microgrid node: browsing and filtering slots, the "only what is
- *               bookable right now" projection used by the Android booking
- *               screen, single slot creation, bulk generation over a date range,
- *               editing, blocking and deletion. The controller is deliberately
- *               THIN - it binds a DTO, calls exactly one ISlotService method and
- *               maps the returned ServiceResult onto a status code. Rule R8
- *               (a slot is bookable only while it has free capacity, is not
- *               Blocked and its node is Active) is decided entirely inside the
- *               FAT service, so neither the React grid nor the phone re-derives
- *               availability.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Controllers / Slots Controller
+ * Description : Handles slot searches, creation, generation and maintenance.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-10
  * =============================================================================
  */
 

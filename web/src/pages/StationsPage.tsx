@@ -1,15 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/StationsPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Microgrid node (solar grid hub) management - the create, edit,
- *               schedule, availability, activate / deactivate and delete screen
- *               that the "station management" marking criterion asks for.
- *               Every rule stays on the server: rule R4 (a node holding future
- *               bookings may not be deactivated) is never pre-checked here, the
- *               API is simply called and its 409 wording is displayed.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Stations
+ * Description : Creates and maintains stations, schedules and availability.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-10
  * =============================================================================
  */
 
@@ -232,9 +227,13 @@ function StationCardSkeleton() {
 export default function StationsPage() {
   // Backoffice owns the node register; a Grid Operator keeps the day to day
   // schedule and free bay count of the node they work at up to date.
-  const { isBackoffice, isGridOperator } = useAuth();
+  const { user, isBackoffice, isGridOperator } = useAuth();
   const toast = useToast();
-  const canManageOperations = isBackoffice || isGridOperator;
+  const canManageOperationsAt = (station: Station): boolean =>
+    isBackoffice ||
+    (isGridOperator &&
+      Boolean(user?.assignedStationId) &&
+      user?.assignedStationId === station.id);
 
   /* ---- list state ---- */
   const [stations, setStations] = useState<Station[]>([]);
@@ -689,7 +688,7 @@ export default function StationsPage() {
                     Edit
                   </button>
                 )}
-                {canManageOperations && (
+                {canManageOperationsAt(station) && (
                   <button
                     type="button"
                     className="btn-secondary btn-sm"
@@ -699,7 +698,7 @@ export default function StationsPage() {
                     Schedule
                   </button>
                 )}
-                {canManageOperations && (
+                {canManageOperationsAt(station) && (
                   <button
                     type="button"
                     className="btn-secondary btn-sm"

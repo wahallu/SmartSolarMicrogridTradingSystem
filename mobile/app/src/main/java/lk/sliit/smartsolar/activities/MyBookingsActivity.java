@@ -1,16 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : MyBookingsActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : The booking list for a signed in solar prosumer. It satisfies
- *               three separate marking requirements at once: the current and
- *               pending bookings, the full booking history, and a working search
- *               filter. Each tab re-queries GET /reservations/my with a different
- *               scope, and every successful load is mirrored into the local
- *               SQLite cache so the screen still has something to show offline.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / My Bookings
+ * Description : Lists and filters the signed-in prosumer's reservations.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-14
  * =============================================================================
  */
 

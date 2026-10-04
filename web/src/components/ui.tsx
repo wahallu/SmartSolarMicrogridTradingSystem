@@ -1,15 +1,11 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/components/ui.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The shared presentation primitives every screen is built from -
- *               spinners, loading / error / empty states, stat cards, status
- *               badges, a modal and confirm dialog, a toast system, pagination
- *               and a search box. Keeping them in one place is what makes the
- *               back office and operator screens look like one product, which
- *               the UI consistency and usability marks ask for.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Components / ui
+ * Description : Provides the reusable buttons, cards, fields and feedback
+ *               components.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-20
  * =============================================================================
  */
 

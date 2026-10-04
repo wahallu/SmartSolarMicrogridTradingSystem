@@ -2,19 +2,9 @@
  * File        : ExceptionHandlingMiddleware.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Middleware
- * Description : Terminal try/catch wrapped around the whole request pipeline so
- *               that an exception nobody anticipated still leaves the server as
- *               the standard ApiResponse JSON envelope.
- *
- *               WHY THIS EXISTS: the React web client and the Android client
- *               both parse every response as ApiResponse JSON and nothing else.
- *               Without this filter an unhandled exception would return the
- *               developer exception HTML page (or an empty 500 body), which both
- *               clients would fail to deserialise - the user would see a parser
- *               crash instead of a readable error message. Catching here keeps
- *               the contract "every response is an ApiResponse" literally true.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Turns unhandled server errors into a consistent API response.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-19
  * =============================================================================
  */
 

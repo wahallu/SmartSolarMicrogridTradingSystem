@@ -1,14 +1,10 @@
-/**
- * =============================================================================
- * File        : types/index.ts
+/* =============================================================================
+ * File        : src/types/index.ts
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : TypeScript mirrors of every DTO the C# Web API returns. These
- *               interfaces are the client side half of docs/API_CONTRACT.md - if
- *               a field is renamed on the server it must be renamed here too,
- *               and the compiler will then point at every screen that needs
- *               updating.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Types / index
+ * Description : Defines the TypeScript models shared by API calls and screens.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-21
  * =============================================================================
  */
 

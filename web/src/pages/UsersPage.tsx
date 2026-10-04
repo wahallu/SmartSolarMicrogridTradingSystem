@@ -1,14 +1,9 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/UsersPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Back office web user management - the create, edit, activate,
- *               deactivate, reset password and delete screen for Backoffice and
- *               Grid Operator accounts. This serves the "EV Owner / web user
- *               management" marking criterion. Rule R10 (only Backoffice may
- *               touch these records) and the self delete guard live in the C#
- *               API; this screen only calls the endpoints and shows the verdict.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
+ * Module      : Pages / Users
+ * Description : Supports Backoffice management of staff accounts.
+ * Author      : IT22049872 - Chathushka
  * Created     : 2026-09-04
  * =============================================================================
  */

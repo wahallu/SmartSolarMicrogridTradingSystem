@@ -2,12 +2,9 @@
  * File        : ErrorCodes.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Common
- * Description : Stable string constants returned in ApiResponse.ErrorCode. The
- *               clients branch on these codes rather than on English message
- *               text, so wording can change without breaking the web or the
- *               Android application. Each code maps to a rule in the contract.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Keeps the public error codes in one place for both clients.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-23
  * =============================================================================
  */
 

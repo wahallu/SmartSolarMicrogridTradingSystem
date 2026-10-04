@@ -1,17 +1,10 @@
-/**
- * =============================================================================
- * File        : api/services.ts
+/* =============================================================================
+ * File        : src/api/services.ts
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : One typed function per Web API endpoint, grouped by resource.
- *               Screens import from here and never build a URL themselves, so
- *               the whole client surface can be reviewed in a single file and a
- *               route change is a one line edit.
- *
- *               Nothing in this file makes a decision - it only forwards. Every
- *               rule (the 7 day window, the 12 hour notice, role checks, QR
- *               validity) is enforced by the C# service layer.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Api / services
+ * Description : Groups the typed API calls used by the web screens.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-25
  * =============================================================================
  */
 

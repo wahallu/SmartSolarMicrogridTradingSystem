@@ -1,17 +1,10 @@
 /* =============================================================================
  * File        : Program.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Host / Composition root
- * Description : Application entry point. Binds configuration, registers every
- *               service in the dependency injection container, configures JWT
- *               bearer authentication and CORS for the two clients, wires the
- *               HTTP pipeline and runs the MongoDB index and seed routines once
- *               at start-up.
- *
- *               This is the only file that knows how the pieces fit together;
- *               the services themselves depend on interfaces only.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Application Bootstrap
+ * Description : Configures the API services, security, middleware and routes.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-23
  * =============================================================================
  */
 

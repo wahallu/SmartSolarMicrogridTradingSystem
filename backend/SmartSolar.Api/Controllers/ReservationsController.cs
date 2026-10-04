@@ -1,21 +1,10 @@
 /* =============================================================================
  * File        : ReservationsController.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Controllers / Reservations
- * Description : HTTP surface for the whole power trading reservation workflow:
- *               staff search, a prosumer's own bookings, booking history, the
- *               live dashboard counters, creation, modification, cancellation,
- *               approval with QR issue, rejection, QR retrieval, QR verification
- *               and completion of the energy transfer. The controller is
- *               deliberately THIN - it binds a DTO, calls exactly one
- *               IReservationService method and maps the returned ServiceResult
- *               onto a status code. Every rule that governs a reservation lives
- *               in the FAT service: R1 (7 day window), R2 / R3 (12 hour notice),
- *               R9 (QR scan window), R11 (a prosumer may only touch their own
- *               data), R12 (node closed) and R13 (duplicate booking). Neither
- *               the React screens nor the Android app re-derives any of them.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Controllers / Reservations Controller
+ * Description : Receives booking, approval, QR and transfer requests.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-17
  * =============================================================================
  */
 
