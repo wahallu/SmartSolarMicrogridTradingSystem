@@ -50,6 +50,9 @@ public class ReservationService : IReservationService
     /// <summary>
     /// Serialiser settings for the QR payload. The naming policy is deliberately left
     /// null so the anonymous object's member names (v, t, r, n, s, e) are written to
+///
+/// In short: passing null keeps the anonymous object's original member names
+/// (v, t, r, n, s, e) in the output.
     /// the JSON verbatim - the contract fixes those single letter names exactly.
     /// </summary>
     private static readonly JsonSerializerOptions QrPayloadJsonOptions = new()
@@ -183,7 +186,7 @@ public class ReservationService : IReservationService
         }
     }
 
-    /// <summary>Reads a single reservation; the owner or staff only (rule R11).</summary>
+    /// <summary>.</summary>
     /// <param name="id">Mongo ObjectId of the reservation, as a string.</param>
     /// <param name="caller">The authenticated caller.</param>
     /// <param name="ct">Cancellation token flowed through to MongoDB.</param>
@@ -244,7 +247,7 @@ public class ReservationService : IReservationService
             switch (scope)
             {
                 case ReservationScope.Current:
-                    // "Current" is what the prosumer is about to attend - approved and still in the future.
+                    // "Current" means an approved reservation whose start time hasn't passed yet.
                     filter = baseFilter
                              & builder.Eq(r => r.Status, ReservationStatus.Approved)
                              & builder.Gt(r => r.ReservationStartUtc, now);

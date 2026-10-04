@@ -207,8 +207,77 @@ bash gradlew installDebug
 | `200234501122` | `Prosumer@123` | Prosumer | Pending activation example |
 | `199756403311` | `Prosumer@123` | Prosumer | Deactivated-account example |
 
-Prosumers sign in using their NIC. Staff members sign in using their username. The login
-endpoint also accepts an email address.
+Prosumers authenticate via their NIC, which is their primary key. Staff authenticate via a username. The login endpoint accepts any one of the three identifiers: a NIC, a username, or an e-mail address.
+
+---
+
+## Business rules
+
+All thirteen rules are enforced **only** in the API service layer. Each returns a
+stable `errorCode` the clients branch on rather than parsing English text.
+
+| # | Rule | Error code |
+|---|---|---|
+| R1 | A reservation must start in the future and within **7 days** | `RES_WINDOW_7_DAYS` |
+| R2 | Updates require at least **12 hours** notice | `RES_UPDATE_12H` |
+| R3 | Cancellations require at least **12 hours** notice | `RES_CANCEL_12H` |
+| R4 | A node cannot be deactivated while future bookings exist | `STATION_HAS_ACTIVE_RES` |
+| R5 | A deactivated account can only be reactivated by a **Backoffice** officer | `ACCOUNT_DEACTIVATED` |
+| R6 | Self-registered prosumers start `Pending` and cannot sign in until activated | `ACCOUNT_PENDING` |
+| R7 | NIC is unique across all accounts | `NIC_ALREADY_EXISTS` |
+| R8 | A slot must be available, have capacity and belong to an active node | `SLOT_UNAVAILABLE` |
+| R9 | A scanned QR must exist, be `Approved`, and fall inside its time window | `QR_INVALID` / `QR_NOT_APPROVED` / `QR_OUT_OF_WINDOW` |
+| R10 | Only Backoffice may manage web users and activate accounts | `FORBIDDEN` |
+| R11 | A prosumer may only read or modify their own data | `FORBIDDEN` |
+| R12 | A node closed on that weekday cannot be booked | `STATION_CLOSED` |
+| R13 | A prosumer may not hold two active bookings on one slot | `DUPLICATE_RESERVATION` |
+
+Full detail, including every endpoint and DTO, is in
+[`docs/API_CONTRACT.md`](docs/API_CONTRACT.md).
+
+---
+
+## Deploying the API to IIS
+
+1. **Install the .NET 8 Hosting Bundle** on the server. Without it IIS returns
+   HTTP 500.19 or 500.31.
+   <https://dotnet.microsoft.com/download/dotnet/8.0>
+
+2. **Publish** the API:
+
+   ```bash
+   cd backend
+   dotnet publish SmartSolar.Api -c Release -o C:\inetpub\SmartSolarApi
+   ```
+
+3. **Create the site** in IIS Manager:
+   * Add a new Application Pool named `SmartSolarPool`
+   * Set its .NET CLR version to **No Managed Code** (Kestrel runs the app, not the CLR host)
+   * Add a Website pointing at `C:\inetpub\SmartSolarApi`, bound to port `8080`
+   * Assign it the `SmartSolarPool` pool
+
+4. **Grant permissions** so the pool identity can read the folder and write logs:
+
+   ```powershell
+   icacls "C:\inetpub\SmartSolarApi" /grant "IIS AppPool\SmartSolarPool:(OI)(CI)RX" /T
+   ```
+
+5. **Point the API at MongoDB.** Edit
+   `C:\inetpub\SmartSolarApi\appsettings.json` and set
+   `MongoDbSettings:ConnectionString`. For MongoDB Atlas use the SRV string:
+   `mongodb+srv://user:password@cluster.mongodb.net`
+
+6. **Verify** by browsing to `http://localhost:8080/api/v1/health`. It should report
+   `"database": "Connected"`.
+
+7. **Repoint the clients**: set `VITE_API_BASE_URL` in `web/.env` and
+   `API_BASE_URL_DEBUG` in `mobile/local.properties` to the IIS address, then rebuild
+   both clients.
+
+`web.config` in the project root configures the ASP.NET Core Module (in-process
+hosting) and is copied automatically by `dotnet publish`.
+
+---
 
 ## Video demonstration
 

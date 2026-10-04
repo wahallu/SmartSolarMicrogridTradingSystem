@@ -32,7 +32,7 @@ import type {
 } from '../types';
 
 /* ===========================================================================
- * Authentication
+ * Auth
  * =========================================================================== */
 
 export const authApi = {
@@ -110,7 +110,7 @@ export const usersApi = {
 };
 
 /* ===========================================================================
- * Solar prosumers (keyed by NIC)
+ * Solar prosumers 
  * =========================================================================== */
 
 export const prosumersApi = {
@@ -177,7 +177,7 @@ export const stationsApi = {
       }),
     ),
 
-  /** Registers a new node. */
+  /** Registers with a new node. */
   create: (payload: Record<string, unknown>) =>
     unwrapWithMessage<Station>(http.post<ApiResponse<Station>>('/stations', payload)),
 
@@ -209,7 +209,7 @@ export const stationsApi = {
 };
 
 /* ===========================================================================
- * Energy booking slots
+ * 
  * =========================================================================== */
 
 export const slotsApi = {
@@ -332,7 +332,7 @@ export const reservationsApi = {
       http.patch<ApiResponse<Reservation>>(`/reservations/${id}/reject`, { reason }),
     ),
 
-  /** Fetches the QR payload and rendered PNG for an approved booking. */
+  /** gets both the QR payload and its PNG image for an approved booking. */
   qr: (id: string) => unwrap<QrCode>(http.get<ApiResponse<QrCode>>(`/reservations/${id}/qr`)),
 
   /** Validates a scanned token against the server (rule R9). */

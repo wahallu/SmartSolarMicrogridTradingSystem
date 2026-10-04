@@ -43,7 +43,7 @@ public static class ErrorCodes
     // ---- stations -----------------------------------------------------------
     public const string StationCodeExists = "STATION_CODE_EXISTS";
 
-    /// <summary>R4 - deactivation refused because future reservations still exist.</summary>
+    /// <summary>R4 - the account can't be deactivated while it still has upcoming reservations</summary>
     public const string StationHasActiveReservations = "STATION_HAS_ACTIVE_RES";
 
     public const string StationInactive = "STATION_INACTIVE";

@@ -86,8 +86,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 
-// Swagger doubles as the API documentation the report references, so it is
-// configured with a bearer scheme that lets a marker try the secured endpoints.
+// In short: Swagger is both the live API docs and the report's reference, so a
+// bearer scheme is added to let a marker call the secured endpoints.
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -146,7 +146,8 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 
-    // A rejected token must still produce the standard JSON envelope.
+    // even a rejected token gets the same standard JSON envelope as
+// everything else.
     options.Events = new JwtBearerEvents
     {
         OnChallenge = async context =>

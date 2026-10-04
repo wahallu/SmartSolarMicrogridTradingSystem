@@ -46,7 +46,7 @@ export function Spinner({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
     <span
       role="status"
       aria-label="Loading"
-      className={`inline-block animate-spin rounded-full border-solar-200 border-t-solar-500 ${SPINNER_SIZES[size]}`}
+      className={`inline-block animate-spin rounded-full border-solar-100 border-t-solar-400 ${SPINNER_SIZES[size]}`}
     />
   );
 }
@@ -77,8 +77,8 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
   return (
     <div className="card border-red-200 bg-red-50">
       <div className="card-body flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-        <AlertCircle className="h-5 w-5 shrink-0 text-red-600" aria-hidden="true" />
-        <p className="flex-1 text-sm font-medium text-red-800">{message}</p>
+        <AlertCircle className="h-5 w-5 shrink-0 text-red-500" aria-hidden="true" />
+        <p className="flex-1 text-sm font-medium text-red-600">{message}</p>
         {onRetry && (
           <button type="button" className="btn-secondary btn-sm" onClick={onRetry}>
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
@@ -90,11 +90,9 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Empty state                                                                 */
-/* -------------------------------------------------------------------------- */
 
-/** Friendly placeholder shown when a list came back with no records. */
+
+/** the message displayed when a list is empty. */
 export function EmptyState({
   icon: Icon,
   title,

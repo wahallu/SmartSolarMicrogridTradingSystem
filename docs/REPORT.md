@@ -180,9 +180,7 @@ Client → HTTPS request with Authorization: Bearer <JWT>
 
 ### 2.4 The response envelope
 
-Every endpoint — success or failure — returns the same JSON shape. Because the shape
-never varies, each client needs exactly one deserialiser and one error handler instead
-of one per endpoint:
+Regardless of outcome, every endpoint returns the same JSON envelope. This uniformity means each client requires exactly one deserialiser and one error handler, eliminating the need for per-endpoint handling.
 
 ```json
 {

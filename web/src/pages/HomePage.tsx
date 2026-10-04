@@ -33,7 +33,7 @@ import {
   Zap,
 } from 'lucide-react';
 
-/** Where the API's interactive documentation is published in development. */
+/** the dev URL for the API's interactive docs. */
 const SWAGGER_URL = 'http://localhost:5218/swagger';
 
 /** One entry in the "How it works" strip. */

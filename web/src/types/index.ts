@@ -33,7 +33,7 @@ export interface PagedResult<T> {
   hasNext: boolean;
 }
 
-/** The three principals recognised by the system. */
+
 export type UserRole = 'Backoffice' | 'GridOperator' | 'Prosumer';
 
 /** Life cycle state of any account. */
@@ -144,7 +144,7 @@ export interface Slot {
   bookedCount: number;
   remainingCapacity: number;
   status: SlotStatus;
-  /** Server verdict on rule R8 - obeyed by the UI, never recomputed. */
+  /** Server verdict on rule R8 -  */
   isBookable: boolean;
 }
 
@@ -201,7 +201,13 @@ export interface QrCode {
   issuedAt: string | null;
 }
 
-/** Live counters shown on the dashboards. */
+/**
+ * Live counters shown on the dashboards.
+ *
+ * These are the real-time figures surfaced on the dashboard screens, kept
+ * up to date as the underlying data changes so the user always sees the
+ * current state at a glance.
+ */
 export interface Dashboard {
   pendingReservations: number;
   /** The "count of approved future reservations" the marking scheme names. */

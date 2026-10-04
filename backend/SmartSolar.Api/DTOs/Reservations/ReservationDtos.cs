@@ -162,7 +162,7 @@ public class DashboardDto
     public long ActiveStations { get; set; }
     public long TotalStations { get; set; }
 
-    /// <summary>Prosumers awaiting activation - staff only, zero for a prosumer caller.</summary>
+    /// <summary>his count is visible only to staff; a prosumer caller always.</summary>
     public long PendingProsumerActivations { get; set; }
 
     public long TotalProsumers { get; set; }

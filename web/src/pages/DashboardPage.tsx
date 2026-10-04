@@ -59,7 +59,7 @@ function greetingFor(hour: number): string {
   return 'Good evening';
 }
 
-/** Expands a role code into the wording used on screen. */
+/** turns a role code into its display label.. */
 function roleLabel(role: UserRole): string {
   // The API's enum names are not phrases to put in front of a user.
   switch (role) {
@@ -97,8 +97,8 @@ export default function DashboardPage() {
     user?.role === 'GridOperator' && user.assignedStationId ? user.assignedStationId : undefined;
 
   useEffect(() => {
-    // The guard stops a slow response from setting state after the user has
-    // navigated away from the dashboard.
+    // it prevents late responses from updating state after the user
+// has left the dashboard.
     let cancelled = false;
 
     async function load(): Promise<void> {
@@ -126,7 +126,8 @@ export default function DashboardPage() {
     };
   }, [scopedStationId, reloadIndex]);
 
-  // Re-runs the effect above; the spinner on the button follows `refreshing`.
+  // triggers the effect again, and the button's spinner reflects the
+// `refreshing` flag.
   const handleRefresh = useCallback(() => {
     setRefreshing(true);
     setReloadIndex((index) => index + 1);
@@ -199,7 +200,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* ---- Reservation counters (read live from the API) ---- */}
+      {/* ---- the reservation totals, fetched live from the API.---- */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Pending reservations"
@@ -227,7 +228,7 @@ export default function DashboardPage() {
         />
       </section>
 
-      {/* ---- Estate wide counters, meaningful to the back office only ---- */}
+      {/* ---- estate-wide totals that only matter to the back office. ---- */}
       {isBackoffice && (
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
@@ -302,7 +303,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ---- Upcoming reservations ---- */}
+        {/* reservations that haven't started yet.  */}
         <div className="card">
           <div className="card-header">
             <h2 className="text-sm font-semibold text-slate-900">Upcoming reservations</h2>
@@ -353,7 +354,7 @@ export default function DashboardPage() {
                         {formatDateTime(reservation.reservationStartUtc)}
                       </td>
                       <td>
-                        {/* The status pill is exactly what the server reported - the UI
+                        {/* 
                             never recomputes a booking's state. */}
                         <span className={reservationBadgeClass(reservation.status)}>
                           {reservation.status}
