@@ -1,15 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/components/Layout.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The authenticated application shell used as a react-router layout
- *               route. It renders the role filtered sidebar navigation, the
- *               signed in user panel with sign out, a responsive top bar and a
- *               live API health indicator, then hands the page body to <Outlet />.
- *               Serves the navigation, role based access and responsive UI
- *               marking requirements.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Components / Layout
+ * Description : Provides the signed-in navigation and shared page frame.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-23
  * =============================================================================
  */
 

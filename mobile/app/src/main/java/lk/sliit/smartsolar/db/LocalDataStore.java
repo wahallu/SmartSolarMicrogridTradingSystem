@@ -1,18 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : LocalDataStore.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : db
- * Description : Read and write access to the SQLite cache tables. Whenever a
- *               screen successfully loads stations or reservations from the Web
- *               API it also writes them here, so the same screen can still show
- *               the last known data if the phone later loses connectivity.
- *
- *               The cache is never authoritative. A cached list is always
- *               presented as such in the UI, and every action (create, update,
- *               cancel, approve, complete) goes straight to the API.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Db / Local Data Store
+ * Description : Stores recent API data for read-only offline use.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-24
  * =============================================================================
  */
 

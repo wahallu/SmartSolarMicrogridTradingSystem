@@ -2,14 +2,10 @@
  * File        : ServiceResult.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Common
- * Description : The value every service method returns. It carries the outcome
- *               of a business rule decision - not an HTTP concept - so the
- *               service layer stays free of ASP.NET types. Controllers translate
- *               the ResultStatus into a status code, which is what keeps this a
- *               FAT service: the decision is made in the service, the controller
- *               only reports it.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Carries a service result before a controller turns it into
+ *               HTTP.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-24
  * =============================================================================
  */
 

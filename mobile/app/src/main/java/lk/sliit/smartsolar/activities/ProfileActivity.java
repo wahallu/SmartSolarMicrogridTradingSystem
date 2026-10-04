@@ -1,20 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : ProfileActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : The signed in account screen. It reads the live profile from
- *               GET /auth/me, shows the read only account details, lets a
- *               prosumer edit their own contact details, lets any role change
- *               their password, and lets a prosumer RAISE an account
- *               deactivation request.
- *
- *               This screen decides nothing. The account status, the role and
- *               the deactivation flag are all values the Web API reported; the
- *               deactivation button only raises a request because rule R5
- *               reserves the actual deactivation for a Backoffice officer.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Module      : Activities / Profile
+ * Description : Displays and updates the signed-in user's account details.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-07
  * =============================================================================
  */
 

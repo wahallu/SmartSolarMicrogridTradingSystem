@@ -2,12 +2,10 @@
  * File        : StationDtos.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : DTOs / Stations
- * Description : Contracts for managing microgrid nodes - creation with GPS
- *               position, kWh capacity and battery bay counts, schedule updates,
- *               operator maintained availability, and the "nearby stations"
- *               projection that feeds the Google Maps screen on Android.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Contains the API models used for station details and
+ *               schedules.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-11
  * =============================================================================
  */
 

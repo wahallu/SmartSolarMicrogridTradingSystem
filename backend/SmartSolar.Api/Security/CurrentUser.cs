@@ -2,12 +2,8 @@
  * File        : CurrentUser.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Security
- * Description : Read only view of whoever is making the current request. The
- *               service layer needs the caller's role and NIC to enforce rules
- *               such as "a prosumer may only touch their own reservations", but
- *               it must not depend on ASP.NET's HttpContext. This small object
- *               carries exactly the facts the rules need and nothing else.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
+ * Description : Reads the signed-in user's identity and role from JWT claims.
+ * Author      : IT22049872 - Chathushka
  * Created     : 2026-09-04
  * =============================================================================
  */

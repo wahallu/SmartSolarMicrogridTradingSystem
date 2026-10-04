@@ -1,21 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : StationDetailActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Everything the Web API knows about one microgrid node: its code
- *               and service status, its address, a small non interactive Google
- *               Map pinned on its coordinates, its rated capacity, battery bay
- *               availability, operating hours and contact number.
- *
- *               THIS SCREEN IS A UI LAYER ONLY. Every figure below arrived from
- *               the API already computed - the bay counts, the hours and the
- *               status are the server's values, shown verbatim. The booking
- *               button merely opens the booking screen; whether a slot can
- *               actually be reserved at this node is decided by the FAT service
- *               layer when the request is submitted.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Station Detail
+ * Description : Shows station details, availability, hours and map location.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-11
  * =============================================================================
  */
 

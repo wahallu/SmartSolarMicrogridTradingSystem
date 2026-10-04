@@ -2,12 +2,9 @@
  * File        : ApiResponse.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Common
- * Description : The single JSON envelope every endpoint returns, success or
- *               failure. Because the shape never changes, the React client and
- *               the Android client each need exactly one deserialiser and one
- *               error handler instead of one per endpoint.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Defines the response shape returned by every API endpoint.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-24
  * =============================================================================
  */
 

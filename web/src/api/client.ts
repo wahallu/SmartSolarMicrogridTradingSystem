@@ -1,18 +1,11 @@
-/**
- * =============================================================================
- * File        : api/client.ts
+/* =============================================================================
+ * File        : src/api/client.ts
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The single axios instance every screen uses to reach the central
- *               C# Web API. The web application is a pure UI layer: it holds no
- *               business logic and never touches MongoDB - every read and every
- *               write goes through one of the calls defined here.
- *
- *               Two interceptors do the repetitive work:
- *                 request  - attaches the bearer token from local storage
- *                 response - unwraps the {success, message, data} envelope and
- *                            converts a failure into a typed ApiError
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Api / client
+ * Description : Configures HTTP requests, authentication and API error
+ *               handling.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-20
  * =============================================================================
  */
 

@@ -2,12 +2,9 @@
  * File        : DomainEnums.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Models / Enums
- * Description : Every closed set of values used by the domain. They are stored
- *               in MongoDB as strings (see BsonRepresentation on the entities)
- *               so a document remains readable in Compass and so the JSON that
- *               the web and Android clients receive is self describing.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Lists the account, station, slot and reservation states.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-24
  * =============================================================================
  */
 

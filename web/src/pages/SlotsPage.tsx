@@ -1,15 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/SlotsPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Energy booking slot management for Backoffice officers and Grid
- *               Operators. Lists a node's slots for a chosen day with server
- *               side filters, and offers create, bulk generate, edit, block and
- *               delete. This is the "manage booking slots" marking requirement.
- *               Availability (rule R8) and the delete guard are decided by the
- *               C# API - this screen only renders and obeys those verdicts.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Slots
+ * Description : Creates and maintains booking slots for a selected station.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-10
  * =============================================================================
  */
 

@@ -1,16 +1,10 @@
 /* =============================================================================
  * File        : AuthController.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Controllers / Auth
- * Description : HTTP surface for logging in, self registering as a solar
- *               prosumer, reading the caller's own profile and changing the
- *               caller's own password. The controller is deliberately THIN: it
- *               binds a DTO, calls exactly one IAuthService method and maps the
- *               returned ServiceResult onto a status code. Every credential
- *               check and every account state rule (R5, R6, R7) lives in the
- *               service, which is what keeps this a FAT service architecture.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Module      : Controllers / Auth Controller
+ * Description : Handles sign-in, registration, profile and password requests.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-07
  * =============================================================================
  */
 

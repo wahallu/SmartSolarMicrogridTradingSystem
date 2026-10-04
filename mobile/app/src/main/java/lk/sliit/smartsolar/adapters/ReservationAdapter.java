@@ -1,16 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : ReservationAdapter.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : adapters
- * Description : RecyclerView adapter that renders a booking as a card: its
- *               reference, a colour coded status pill, the node, the slot day
- *               and time, the traded energy and how long remains before the
- *               window opens. It serves the "My bookings" and "Node bookings"
- *               list requirements. No business rule is evaluated here - the row
- *               only mirrors the flags the Web API already decided.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Adapters / Reservation Adapter
+ * Description : Binds reservation records to booking list rows.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-18
  * =============================================================================
  */
 

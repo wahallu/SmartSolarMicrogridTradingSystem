@@ -1,23 +1,11 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/MapPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Plots every microgrid node on a map so staff can see the network
- *               geographically and jump from a node straight to its bookings.
- *
- *               The web client draws the map with Leaflet over OpenStreetMap
- *               tiles, which need no API key and no billing account, so the map
- *               works on any marker's machine straight after "npm run dev". The
- *               Android client uses Google Maps, which is where the assignment
- *               asks for it.
- *
- *               Nothing geographic is computed here: when the browser grants a
- *               position the list comes from GET /stations/nearby and the
- *               distanceKm on every row is the Haversine figure calculated by
- *               StationService in the C# API. That is the fat-service rule - the
- *               browser only renders the numbers it is handed.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Map
+ * Description : Plots microgrid stations and nearby results on an interactive
+ *               map.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-13
  * =============================================================================
  */
 

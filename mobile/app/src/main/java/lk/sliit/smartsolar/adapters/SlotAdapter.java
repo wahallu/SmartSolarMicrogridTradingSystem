@@ -1,15 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : SlotAdapter.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : adapters
- * Description : RecyclerView adapter for the energy slot picker on the new and
- *               edit booking screens. It supports a single selection, drawing
- *               the chosen slot with the amber brand highlight, and renders any
- *               slot the API marked as not bookable in a disabled state so the
- *               user cannot pick a window the server would refuse.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Adapters / Slot Adapter
+ * Description : Binds available energy slots to selectable list rows.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-11
  * =============================================================================
  */
 

@@ -1,17 +1,11 @@
 /* =============================================================================
  * File        : HealthController.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Controllers / Health
- * Description : The single anonymous "is the system up" endpoint, and the first
- *               request anyone - a marker, a load balancer or the Android
- *               application on start up - sends after a deployment. It pings
- *               MongoDB through MongoDbContext and reports the process identity
- *               (database name, environment, version) plus the server's UTC
- *               clock, so a client that sees odd booking behaviour can prove in
- *               one call whether the API is alive, which database it opened and
- *               whether its clock agrees with the caller's.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Controllers / Health Controller
+ * Description : Reports whether the API and its MongoDB connection are
+ *               healthy.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-19
  * =============================================================================
  */
 

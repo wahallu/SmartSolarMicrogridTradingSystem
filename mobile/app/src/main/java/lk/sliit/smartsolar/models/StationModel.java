@@ -1,15 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : StationModel.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : models
- * Description : Client side representation of the StationDto / NearbyStationDto
- *               returned by the Web API. The latitude and longitude carried here
- *               are what the Google Maps screen plots, and distanceKm is the
- *               value the SERVER computed - the phone never calculates distances
- *               itself, because all business logic belongs to the FAT service.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Models / Station Model
+ * Description : Parses station details returned by the Web API.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-10
  * =============================================================================
  */
 

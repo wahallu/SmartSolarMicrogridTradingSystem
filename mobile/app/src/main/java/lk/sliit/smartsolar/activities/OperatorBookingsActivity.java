@@ -1,19 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : OperatorBookingsActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : The booking list a Grid Operator works from at their microgrid
- *               node. A single selection chip row picks the reservation status
- *               and a debounced search box narrows the rows by prosumer name,
- *               NIC or reservation reference.
- *
- *               BOTH filters are executed by the Web API: the screen only builds
- *               the query string for GET /reservations and paints whatever comes
- *               back. Nothing is counted, filtered by rule or decided here, which
- *               is what keeps the business logic in the FAT service.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Operator Bookings
+ * Description : Shows the bookings handled by a Grid Operator.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-15
  * =============================================================================
  */
 

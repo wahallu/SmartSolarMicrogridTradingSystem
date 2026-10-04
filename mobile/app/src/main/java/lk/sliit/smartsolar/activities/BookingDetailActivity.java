@@ -1,21 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : BookingDetailActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Shows one energy trading reservation in full: its reference and
- *               status, the microgrid node, the booked slot, the traded energy,
- *               the QR code the operator scans and the audit trail staff wrote.
- *
- *               THIS SCREEN IS A UI LAYER ONLY. The "Change booking" and
- *               "Cancel booking" buttons are enabled purely from the canModify
- *               and canCancel booleans the Web API sends with the reservation:
- *               the 12 hour notice rule (R2 / R3) is evaluated in the FAT
- *               service layer and is never recomputed here. The QR image is
- *               rendered by the server too, and approve / reject are refused by
- *               the API for anyone who is not staff.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Booking Detail
+ * Description : Shows one booking and the actions still available for it.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-16
  * =============================================================================
  */
 

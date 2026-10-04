@@ -1,17 +1,11 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : BaseActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Common behaviour every screen inherits: the shared ApiClient,
- *               the SQLite session and cache, toolbar wiring, toast helpers and
- *               a single place that handles an expired session.
- *
- *               Centralising this means an individual Activity contains only the
- *               logic for its own screen, and a cross cutting change (for example
- *               how a 401 is handled) is made once.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Base
+ * Description : Shares API, session, toolbar and error handling across
+ *               screens.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-19
  * =============================================================================
  */
 

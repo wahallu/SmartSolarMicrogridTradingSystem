@@ -1,19 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/PendingActivationsPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The back office activation work queue that the marking scheme
- *               names explicitly. GET /prosumers/pending returns both halves of
- *               the queue in a single call: prosumers who self-registered from
- *               the mobile app and are still Pending (rule R6), and Active
- *               prosumers who have asked to be deactivated from the mobile app.
- *
- *               Every decision here belongs to the C# API. This screen only
- *               chooses which buttons to draw from the server state it was given
- *               (status, deactivationRequested) and shows the API's own message
- *               after each action.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Module      : Pages / Pending Activations
+ * Description : Handles pending registrations and deactivation requests.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-08
  * =============================================================================
  */
 

@@ -1,15 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : DashboardModel.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : models
- * Description : Client side representation of the DashboardDto returned by
- *               GET /reservations/dashboard. Every figure on the home screens is
- *               read live from this payload - nothing is counted, derived or
- *               hard coded on the phone, which is exactly what the marking
- *               scheme asks for.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Models / Dashboard Model
+ * Description : Parses the dashboard totals and upcoming booking data.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-22
  * =============================================================================
  */
 

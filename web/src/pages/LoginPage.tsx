@@ -1,15 +1,11 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/LoginPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The public sign-in screen. It collects a NIC, username or e-mail
- *               plus a password, hands them to the AuthContext and then sends the
- *               user to the landing route for their role - the role based
- *               redirect the marking scheme asks for. Account state failures
- *               (Pending, Deactivated) are surfaced with the API's own wording.
- *               No credential rule is evaluated here; the API is the authority.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Module      : Pages / Login
+ * Description : Collects account credentials and starts an authenticated
+ *               session.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-03
  * =============================================================================
  */
 

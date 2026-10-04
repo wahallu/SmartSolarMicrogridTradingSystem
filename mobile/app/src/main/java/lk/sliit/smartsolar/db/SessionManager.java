@@ -1,18 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : SessionManager.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : db
- * Description : Stores and retrieves the signed in user's session in the local
- *               SQLite database. The assignment asks specifically for login
- *               details to persist in SQLite on Android, so the JWT and the user
- *               profile are written to the "session" table rather than to
- *               SharedPreferences.
- *
- *               The table holds at most one row (primary key fixed at 1), so a
- *               new login simply replaces the previous session.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Module      : Db / Session Manager
+ * Description : Saves and restores the authenticated user session in SQLite.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-03
  * =============================================================================
  */
 

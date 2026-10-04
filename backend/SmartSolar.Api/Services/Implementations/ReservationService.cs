@@ -2,19 +2,9 @@
  * File        : ReservationService.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Implementations
- * Description : The heart of the system. Every step of the power trading booking
- *               life cycle lives here: create, update, cancel, approve, reject,
- *               QR issue, QR verification and completion, plus the dashboard the
- *               web and Android clients render. This one class owns rules R1 (the
- *               7 day booking window), R2 and R3 (the 12 hour update / cancel
- *               notice), R8 (slot availability), R9 (QR validity), R11 (a
- *               prosumer may only touch their own bookings), R12 (a node closed
- *               that day cannot be booked) and R13 (no duplicate booking on one
- *               slot). Because all of it sits behind the service interface, the
- *               controllers stay thin and neither client re-implements a rule -
- *               they only display the message this service returns.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Implements the reservation workflow and its booking rules.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-14
  * =============================================================================
  */
 

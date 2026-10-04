@@ -1,15 +1,11 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/HomePage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The public landing (index) page of the web application, served
- *               at "/" with no authentication. It introduces the product, walks
- *               a visitor through the four step booking journey, explains what
- *               each of the three roles can do and lists the seeded demo logins.
- *               This screen satisfies the "Home (index) page" marking criterion.
- *               It is pure presentation - it calls no API and holds no rules.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Home
+ * Description : Introduces the system, its workflow and demonstration
+ *               accounts.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-20
  * =============================================================================
  */
 

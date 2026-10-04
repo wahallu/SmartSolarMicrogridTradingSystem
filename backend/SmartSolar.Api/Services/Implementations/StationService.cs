@@ -2,17 +2,9 @@
  * File        : StationService.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Implementations
- * Description : Every operation that may be performed on a microgrid node lives
- *               here: listing and searching nodes, the map "nearby" projection
- *               whose great circle distances are computed on the SERVER, node
- *               registration, schedule and battery bay maintenance, and the
- *               activate / deactivate / delete life cycle. Rule R4 (a node that
- *               still holds future Pending or Approved reservations may not be
- *               deactivated) and rule R10 (only a Backoffice officer may create
- *               or modify a node) are enforced here and nowhere else, which is
- *               what keeps this a FAT service and the clients purely UI.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Implements station management, schedules and nearby searches.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-12
  * =============================================================================
  */
 

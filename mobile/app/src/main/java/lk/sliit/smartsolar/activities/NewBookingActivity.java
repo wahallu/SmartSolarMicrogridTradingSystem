@@ -1,20 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : NewBookingActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : The prosumer's booking creation flow, which is one of the marked
- *               criteria of the assignment. It walks the user through choosing a
- *               microgrid node, a date, a slot the API reports as bookable and an
- *               energy amount, then POSTs the request to the central Web API.
- *
- *               This screen is a UI layer only. The 7 day booking window (rule
- *               R1), slot availability (rule R8) and the ownership rule (R11) are
- *               all decided by the server; the phone only presents whatever the
- *               API answers. Every place that leans on a server verdict is
- *               commented as such.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / New Booking
+ * Description : Guides a prosumer through station, slot and energy selection.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-14
  * =============================================================================
  */
 

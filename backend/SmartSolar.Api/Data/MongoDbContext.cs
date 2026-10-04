@@ -2,15 +2,9 @@
  * File        : MongoDbContext.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Data
- * Description : The single point at which this application talks to MongoDB. It
- *               resolves the four collections named in the specification and
- *               creates their indexes once at start-up. Registered as a
- *               singleton because MongoClient maintains its own connection pool
- *               and is designed to be shared for the lifetime of the process.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
- * References  : Index creation follows the MongoDB .NET driver guidance at
- *               https://www.mongodb.com/docs/drivers/csharp/current/fundamentals/indexes/
+ * Description : Opens the MongoDB collections used by the service layer.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-19
  * =============================================================================
  */
 

@@ -1,16 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : SplashActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Launcher screen of the Android client. It shows the brand mark
- *               for a short, fixed moment and then decides where the user goes:
- *               straight to their role home screen when a session already exists
- *               in the local SQLite database, or to the login form when it does
- *               not. This is the entry point for the marked "session persistence
- *               in SQLite" and "role based routing" requirements.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Module      : Activities / Splash
+ * Description : Restores a saved session before opening the first screen.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-07
  * =============================================================================
  */
 

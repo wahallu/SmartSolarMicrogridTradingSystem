@@ -1,21 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : StationsMapActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : The Google Maps screen. It centres a map on the signed in user,
- *               plots every nearby microgrid node as a marker and lists the same
- *               nodes underneath so they can be reached without pinching the map.
- *
- *               THIS SCREEN IS A UI LAYER ONLY. The nodes it draws, their order
- *               and the distance shown against each one all come from
- *               GET /stations/nearby. The phone sends its coordinates and a
- *               radius and paints the answer; it never measures a distance, never
- *               ranks the list and never decides which nodes fall inside the
- *               radius. That arithmetic is the Haversine implementation inside
- *               the FAT service layer of the Web API.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Stations Map
+ * Description : Displays nearby stations on Google Maps and in a list.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-12
  * =============================================================================
  */
 

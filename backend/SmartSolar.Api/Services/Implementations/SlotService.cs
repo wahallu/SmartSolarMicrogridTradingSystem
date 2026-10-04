@@ -2,17 +2,9 @@
  * File        : SlotService.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Implementations
- * Description : Everything that may be done to an energy booking slot lives here:
- *               the paged slot browser, the "what can I book right now" list that
- *               rule R8 defines, single slot publication, the bulk generator that
- *               lays out a whole date range for a node in one call, and the edit /
- *               block / delete life cycle. Rule R8 (a slot is bookable only while
- *               it is Available, still has free capacity, starts in the future and
- *               belongs to an Active node) and the guard that refuses to move a
- *               slot that already carries bookings are enforced here and nowhere
- *               else - the FAT service keeps the web and Android clients pure UI.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Implements slot searches, generation and maintenance rules.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-12
  * =============================================================================
  */
 

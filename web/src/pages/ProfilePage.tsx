@@ -1,16 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/ProfilePage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The signed in user's own account page, shared by all three roles.
- *               It shows the profile the API holds for the caller, lets them
- *               correct their contact details and lets them change their own
- *               password. Nothing is decided here: password strength, e-mail
- *               uniqueness, whether the account may be edited at all and the
- *               fate of a pending deactivation request are all API rulings, and
- *               this screen only forwards the request and renders the answer.
- * Author      : Chathushka - Identity, Access Control & Local Session (SE4040 EAD)
- * Created     : 2026-09-04
+ * Module      : Pages / Profile
+ * Description : Lets the signed-in user review and update account details.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-03
  * =============================================================================
  */
 
