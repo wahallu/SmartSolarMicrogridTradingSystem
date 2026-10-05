@@ -12,20 +12,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import type { LucideIcon } from 'lucide-react';
-import {
-  ArrowLeft,
-  BatteryCharging,
-  Eye,
-  EyeOff,
-  Loader2,
-  LogIn,
-  QrCode,
-  ShieldAlert,
-  Sun,
-  TriangleAlert,
-  Zap,
-} from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, Loader2, ShieldAlert, Sun, TriangleAlert } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { ApiError } from '../api/client';
 import type { UserRole } from '../types';
@@ -51,35 +38,9 @@ interface DemoAccount {
 
 /** The accounts the API's seeder creates, so a marker can sign in immediately. */
 const DEMO_ACCOUNTS: DemoAccount[] = [
-  { label: 'Backoffice', identifier: 'admin', password: 'Admin@123' },
-  { label: 'Grid Operator', identifier: 'operator1', password: 'Operator@123' },
+  { label: 'Back office', identifier: 'admin', password: 'Admin@123' },
+  { label: 'Grid operator', identifier: 'operator1', password: 'Operator@123' },
   { label: 'Prosumer', identifier: '200112301234', password: 'Prosumer@123' },
-];
-
-/** One selling point on the brand panel. */
-interface Highlight {
-  icon: LucideIcon;
-  title: string;
-  body: string;
-}
-
-/** The three selling points shown on the brand panel. */
-const HIGHLIGHTS: Highlight[] = [
-  {
-    icon: Zap,
-    title: 'Reserve energy slots',
-    body: 'Book a window at any active microgrid node and state the kWh you intend to trade.',
-  },
-  {
-    icon: QrCode,
-    title: 'Carry an approved booking',
-    body: 'Approved reservations are issued a signed QR code that identifies you at the node.',
-  },
-  {
-    icon: BatteryCharging,
-    title: 'Settle the transfer on site',
-    body: 'Operators scan, verify against the API and record the energy that actually flowed.',
-  },
 ];
 
 /**
@@ -199,255 +160,188 @@ export default function LoginPage() {
   const isDeactivated: boolean = failure?.code === 'ACCOUNT_DEACTIVATED';
 
   return (
-    <div className="min-h-screen bg-slate-50 lg:grid lg:grid-cols-2">
-      {/* ---- Brand panel (left on large screens) ---- */}
-      <aside
-        className="relative hidden overflow-hidden px-12 py-16 text-white lg:flex lg:flex-col lg:justify-between"
-        style={{
-          backgroundImage:
-            'linear-gradient(150deg, #fbbf24 0%, #f59e0b 38%, #d97706 68%, #92400e 100%)',
-        }}
-      >
-        <div
-          className="pointer-events-none absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 78% 12%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 46%)',
-          }}
-          aria-hidden="true"
+    <div className="min-h-[100dvh] bg-white lg:grid lg:grid-cols-2">
+      {/* ---- Photograph (large screens only; the form is the page on a phone) ---- */}
+      <aside className="relative hidden lg:block">
+        <img
+          src="/images/rooftop-array.jpg"
+          alt="A technician reads a document beside a large array of rooftop solar panels under a clear sky."
+          width={1400}
+          height={933}
+          className="absolute inset-0 h-full w-full object-cover object-[30%_50%]"
         />
-
-        <div className="relative">
-          <Link to="/" className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 backdrop-blur">
-              <Sun className="h-6 w-6" aria-hidden="true" />
-            </span>
-            <span className="text-lg font-extrabold tracking-tight">Smart Solar Microgrid</span>
-          </Link>
-
-          <h1 className="mt-14 max-w-md text-4xl font-extrabold leading-tight tracking-tight">
-            Trading System Portal
-          </h1>
-          <p className="mt-4 max-w-md text-sm leading-relaxed text-white/90">
-            One place for the back office, grid operators and solar prosumers to manage every energy
-            reservation on the microgrid.
-          </p>
-
-          <ul className="mt-12 max-w-md space-y-6">
-            {HIGHLIGHTS.map((item) => {
-              const HighlightIcon = item.icon;
-              return (
-                <li key={item.title} className="flex gap-4">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/20 backdrop-blur">
-                    <HighlightIcon className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold">{item.title}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-white/85">{item.body}</p>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-
-        <p className="relative text-xs text-white/75">
-          SE4040 Enterprise Application Development
-        </p>
       </aside>
 
       {/* ---- Sign-in column ---- */}
-      <main className="flex min-h-screen items-center justify-center px-4 py-10 sm:px-6 lg:min-h-0 lg:py-16">
-        <div className="w-full max-w-md animate-fade-in">
-          {/* Compact brand block, shown only where the panel above is hidden. */}
-          <div className="mb-8 flex items-center gap-3 lg:hidden">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-solar-400 to-solar-600 text-white shadow-card">
-              <Sun className="h-5 w-5" aria-hidden="true" />
+      <main className="flex min-h-[100dvh] flex-col px-4 py-6 sm:px-10 lg:px-16 lg:py-8">
+        <div className="flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-3">
+            <span className="flex h-8 w-8 items-center justify-center rounded-md bg-accent text-accent-ink">
+              <Sun className="h-[18px] w-[18px]" aria-hidden="true" />
             </span>
-            <span className="text-lg font-extrabold tracking-tight text-slate-900">
+            <span className="text-base font-semibold tracking-tight text-slate-900">
               Smart Solar Microgrid
             </span>
-          </div>
+          </Link>
+        </div>
 
-          <div className="card">
-            <div className="card-header">
+        <div className="mx-auto flex w-full max-w-sm flex-1 animate-fade-in flex-col justify-center py-10">
+          <h1 className="text-3xl font-semibold text-slate-900">Sign in</h1>
+          <p className="mt-2 text-slate-600">Use the credentials issued for your role.</p>
+
+          {/* Account state alerts - wording and code both come from the API. */}
+          {failure && isPending && (
+            <div
+              className="mt-6 flex gap-3 rounded-lg border border-solar-300 bg-solar-50 px-4 py-3"
+              role="alert"
+            >
+              <TriangleAlert className="mt-0.5 h-5 w-5 shrink-0 text-solar-700" aria-hidden="true" />
               <div>
-                <h2 className="text-lg font-bold text-slate-900">Sign in</h2>
-                <p className="mt-0.5 text-sm text-slate-500">
-                  Use the credentials issued for your role.
+                <p className="text-sm font-semibold text-solar-900">
+                  Your account is awaiting activation
+                </p>
+                <p className="mt-1 text-sm text-solar-800">{failure.message}</p>
+                <p className="mt-1 text-sm text-solar-800">
+                  A Backoffice officer must activate the account before it can be used.
                 </p>
               </div>
-              <LogIn className="h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
             </div>
+          )}
 
-            <div className="card-body">
-              {/* Account state alerts - wording and code both come from the API. */}
-              {failure && isPending && (
-                <div
-                  className="mb-5 flex gap-3 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3"
-                  role="alert"
-                >
-                  <TriangleAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
-                  <div>
-                    <p className="text-sm font-semibold text-amber-900">
-                      Your account is awaiting activation
-                    </p>
-                    <p className="mt-1 text-sm text-amber-800">{failure.message}</p>
-                    <p className="mt-1 text-xs text-amber-700">
-                      A Backoffice officer must activate the account before it can be used.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {failure && isDeactivated && (
-                <div
-                  className="mb-5 flex gap-3 rounded-lg border border-red-300 bg-red-50 px-4 py-3"
-                  role="alert"
-                >
-                  <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-red-600" aria-hidden="true" />
-                  <div>
-                    <p className="text-sm font-semibold text-red-900">This account is deactivated</p>
-                    <p className="mt-1 text-sm text-red-800">{failure.message}</p>
-                    <p className="mt-1 text-xs text-red-700">
-                      Please contact the Backoffice to have the account reactivated.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {failure && !isPending && !isDeactivated && (
-                <div
-                  className="mb-5 flex gap-3 rounded-lg border border-red-300 bg-red-50 px-4 py-3"
-                  role="alert"
-                >
-                  <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-red-600" aria-hidden="true" />
-                  <p className="text-sm text-red-800">{failure.message}</p>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit} noValidate>
-                <div>
-                  <label className="label" htmlFor="identifier">
-                    NIC, username or e-mail
-                  </label>
-                  <input
-                    id="identifier"
-                    name="identifier"
-                    type="text"
-                    autoComplete="username"
-                    autoFocus
-                    className={errors.identifier ? 'input input-error' : 'input'}
-                    placeholder="200112301234"
-                    value={identifier}
-                    disabled={submitting}
-                    aria-invalid={errors.identifier ? true : undefined}
-                    aria-describedby={errors.identifier ? 'identifier-error' : undefined}
-                    onChange={(event) => setIdentifier(event.target.value)}
-                    onBlur={() => handleBlur('identifier')}
-                  />
-                  {errors.identifier && (
-                    <p className="field-error" id="identifier-error">
-                      {errors.identifier}
-                    </p>
-                  )}
-                </div>
-
-                <div className="mt-4">
-                  <label className="label" htmlFor="password">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="password"
-                      name="password"
-                      type={showPassword ? 'text' : 'password'}
-                      autoComplete="current-password"
-                      className={errors.password ? 'input input-error pr-11' : 'input pr-11'}
-                      placeholder="Your password"
-                      value={password}
-                      disabled={submitting}
-                      aria-invalid={errors.password ? true : undefined}
-                      aria-describedby={errors.password ? 'password-error' : undefined}
-                      onChange={(event) => setPassword(event.target.value)}
-                      onBlur={() => handleBlur('password')}
-                    />
-                    <button
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-lg text-slate-400 hover:text-slate-700"
-                      onClick={() => setShowPassword((current) => !current)}
-                      aria-label={showPassword ? 'Hide password' : 'Show password'}
-                      aria-pressed={showPassword}
-                      tabIndex={0}
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" aria-hidden="true" />
-                      ) : (
-                        <Eye className="h-4 w-4" aria-hidden="true" />
-                      )}
-                    </button>
-                  </div>
-                  {errors.password && (
-                    <p className="field-error" id="password-error">
-                      {errors.password}
-                    </p>
-                  )}
-                </div>
-
-                <button type="submit" className="btn-primary mt-6 w-full" disabled={submitting}>
-                  {submitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                      Signing in...
-                    </>
-                  ) : (
-                    <>
-                      <LogIn className="h-4 w-4" aria-hidden="true" />
-                      Sign in
-                    </>
-                  )}
-                </button>
-              </form>
-            </div>
-          </div>
-
-          {/* ---- Quick fill for the seeded demo accounts ---- */}
-          <div className="card mt-5">
-            <div className="card-body">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Demo accounts
-              </p>
-              <p className="mt-1 text-xs text-slate-500">
-                Tap a role to fill the form with its seeded credentials.
-              </p>
-              <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
-                {DEMO_ACCOUNTS.map((account) => (
-                  <button
-                    key={account.identifier}
-                    type="button"
-                    className="btn-secondary btn-sm flex-col items-start gap-0.5 py-2 text-left"
-                    disabled={submitting}
-                    onClick={() => quickFill(account)}
-                  >
-                    <span className="font-semibold text-slate-800">{account.label}</span>
-                    <span className="font-mono text-[11px] font-normal text-slate-500">
-                      {account.identifier}
-                    </span>
-                  </button>
-                ))}
+          {failure && isDeactivated && (
+            <div
+              className="mt-6 flex gap-3 rounded-lg border border-red-300 bg-red-50 px-4 py-3"
+              role="alert"
+            >
+              <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-red-700" aria-hidden="true" />
+              <div>
+                <p className="text-sm font-semibold text-red-900">This account is deactivated</p>
+                <p className="mt-1 text-sm text-red-800">{failure.message}</p>
+                <p className="mt-1 text-sm text-red-800">
+                  Please contact the Backoffice to have the account reactivated.
+                </p>
               </div>
             </div>
-          </div>
+          )}
 
-          <div className="mt-6 text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-900"
+          {failure && !isPending && !isDeactivated && (
+            <div
+              className="mt-6 flex gap-3 rounded-lg border border-red-300 bg-red-50 px-4 py-3"
+              role="alert"
             >
-              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Back to home
-            </Link>
-          </div>
+              <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-red-700" aria-hidden="true" />
+              <p className="text-sm text-red-900">{failure.message}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} noValidate className="mt-8">
+            <div>
+              <label className="label" htmlFor="identifier">
+                NIC, username or e-mail
+              </label>
+              <input
+                id="identifier"
+                name="identifier"
+                type="text"
+                autoComplete="username"
+                autoFocus
+                className={errors.identifier ? 'input input-error' : 'input'}
+                placeholder="200112301234"
+                value={identifier}
+                disabled={submitting}
+                aria-invalid={errors.identifier ? true : undefined}
+                aria-describedby={errors.identifier ? 'identifier-error' : undefined}
+                onChange={(event) => setIdentifier(event.target.value)}
+                onBlur={() => handleBlur('identifier')}
+              />
+              {errors.identifier && (
+                <p className="field-error" id="identifier-error">
+                  {errors.identifier}
+                </p>
+              )}
+            </div>
+
+            <div className="mt-5">
+              <label className="label" htmlFor="password">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  className={errors.password ? 'input input-error pr-11' : 'input pr-11'}
+                  placeholder="Your password"
+                  value={password}
+                  disabled={submitting}
+                  aria-invalid={errors.password ? true : undefined}
+                  aria-describedby={errors.password ? 'password-error' : undefined}
+                  onChange={(event) => setPassword(event.target.value)}
+                  onBlur={() => handleBlur('password')}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-lg text-slate-500 hover:text-slate-900"
+                  onClick={() => setShowPassword((current) => !current)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
+                  tabIndex={0}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" aria-hidden="true" />
+                  ) : (
+                    <Eye className="h-4 w-4" aria-hidden="true" />
+                  )}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="field-error" id="password-error">
+                  {errors.password}
+                </p>
+              )}
+            </div>
+
+            <button type="submit" className="btn-primary mt-7 w-full py-2.5" disabled={submitting}>
+              {submitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign in'
+              )}
+            </button>
+          </form>
+
+          {/* ---- Quick fill for the seeded demo accounts ---- */}
+          <fieldset className="mt-10 border-t border-slate-200 pt-6" disabled={submitting}>
+            <legend className="sr-only">Demo accounts</legend>
+            <p className="text-sm font-medium text-slate-900">Demo accounts</p>
+            <p className="mt-1 text-sm text-slate-600">Fill the form with a seeded login.</p>
+            <div className="mt-3 grid grid-cols-3 divide-x divide-slate-200 overflow-hidden rounded-lg border border-slate-300">
+              {DEMO_ACCOUNTS.map((account) => (
+                <button
+                  key={account.identifier}
+                  type="button"
+                  className="bg-white px-2 py-2.5 text-center text-sm font-medium text-slate-800 transition-colors hover:bg-slate-50 disabled:opacity-50"
+                  onClick={() => quickFill(account)}
+                >
+                  {account.label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        </div>
+
+        <div>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            Back to home
+          </Link>
         </div>
       </main>
     </div>

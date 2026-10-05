@@ -32,7 +32,7 @@
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
-    <!-- The amber application bar. BaseActivity wires it up WITHOUT a back arrow. -->
+    <!-- The flat application bar. BaseActivity wires it up WITHOUT a back arrow. -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_booking_summary"
         style="@style/Widget.SmartSolar.Toolbar"
@@ -191,7 +191,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_md"
-                        android:text="Time window" />
+                        android:text="@string/label_time_window" />
 
                     <TextView
                         android:id="@+id/text_summary_time"
@@ -226,7 +226,7 @@
                 android:layout_marginTop="@dimen/space_xl"
                 android:text="@string/action_my_bookings"
                 app:icon="@drawable/ic_calendar"
-                app:iconTint="@color/white" />
+                app:iconTint="@color/accent_ink" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_summary_home"
@@ -234,7 +234,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/space_sm"
-                android:text="Back to home"
+                android:text="@string/action_back_home"
                 app:icon="@drawable/ic_home"
                 app:iconTint="@color/slate_700" />
 

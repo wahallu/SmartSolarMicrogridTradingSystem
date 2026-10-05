@@ -12,6 +12,7 @@
 package lk.sliit.smartsolar.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -76,6 +78,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         if (showBack) {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+            // The bar is white, so the arrow is tinted ink. mutate() keeps the tint off the
+            // shared drawable state that every other screen's back arrow draws from.
+            Drawable arrow = toolbar.getNavigationIcon();
+            if (arrow != null) {
+                arrow = arrow.mutate();
+                arrow.setTint(ContextCompat.getColor(this, R.color.slate_900));
+                toolbar.setNavigationIcon(arrow);
+            }
             toolbar.setNavigationOnClickListener(v -> finish());
         }
     }

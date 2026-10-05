@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Pale amber circle used behind stat icons. -->
+<!-- Neutral circle used behind an icon. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
-    <solid android:color="@color/solar_100" />
+    <solid android:color="@color/slate_100" />
 </shape>

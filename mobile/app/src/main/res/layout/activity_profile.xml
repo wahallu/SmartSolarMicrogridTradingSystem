@@ -28,7 +28,7 @@
     android:background="@color/screen_background"
     android:orientation="vertical">
 
-    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <!-- The flat application bar, wired up by BaseActivity.setupToolbar. -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_profile"
         style="@style/Widget.SmartSolar.Toolbar"
@@ -251,7 +251,7 @@
                             android:id="@+id/text_details_heading"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Account details"
+                            android:text="@string/profile_account_details"
                             android:textAppearance="@style/TextAppearance.SmartSolar.SectionTitle" />
 
                         <!-- NIC: the prosumer primary key, never editable from the phone. -->
@@ -260,7 +260,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/space_md"
-                            android:text="NIC"
+                            android:text="@string/label_nic"
                             android:textAppearance="@style/TextAppearance.SmartSolar.FieldLabel" />
 
                         <TextView
@@ -283,7 +283,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/space_md"
-                            android:text="Username"
+                            android:text="@string/label_username"
                             android:textAppearance="@style/TextAppearance.SmartSolar.FieldLabel" />
 
                         <TextView
@@ -387,7 +387,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/space_md"
-                                android:text="Assigned node"
+                                android:text="@string/label_assigned_node"
                                 android:textAppearance="@style/TextAppearance.SmartSolar.FieldLabel" />
 
                             <TextView
@@ -434,7 +434,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space_sm"
                         android:layout_weight="1"
-                        android:text="Staff profiles are maintained by a Backoffice officer in the Smart Solar web application. You can still change your password here."
+                        android:text="@string/profile_staff_notice"
                         android:textAppearance="@style/TextAppearance.SmartSolar.Body" />
 
                 </LinearLayout>

@@ -3,14 +3,16 @@
   =============================================================================
   File        : activity_operator_home.xml
   Project     : Smart Solar Microgrid Trading System - Android Client
-  Description : Console of a Grid Operator. It repeats the prosumer header
-                pattern but names the operator\'s assigned microgrid node, shows
-                the node scoped counters from GET /reservations/dashboard, and
-                gives the QR scanner - the operator\'s main job - a full width
-                primary card of its own.
+  Description : Home screen of a Grid Operator. Shows the counters for the
+                operator's assigned node, a primary scan action, secondary
+                actions and the bookings that still need attention.
 
-                Every counter is a value the Web API calculated; the layout only
-                provides the placeholders.
+                Every figure on this screen is a value the Web API sent. The
+                layout only supplies the placeholders - nothing is counted on
+                the phone.
+
+                A SwipeRefreshLayout wraps the whole page so a pull down
+                re-reads the dashboard.
   Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
   Created     : 2026-09-04
   =============================================================================
@@ -36,27 +38,27 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/space_xl">
 
-            <!-- ============ Gradient header: greeting, operator, assigned node ============ -->
+            <!-- ============ Who is signed in, and at which node ============ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_header_rounded"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingStart="@dimen/screen_padding"
-                android:paddingTop="@dimen/space_lg"
-                android:paddingEnd="@dimen/screen_padding"
-                android:paddingBottom="44dp">
+                android:paddingTop="@dimen/space_md"
+                android:paddingEnd="@dimen/space_sm"
+                android:paddingBottom="@dimen/space_xs">
 
                 <TextView
                     android:id="@+id/text_avatar_initial"
-                    android:layout_width="@dimen/avatar_size"
-                    android:layout_height="@dimen/avatar_size"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
                     android:background="@drawable/bg_circle_solar"
+                    android:fontFamily="sans-serif-medium"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="K" />
+                    android:textSize="18sp"
+                    tools:text="S" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -69,7 +71,7 @@
                         android:id="@+id/text_greeting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/solar_100"
+                        android:textColor="@color/slate_600"
                         android:textSize="13sp"
                         tools:text="@string/greeting_morning" />
 
@@ -78,221 +80,32 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
+                        android:fontFamily="sans-serif-medium"
                         android:maxLines="1"
-                        android:textColor="@color/white"
+                        android:textColor="@color/slate_900"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        tools:text="Kasun Silva" />
+                        tools:text="Sandun Hettiarachchi" />
 
-                    <!-- The node this operator is assigned to, sent by the API on the session user. -->
                     <TextView
                         android:id="@+id/text_station_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:textColor="@color/solar_100"
+                        android:fontFamily="monospace"
+                        android:textColor="@color/slate_600"
                         android:textSize="12sp"
-                        tools:text="MG-COL-01" />
+                        tools:text="STN-001" />
                 </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/btn_logout"
-                    android:layout_width="@dimen/icon_lg"
-                    android:layout_height="@dimen/icon_lg"
-                    android:layout_gravity="top"
+                    android:layout_width="@dimen/touch_target"
+                    android:layout_height="@dimen/touch_target"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/action_logout"
+                    android:padding="12dp"
                     android:src="@drawable/ic_logout"
-                    app:tint="@color/white" />
-            </LinearLayout>
-
-            <!-- ============ 2x2 node scoped counters, overlapping the header ============ -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/screen_padding"
-                android:layout_marginTop="-28dp"
-                android:layout_marginEnd="@dimen/screen_padding"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <!-- Bookings waiting for this node\'s staff to approve them. -->
-                    <com.google.android.material.card.MaterialCardView
-                        style="@style/Widget.SmartSolar.Card"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/space_sm"
-                        android:layout_weight="1">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="34dp"
-                                android:layout_height="34dp"
-                                android:background="@drawable/bg_circle_light"
-                                android:contentDescription="@null"
-                                android:padding="7dp"
-                                android:src="@drawable/ic_clock"
-                                app:tint="@color/solar_700" />
-
-                            <TextView
-                                android:id="@+id/text_stat_pending"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/space_sm"
-                                android:text="0"
-                                android:textColor="@color/slate_900"
-                                android:textSize="24sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                style="@style/TextAppearance.SmartSolar.Caption"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/stat_pending" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        style="@style/Widget.SmartSolar.Card"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="34dp"
-                                android:layout_height="34dp"
-                                android:background="@drawable/bg_circle_light"
-                                android:contentDescription="@null"
-                                android:padding="7dp"
-                                android:src="@drawable/ic_check_circle"
-                                app:tint="@color/solar_700" />
-
-                            <TextView
-                                android:id="@+id/text_stat_approved"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/space_sm"
-                                android:text="0"
-                                android:textColor="@color/slate_900"
-                                android:textSize="24sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                style="@style/TextAppearance.SmartSolar.Caption"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/stat_approved_upcoming" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_sm"
-                    android:orientation="horizontal">
-
-                    <!-- Transfers finalised at this node, with today\'s share underneath. -->
-                    <com.google.android.material.card.MaterialCardView
-                        style="@style/Widget.SmartSolar.Card"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/space_sm"
-                        android:layout_weight="1">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="34dp"
-                                android:layout_height="34dp"
-                                android:background="@drawable/bg_circle_light"
-                                android:contentDescription="@null"
-                                android:padding="7dp"
-                                android:src="@drawable/ic_history"
-                                app:tint="@color/solar_700" />
-
-                            <TextView
-                                android:id="@+id/text_stat_completed"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/space_sm"
-                                android:text="0"
-                                android:textColor="@color/slate_900"
-                                android:textSize="24sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                style="@style/TextAppearance.SmartSolar.Caption"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/stat_completed" />
-
-                            <!-- Today\'s figure, also supplied by the dashboard payload. -->
-                            <TextView
-                                android:id="@+id/text_stat_today"
-                                style="@style/TextAppearance.SmartSolar.Caption"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/grid_600"
-                                tools:text="3 today" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        style="@style/Widget.SmartSolar.Card"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="34dp"
-                                android:layout_height="34dp"
-                                android:background="@drawable/bg_circle_light"
-                                android:contentDescription="@null"
-                                android:padding="7dp"
-                                android:src="@drawable/ic_bolt"
-                                app:tint="@color/solar_700" />
-
-                            <TextView
-                                android:id="@+id/text_stat_energy"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/space_sm"
-                                android:text="0"
-                                android:textColor="@color/slate_900"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                tools:text="812.5 kWh" />
-
-                            <TextView
-                                style="@style/TextAppearance.SmartSolar.Caption"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/stat_energy" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
+                    app:tint="@color/slate_700" />
             </LinearLayout>
 
             <!-- ============ Primary action: scan a prosumer QR code ============ -->
@@ -302,12 +115,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/screen_padding"
-                android:layout_marginTop="@dimen/space_lg"
+                android:layout_marginTop="@dimen/space_md"
                 android:layout_marginEnd="@dimen/screen_padding"
                 android:clickable="true"
                 android:focusable="true"
-                app:cardBackgroundColor="@color/solar_500"
+                app:cardBackgroundColor="@color/accent"
                 app:contentPadding="@dimen/space_md"
+                app:rippleColor="@color/accent_pressed"
                 app:strokeWidth="0dp">
 
                 <LinearLayout
@@ -317,13 +131,11 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_circle_light"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:contentDescription="@null"
-                        android:padding="10dp"
                         android:src="@drawable/ic_scan"
-                        app:tint="@color/solar_700" />
+                        app:tint="@color/accent_ink" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -335,18 +147,18 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-medium"
                             android:text="@string/action_scan_qr"
-                            android:textColor="@color/white"
-                            android:textSize="17sp"
-                            android:textStyle="bold" />
+                            android:textColor="@color/accent_ink"
+                            android:textSize="17sp" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:text="@string/scanner_prompt"
-                            android:textColor="@color/solar_50"
-                            android:textSize="12sp" />
+                            android:textColor="@color/accent_ink"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
                     <ImageView
@@ -354,141 +166,306 @@
                         android:layout_height="@dimen/icon_md"
                         android:contentDescription="@null"
                         android:src="@drawable/ic_chevron_right"
-                        app:tint="@color/white" />
+                        app:tint="@color/accent_ink" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ============ Secondary actions ============ -->
-            <TextView
-                style="@style/TextAppearance.SmartSolar.SectionTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/screen_padding"
-                android:layout_marginTop="@dimen/space_lg"
-                android:layout_marginEnd="@dimen/screen_padding"
-                android:text="@string/section_quick_actions" />
-
-            <LinearLayout
+            <!-- ============ Live figures for the assigned node ============ -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.SmartSolar.Card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/screen_padding"
                 android:layout_marginTop="@dimen/space_sm"
                 android:layout_marginEnd="@dimen/screen_padding"
-                android:orientation="horizontal">
+                app:contentPadding="0dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_station_bookings"
-                    style="@style/Widget.SmartSolar.Card"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/space_sm"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    app:contentPadding="10dp">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:background="@drawable/bg_circle_light"
-                            android:contentDescription="@null"
-                            android:padding="6dp"
-                            android:src="@drawable/ic_calendar"
-                            app:tint="@color/solar_700" />
-
-                        <TextView
-                            android:layout_width="match_parent"
+                        <!-- Today's bookings: dashboard.todayReservations. -->
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space_xs"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:text="@string/action_station_bookings"
-                            android:textColor="@color/slate_700"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="@dimen/space_md">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_nearby_nodes"
-                    style="@style/Widget.SmartSolar.Card"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/space_sm"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    app:contentPadding="10dp">
+                            <TextView
+                                style="@style/TextAppearance.SmartSolar.Caption"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/stat_today" />
+
+                            <TextView
+                                android:id="@+id/text_stat_today"
+                                style="@style/TextAppearance.SmartSolar.Figure"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/space_xs"
+                                android:text="0"
+                                android:textSize="32sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/divider" />
+
+                        <!-- Energy delivered: dashboard.totalEnergyKwh. -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="@dimen/space_md">
+
+                            <TextView
+                                style="@style/TextAppearance.SmartSolar.Caption"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/stat_energy" />
+
+                            <TextView
+                                android:id="@+id/text_stat_energy"
+                                style="@style/TextAppearance.SmartSolar.Figure"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/space_xs"
+                                android:text="0"
+                                android:textSize="22sp"
+                                tools:text="812.5 kWh" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:background="@drawable/bg_circle_light"
-                            android:contentDescription="@null"
-                            android:padding="6dp"
-                            android:src="@drawable/ic_map_pin"
-                            app:tint="@color/solar_700" />
-
-                        <TextView
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space_xs"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:text="@string/action_nearby_nodes"
-                            android:textColor="@color/slate_700"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="@dimen/space_md">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/card_profile"
-                    style="@style/Widget.SmartSolar.Card"
-                    android:layout_width="0dp"
+                            <TextView
+                                android:id="@+id/text_stat_pending"
+                                style="@style/TextAppearance.SmartSolar.Figure"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0" />
+
+                            <TextView
+                                style="@style/TextAppearance.SmartSolar.Caption"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/stat_pending" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/divider" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="@dimen/space_md">
+
+                            <TextView
+                                android:id="@+id/text_stat_approved"
+                                style="@style/TextAppearance.SmartSolar.Figure"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0" />
+
+                            <TextView
+                                style="@style/TextAppearance.SmartSolar.Caption"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/stat_approved_upcoming" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/divider" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="@dimen/space_md">
+
+                            <TextView
+                                android:id="@+id/text_stat_completed"
+                                style="@style/TextAppearance.SmartSolar.Figure"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0" />
+
+                            <TextView
+                                style="@style/TextAppearance.SmartSolar.Caption"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/stat_completed" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ============ Secondary actions ============ -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_station_bookings"
+                style="@style/Widget.SmartSolar.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/screen_padding"
+                android:layout_marginTop="@dimen/space_sm"
+                android:layout_marginEnd="@dimen/screen_padding"
+                android:clickable="true"
+                android:focusable="true"
+                app:contentPadding="@dimen/space_md">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    app:contentPadding="10dp">
+                    android:gravity="center_vertical"
+                    android:minHeight="32dp"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="@color/slate_700" />
+
+                    <TextView
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
+                        android:layout_marginStart="@dimen/space_md"
+                        android:layout_weight="1"
+                        android:text="@string/action_station_bookings"
+                        android:textColor="@color/slate_900"
+                        android:textSize="15sp" />
 
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:background="@drawable/bg_circle_light"
-                            android:contentDescription="@null"
-                            android:padding="6dp"
-                            android:src="@drawable/ic_person"
-                            app:tint="@color/solar_700" />
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/slate_500" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/space_xs"
-                            android:gravity="center"
-                            android:maxLines="2"
-                            android:text="@string/action_profile"
-                            android:textColor="@color/slate_700"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-            </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_nearby_nodes"
+                style="@style/Widget.SmartSolar.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/screen_padding"
+                android:layout_marginTop="@dimen/space_sm"
+                android:layout_marginEnd="@dimen/screen_padding"
+                android:clickable="true"
+                android:focusable="true"
+                app:contentPadding="@dimen/space_md">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="32dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_map_pin"
+                        app:tint="@color/slate_700" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_md"
+                        android:layout_weight="1"
+                        android:text="@string/action_nearby_nodes"
+                        android:textColor="@color/slate_900"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/slate_500" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_profile"
+                style="@style/Widget.SmartSolar.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/screen_padding"
+                android:layout_marginTop="@dimen/space_sm"
+                android:layout_marginEnd="@dimen/screen_padding"
+                android:clickable="true"
+                android:focusable="true"
+                app:contentPadding="@dimen/space_md">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="32dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_person"
+                        app:tint="@color/slate_700" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/space_md"
+                        android:layout_weight="1"
+                        android:text="@string/action_profile"
+                        android:textColor="@color/slate_900"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="@dimen/icon_md"
+                        android:layout_height="@dimen/icon_md"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="@color/slate_500" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- ============ Bookings awaiting approval ============ -->
             <TextView
@@ -498,8 +475,9 @@
                 android:layout_marginStart="@dimen/screen_padding"
                 android:layout_marginTop="@dimen/space_lg"
                 android:layout_marginEnd="@dimen/screen_padding"
-                android:text="Awaiting approval" />
+                android:text="@string/section_awaiting" />
 
+            <!-- Loading state. -->
             <LinearLayout
                 android:id="@+id/layout_loading"
                 android:layout_width="match_parent"
@@ -510,7 +488,8 @@
 
                 <ProgressBar
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:indeterminateTint="@color/slate_900" />
 
                 <TextView
                     style="@style/TextAppearance.SmartSolar.Caption"
@@ -520,6 +499,7 @@
                     android:text="@string/loading" />
             </LinearLayout>
 
+            <!-- Content state: the bookings the API returned. -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_pending"
                 android:layout_width="match_parent"
@@ -527,12 +507,11 @@
                 android:layout_marginTop="@dimen/space_sm"
                 android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
-                android:paddingStart="@dimen/screen_padding"
-                android:paddingEnd="@dimen/screen_padding"
                 android:visibility="gone"
                 tools:itemCount="2"
                 tools:visibility="visible" />
 
+            <!-- Empty state. -->
             <LinearLayout
                 android:id="@+id/layout_empty"
                 android:layout_width="match_parent"
@@ -547,7 +526,7 @@
                     android:layout_height="@dimen/icon_lg"
                     android:contentDescription="@null"
                     android:src="@drawable/ic_check_circle"
-                    app:tint="@color/slate_400" />
+                    app:tint="@color/slate_500" />
 
                 <TextView
                     style="@style/TextAppearance.SmartSolar.SectionTitle"
@@ -562,9 +541,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_xs"
                     android:gravity="center"
-                    android:text="Nothing is waiting for your approval right now." />
+                    android:text="@string/empty_no_bookings_message" />
             </LinearLayout>
 
+            <!-- Error state, shown when the dashboard call fails. -->
             <LinearLayout
                 android:id="@+id/layout_error"
                 android:layout_width="match_parent"

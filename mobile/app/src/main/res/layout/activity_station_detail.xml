@@ -30,7 +30,7 @@
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
-    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <!-- The flat application bar, wired up by BaseActivity.setupToolbar. -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/Widget.SmartSolar.Toolbar"
@@ -331,10 +331,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_md"
-                    android:text="Book an energy slot here"
+                    android:text="@string/action_book_here"
                     android:visibility="gone"
                     app:icon="@drawable/ic_calendar"
-                    app:iconTint="@color/white"
+                    app:iconTint="@color/accent_ink"
                     tools:visibility="visible" />
 
                 <!--
@@ -348,7 +348,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_sm"
-                    android:text="Directions"
+                    android:text="@string/action_directions"
                     app:icon="@drawable/ic_map_pin"
                     app:iconTint="@color/slate_700" />
 

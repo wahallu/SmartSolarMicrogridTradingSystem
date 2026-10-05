@@ -190,10 +190,10 @@ function StatChip({ icon: Icon, label, value }: { icon: LucideIcon; label: strin
   return (
     <div className="rounded-lg bg-slate-50 px-3 py-2">
       <p className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
-        <Icon className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
+        <Icon className="h-3.5 w-3.5 text-slate-500" aria-hidden="true" />
         {label}
       </p>
-      <p className="mt-0.5 text-sm font-bold text-slate-900">{value}</p>
+      <p className="mt-0.5 text-sm font-semibold text-slate-900">{value}</p>
     </div>
   );
 }
@@ -202,21 +202,21 @@ function StatChip({ icon: Icon, label, value }: { icon: LucideIcon; label: strin
 function StationCardSkeleton() {
   // Mirrors the real card's height so the grid does not jump when data lands.
   return (
-    <div className="card animate-pulse">
+    <div className="card">
       <div className="card-header">
-        <span className="h-4 w-20 rounded bg-slate-200" />
-        <span className="h-5 w-16 rounded-full bg-slate-200" />
+        <span className="h-4 w-20 rounded skeleton" />
+        <span className="h-5 w-16 rounded-full skeleton" />
       </div>
       <div className="card-body space-y-4">
         <div className="space-y-2">
-          <span className="block h-5 w-3/4 rounded bg-slate-200" />
-          <span className="block h-4 w-2/3 rounded bg-slate-100" />
+          <span className="block h-5 w-3/4 rounded skeleton" />
+          <span className="block h-4 w-2/3 skeleton" />
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <span className="block h-12 rounded-lg bg-slate-100" />
-          <span className="block h-12 rounded-lg bg-slate-100" />
-          <span className="block h-12 rounded-lg bg-slate-100" />
-          <span className="block h-12 rounded-lg bg-slate-100" />
+          <span className="block h-12 rounded-lg skeleton" />
+          <span className="block h-12 rounded-lg skeleton" />
+          <span className="block h-12 rounded-lg skeleton" />
+          <span className="block h-12 rounded-lg skeleton" />
         </div>
       </div>
     </div>
@@ -523,7 +523,7 @@ export default function StationsPage() {
       {/* ---- Page header ---- */}
       <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Microgrid nodes</h1>
+          <h1 className="text-2xl font-semibold text-slate-900">Microgrid nodes</h1>
           <p className="mt-1 text-sm text-slate-500">
             Solar grid hubs, their capacity, battery bays and trading hours.
           </p>
@@ -613,10 +613,10 @@ export default function StationsPage() {
           {stations.map((station) => (
             <article
               key={station.id}
-              className="card flex flex-col transition-shadow hover:shadow-card-hover"
+              className="card flex flex-col transition-colors hover:border-slate-400"
             >
               <div className="card-header">
-                <span className="font-mono text-sm font-bold text-slate-900">
+                <span className="font-mono text-sm font-semibold text-slate-900">
                   {station.stationCode}
                 </span>
                 {/* The status is a server verdict; the pill only renders it. */}
@@ -629,12 +629,12 @@ export default function StationsPage() {
                     {station.name}
                   </h2>
                   <p className="mt-1.5 flex items-start gap-1.5 text-sm text-slate-500">
-                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-slate-500" aria-hidden="true" />
                     <span>
                       {station.address}, {station.city}
                     </span>
                   </p>
-                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-solar-700">
+                  <p className="mt-1 text-xs font-medium text-solar-700">
                     {station.type}
                   </p>
                 </div>
@@ -659,7 +659,7 @@ export default function StationsPage() {
                 </div>
 
                 <p className="flex items-center gap-1.5 text-sm text-slate-500">
-                  <Clock className="h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                  <Clock className="h-4 w-4 shrink-0 text-slate-500" aria-hidden="true" />
                   Open {station.operatingHours.openTime} - {station.operatingHours.closeTime}
                 </p>
 
@@ -725,7 +725,7 @@ export default function StationsPage() {
                 {isBackoffice && (
                   <button
                     type="button"
-                    className="btn-danger btn-sm"
+                    className="btn-danger-quiet btn-sm"
                     onClick={() => openDelete(station)}
                   >
                     <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
@@ -1024,7 +1024,7 @@ export default function StationsPage() {
                 <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
                   <input
                     type="checkbox"
-                    className="h-4 w-4 rounded border-slate-300 text-solar-500 focus:ring-solar-500"
+                    className="h-4 w-4 rounded border-slate-300"
                     checked={row.isOpen}
                     onChange={(event) =>
                       setScheduleField(row.dayOfWeek, { isOpen: event.target.checked })

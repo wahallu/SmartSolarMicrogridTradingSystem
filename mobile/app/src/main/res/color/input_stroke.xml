@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Outline of a text field: ink while focused, a quiet grey otherwise. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true" android:color="@color/slate_900" />
+    <item android:state_hovered="true" android:color="@color/slate_500" />
+    <item android:state_enabled="false" android:color="@color/slate_200" />
+    <item android:color="@color/slate_300" />
+</selector>

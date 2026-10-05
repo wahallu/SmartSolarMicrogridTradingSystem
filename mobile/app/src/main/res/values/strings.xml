@@ -14,11 +14,11 @@
 
     <string name="app_name">Smart Solar</string>
     <string name="app_full_name">Smart Solar Microgrid</string>
-    <string name="app_tagline">Trade your rooftop solar with the grid</string>
+    <string name="app_tagline">Trade rooftop solar with your local grid</string>
 
     <!-- ==== Authentication ==== -->
-    <string name="login_title">Welcome back</string>
-    <string name="login_subtitle">Sign in to manage your energy trading</string>
+    <string name="login_title">Sign in</string>
+    <string name="login_subtitle">Use the credentials issued for your account.</string>
     <string name="hint_identifier">NIC, username or e-mail</string>
     <string name="hint_password">Password</string>
     <string name="action_login">Sign in</string>
@@ -49,6 +49,7 @@
     <string name="stat_today">Today</string>
     <string name="section_upcoming">Upcoming bookings</string>
     <string name="section_quick_actions">Quick actions</string>
+    <string name="section_awaiting">Awaiting approval</string>
 
     <!-- ==== Navigation / actions ==== -->
     <string name="action_new_booking">New booking</string>
@@ -87,6 +88,27 @@
     <string name="booking_detail_title">Booking details</string>
     <string name="action_edit_booking">Change booking</string>
     <string name="action_cancel_booking">Cancel booking</string>
+    <string name="action_approve">Approve</string>
+    <string name="action_book_here">Book an energy slot here</string>
+    <string name="action_enter_code">Enter code manually</string>
+    <string name="action_directions">Directions</string>
+    <string name="action_back_home">Back to home</string>
+    <string name="label_time_window">Time window</string>
+    <string name="label_transfer_type">Transfer type</string>
+    <string name="label_booking_qr">Booking QR code</string>
+    <string name="label_audit_trail">Audit trail</string>
+    <string name="label_nic">NIC</string>
+    <string name="label_username">Username</string>
+    <string name="label_assigned_node">Assigned node</string>
+    <string name="profile_account_details">Account details</string>
+    <string name="profile_staff_notice">Staff profiles are maintained by a back office officer in the web portal. You can still change your password here.</string>
+    <string name="edit_booking_locked">This booking can no longer be changed. Only pending or approved bookings can change, and at least 12 hours before the slot starts.</string>
+    <string name="edit_booking_window_hint">You can move a booking to a slot in the next 7 days, at least 12 hours before it starts.</string>
+    <string name="edit_booking_no_slots">No other slots are free at this node on that date. Keep the current slot or try another date.</string>
+    <string name="new_booking_no_slots">No energy slots are available at this node on that date. Try another date or another node.</string>
+    <string name="verify_ok_title">Booking verified</string>
+    <string name="verify_ok_message">The QR code is valid. Check the details, then finalise the transfer.</string>
+    <string name="action_reject">Reject</string>
     <string name="action_show_qr">Show QR code</string>
     <string name="qr_instruction">Show this code to the grid operator at the node.</string>
     <string name="notice_12_hour">Changes and cancellations require at least 12 hours notice. This is enforced by the server.</string>
@@ -141,6 +163,7 @@
 
     <!-- Content descriptions for accessibility -->
     <string name="cd_app_logo">Smart Solar logo</string>
+    <string name="cd_login_photo">A technician in a hard hat inspects a row of solar panels in an open field</string>
     <string name="cd_back">Navigate back</string>
     <string name="cd_qr_code">Booking QR code</string>
     <string name="cd_station_marker">Microgrid node marker</string>

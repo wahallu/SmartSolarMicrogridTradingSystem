@@ -9,7 +9,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   CalendarCheck,
   Clock,
@@ -37,20 +37,52 @@ interface NavItem {
   roles?: UserRole[];
 }
 
+/** A titled run of related entries. A group with no visible entries is not drawn. */
+interface NavGroup {
+  title: string | null;
+  items: NavItem[];
+}
+
 /** Result of the single start-up probe against GET /health. */
 type HealthState = 'checking' | 'online' | 'offline';
 
 /** The whole navigation, declared once so the shell stays data driven. */
-const NAV_ITEMS: NavItem[] = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/reservations', label: 'Reservations', icon: CalendarCheck },
-  { to: '/stations', label: 'Microgrid Nodes', icon: Zap },
-  { to: '/slots', label: 'Booking Slots', icon: Clock, roles: ['Backoffice', 'GridOperator'] },
-  { to: '/prosumers', label: 'Prosumers', icon: Users, roles: ['Backoffice', 'GridOperator'] },
-  { to: '/prosumers/pending', label: 'Pending Activations', icon: UserCheck, roles: ['Backoffice'] },
-  { to: '/users', label: 'Web Users', icon: Shield, roles: ['Backoffice'] },
-  { to: '/map', label: 'Station Map', icon: MapPin },
+const NAV_GROUPS: NavGroup[] = [
+  {
+    title: null,
+    items: [{ to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard }],
+  },
+  {
+    title: 'Trading',
+    items: [
+      { to: '/reservations', label: 'Reservations', icon: CalendarCheck },
+      { to: '/slots', label: 'Booking Slots', icon: Clock, roles: ['Backoffice', 'GridOperator'] },
+    ],
+  },
+  {
+    title: 'Network',
+    items: [
+      { to: '/stations', label: 'Microgrid Nodes', icon: Zap },
+      { to: '/map', label: 'Station Map', icon: MapPin },
+    ],
+  },
+  {
+    title: 'People',
+    items: [
+      { to: '/prosumers', label: 'Prosumers', icon: Users, roles: ['Backoffice', 'GridOperator'] },
+      {
+        to: '/prosumers/pending',
+        label: 'Pending Activations',
+        icon: UserCheck,
+        roles: ['Backoffice'],
+      },
+      { to: '/users', label: 'Web Users', icon: Shield, roles: ['Backoffice'] },
+    ],
+  },
 ];
+
+/** Flat list used to work out the section name for the mobile top bar. */
+const ALL_ITEMS: NavItem[] = NAV_GROUPS.flatMap((group) => group.items);
 
 /** Human readable wording for a role code. */
 function roleLabel(role: UserRole): string {
@@ -65,14 +97,14 @@ function roleLabel(role: UserRole): string {
   }
 }
 
-/** Picks the heading for the current URL by longest matching nav path. */
-function derivePageTitle(pathname: string): string {
+/** Picks the section name for the current URL by longest matching nav path. */
+function deriveSectionName(pathname: string): string {
   // Longest prefix wins, so /prosumers/pending reads "Pending Activations" rather
   // than "Prosumers", and detail routes inherit their section heading.
   let matched = '';
   let title = 'Smart Solar';
 
-  for (const item of NAV_ITEMS) {
+  for (const item of ALL_ITEMS) {
     const isMatch = pathname === item.to || pathname.startsWith(`${item.to}/`);
     if (isMatch && item.to.length > matched.length) {
       matched = item.to;
@@ -80,12 +112,13 @@ function derivePageTitle(pathname: string): string {
     }
   }
 
+  if (pathname.startsWith('/profile')) return 'My profile';
   return title;
 }
 
 /** The authenticated app shell; child routes render inside its main area. */
 export function Layout() {
-  // The drawer state only matters below the lg breakpoint, where the sidebar
+  // The drawer state only matters below the lg breakpoint, where the rail
   // slides in over the content instead of sitting beside it.
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -93,14 +126,19 @@ export function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [health, setHealth] = useState<HealthState>('checking');
 
-  // Only the items the signed in role is allowed to use are ever rendered. The
+  // Only the entries the signed in role is allowed to use are ever rendered. The
   // same restriction is applied by the API on every endpoint.
-  const visibleItems = useMemo<NavItem[]>(() => {
+  const visibleGroups = useMemo<NavGroup[]>(() => {
     const role = user?.role;
-    return NAV_ITEMS.filter((item) => !item.roles || (role !== undefined && item.roles.includes(role)));
+    return NAV_GROUPS.map((group) => ({
+      title: group.title,
+      items: group.items.filter(
+        (item) => !item.roles || (role !== undefined && item.roles.includes(role)),
+      ),
+    })).filter((group) => group.items.length > 0);
   }, [user?.role]);
 
-  const pageTitle = derivePageTitle(location.pathname);
+  const sectionName = deriveSectionName(location.pathname);
 
   // Navigating on a phone should not leave the drawer covering the new page.
   useEffect(() => {
@@ -142,32 +180,53 @@ export function Layout() {
   const initial = user?.fullName?.trim().charAt(0).toUpperCase() || 'S';
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Mobile backdrop - tapping anywhere outside the drawer closes it. */}
+    <div className="min-h-[100dvh] bg-slate-50">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-slate-900"
+      >
+        Skip to content
+      </a>
+
+      {/* Mobile top bar: the rail is a drawer below lg, so the menu button lives here. */}
+      <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-slate-200 bg-white px-4 lg:hidden">
+        <button
+          type="button"
+          className="btn-ghost -ml-2 px-2"
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open navigation"
+          aria-expanded={sidebarOpen}
+        >
+          <Menu className="h-5 w-5" aria-hidden="true" />
+        </button>
+        <p className="truncate text-sm font-semibold text-slate-900">{sectionName}</p>
+      </header>
+
+      {/* Backdrop - tapping anywhere outside the drawer closes it. */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-slate-900/50 lg:hidden"
+          className="fixed inset-0 z-30 bg-slate-950/60 lg:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-slate-200 bg-white transition-transform duration-200 ease-out lg:translate-x-0 ${
+        className={`rail fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-chrome-line/10 bg-chrome transition-transform duration-200 ease-out lg:w-60 lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
+        aria-label="Primary"
       >
-        <div className="flex items-center gap-3 border-b border-slate-200 px-5 py-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-solar-500">
-            <Sun className="h-6 w-6 text-white" aria-hidden="true" />
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-slate-900">Smart Solar</p>
-            <p className="truncate text-xs text-slate-500">Microgrid Trading</p>
-          </div>
+        <div className="flex h-14 items-center gap-2.5 px-5">
+          <Link to="/dashboard" className="flex min-w-0 items-center gap-2.5">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent text-accent-ink">
+              <Sun className="h-4 w-4" aria-hidden="true" />
+            </span>
+            <span className="truncate text-sm font-semibold text-chrome-hi">Smart Solar</span>
+          </Link>
           <button
             type="button"
-            className="btn-ghost btn-sm ml-auto lg:hidden"
+            className="ml-auto rounded-md p-1.5 text-chrome-text hover:bg-chrome-line/10 hover:text-chrome-hi lg:hidden"
             onClick={() => setSidebarOpen(false)}
             aria-label="Close navigation"
           >
@@ -175,75 +234,85 @@ export function Layout() {
           </button>
         </div>
 
-        <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
-          {visibleItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === '/prosumers'}
-                className={({ isActive }) => (isActive ? 'nav-link nav-link-active' : 'nav-link')}
-              >
-                <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-                <span className="truncate">{item.label}</span>
-              </NavLink>
-            );
-          })}
+        <nav className="flex-1 overflow-y-auto px-3 pb-4 pt-2">
+          {visibleGroups.map((group, groupIndex) => (
+            <div key={group.title ?? 'root'} className={groupIndex === 0 ? '' : 'mt-6'}>
+              {group.title && (
+                <p className="mb-1.5 px-3 text-xs font-medium text-chrome-text/70">{group.title}</p>
+              )}
+              <div className="space-y-0.5">
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      end={item.to === '/prosumers'}
+                      className={({ isActive }) =>
+                        isActive ? 'nav-link nav-link-active' : 'nav-link'
+                      }
+                    >
+                      <Icon className="h-[18px] w-[18px] shrink-0" aria-hidden="true" />
+                      <span className="truncate">{item.label}</span>
+                    </NavLink>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
-        <div className="border-t border-slate-200 px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-solar-100 text-sm font-bold text-solar-700">
+        <div className="border-t border-chrome-line/10 p-3">
+          <Link
+            to="/profile"
+            className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-chrome-line/5"
+            aria-label="Open my profile"
+          >
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-chrome-line/10 text-sm font-semibold text-chrome-hi">
               {initial}
-            </div>
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-slate-900">
+            </span>
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-medium text-chrome-hi">
                 {user?.fullName ?? 'Signed in user'}
-              </p>
-              <p className="truncate text-xs text-slate-500">
+              </span>
+              <span className="block truncate text-xs text-chrome-text">
                 {user ? roleLabel(user.role) : '-'}
-              </p>
-            </div>
+              </span>
+            </span>
+          </Link>
+
+          <div className="mt-2 flex items-center justify-between gap-2 px-2">
+            <span
+              className="flex items-center gap-2 text-xs text-chrome-text"
+              role="status"
+              aria-live="polite"
+            >
+              <span
+                className={`h-2 w-2 shrink-0 rounded-full ${
+                  health === 'online'
+                    ? 'bg-grid-400'
+                    : health === 'offline'
+                      ? 'bg-red-500'
+                      : 'bg-chrome-text/50'
+                }`}
+                aria-hidden="true"
+              />
+              {health === 'online' ? 'API online' : health === 'offline' ? 'API offline' : 'Checking API'}
+            </span>
+            <button
+              type="button"
+              className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium text-chrome-text transition-colors hover:bg-chrome-line/10 hover:text-chrome-hi"
+              onClick={handleSignOut}
+            >
+              <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
+              Sign out
+            </button>
           </div>
-          <button type="button" className="btn-secondary btn-sm mt-3 w-full" onClick={handleSignOut}>
-            <LogOut className="h-4 w-4" aria-hidden="true" />
-            Sign out
-          </button>
         </div>
       </aside>
 
-      <div className="lg:pl-64">
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-slate-200 bg-white px-4 sm:px-6 lg:px-8">
-          <button
-            type="button"
-            className="btn-ghost btn-sm lg:hidden"
-            onClick={() => setSidebarOpen(true)}
-            aria-label="Open navigation"
-          >
-            <Menu className="h-5 w-5" aria-hidden="true" />
-          </button>
-
-          <h1 className="truncate text-base font-bold text-slate-900 sm:text-lg">{pageTitle}</h1>
-
-          <div className="ml-auto flex items-center gap-2">
-            <span
-              className={`h-2.5 w-2.5 shrink-0 rounded-full ${
-                health === 'online'
-                  ? 'bg-grid-500'
-                  : health === 'offline'
-                    ? 'bg-red-500'
-                    : 'bg-slate-300'
-              }`}
-              aria-hidden="true"
-            />
-            <span className="hidden text-xs font-medium text-slate-500 sm:inline">
-              {health === 'online' ? 'API online' : health === 'offline' ? 'API offline' : 'Checking API'}
-            </span>
-          </div>
-        </header>
-
-        <main className="p-4 sm:p-6 lg:p-8">
+      <div className="lg:pl-60">
+        <main id="main" className="mx-auto max-w-[1360px] px-4 py-6 sm:px-6 lg:px-10 lg:py-9">
           <Outlet />
         </main>
       </div>

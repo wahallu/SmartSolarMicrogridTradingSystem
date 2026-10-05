@@ -159,7 +159,7 @@ export default function PendingActivationsPage() {
       {/* ---- Page header ---- */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Pending activations</h1>
+          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Pending activations</h1>
           <p className="mt-1 text-sm text-slate-500">
             The back office work queue. Every account below is waiting for an activation decision.
           </p>
@@ -175,20 +175,16 @@ export default function PendingActivationsPage() {
       </div>
 
       {/* ---- What this queue contains ---- */}
-      <div className="card border-slate-200 bg-slate-50">
+      <div className="rounded-xl border border-slate-200 bg-slate-50">
         <div className="card-body flex flex-col items-start gap-3 sm:flex-row">
-          <Info className="mt-0.5 h-5 w-5 shrink-0 text-slate-400" aria-hidden="true" />
+          <Info className="mt-0.5 h-5 w-5 shrink-0 text-slate-500" aria-hidden="true" />
           <div className="text-sm text-slate-600">
-            <p>
-              This queue holds two kinds of entry, and the API returns both of them in the same
-              <span className="font-medium text-slate-700"> GET /prosumers/pending </span>
-              call:
-            </p>
+            <p>Two kinds of request wait in this queue:</p>
             <ul className="mt-2 list-disc space-y-1 pl-5">
               <li>
                 Prosumers who registered themselves from the mobile app. A self-registered account
                 starts <span className="font-medium text-slate-700">Pending</span> and cannot sign
-                in until a back office officer activates it (rule R6).
+                in until a back office officer activates it.
               </li>
               <li>
                 Active prosumers who have requested deactivation from the mobile app. Approving the
@@ -251,7 +247,7 @@ export default function PendingActivationsPage() {
                   {/* ---- Identity ---- */}
                   <div className="flex items-start gap-3">
                     <div
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-100 text-base font-bold text-amber-800"
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-amber-100 text-base font-semibold text-amber-800"
                       aria-hidden="true"
                     >
                       {initialOf(entry.fullName)}
@@ -260,7 +256,7 @@ export default function PendingActivationsPage() {
                       <p className="truncate text-sm font-semibold text-slate-900">
                         {entry.fullName}
                       </p>
-                      <p className="mt-0.5 truncate font-mono text-xs font-semibold text-slate-500">
+                      <p className="mt-0.5 truncate font-mono text-xs font-medium text-slate-600">
                         {nic}
                       </p>
                     </div>
@@ -270,20 +266,20 @@ export default function PendingActivationsPage() {
                   {/* ---- Contact details ---- */}
                   <div className="space-y-1.5 text-sm text-slate-600">
                     <p className="flex items-start gap-2">
-                      <Mail className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                      <Mail className="mt-0.5 h-4 w-4 shrink-0 text-slate-500" aria-hidden="true" />
                       <span className="min-w-0 break-words">{entry.email}</span>
                     </p>
                     <p className="flex items-start gap-2">
-                      <Phone className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                      <Phone className="mt-0.5 h-4 w-4 shrink-0 text-slate-500" aria-hidden="true" />
                       <span className="min-w-0 break-words">{entry.phone}</span>
                     </p>
                     <p className="flex items-start gap-2">
-                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" aria-hidden="true" />
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-slate-500" aria-hidden="true" />
                       <span className="min-w-0 break-words">{entry.address}</span>
                     </p>
                   </div>
 
-                  <p className="text-xs font-medium text-slate-400">
+                  <p className="text-xs font-medium text-slate-500">
                     Registered {formatDate(entry.createdAt)}
                   </p>
 
@@ -326,7 +322,7 @@ export default function PendingActivationsPage() {
                     <>
                       <button
                         type="button"
-                        className="btn-danger btn-sm"
+                        className="btn-danger-quiet btn-sm"
                         onClick={() => {
                           setApproveTarget(entry);
                           setApproveReason(entry.deactivationReason ?? '');

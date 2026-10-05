@@ -10,7 +10,10 @@
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
 import App from './App';
+import './styles/tokens.css';
 import './index.css';
 
 // The root element is declared in index.html; a missing one is a wiring error.

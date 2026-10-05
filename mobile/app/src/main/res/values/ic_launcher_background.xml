@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Background layer colour for the adaptive launcher icon. -->
+<!-- Background layer colour for the adaptive launcher icon: the brand accent. -->
 <resources>
-    <color name="ic_launcher_background">#F59E0B</color>
+    <color name="ic_launcher_background">#FBBF24</color>
 </resources>

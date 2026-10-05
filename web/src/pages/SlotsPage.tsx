@@ -474,7 +474,7 @@ export default function SlotsPage() {
       {/* ---- Page header ---- */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Booking slots</h1>
+          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Booking slots</h1>
           <p className="mt-1 text-sm text-slate-500">
             Publish and maintain the energy windows prosumers can reserve at each microgrid node.
           </p>
@@ -734,7 +734,7 @@ export default function SlotsPage() {
 
                               <button
                                 type="button"
-                                className="btn-danger btn-sm"
+                                className="btn-danger-quiet btn-sm"
                                 onClick={() => setDeleteTarget(slot)}
                                 disabled={busy}
                               >
@@ -1325,7 +1325,7 @@ export default function SlotsPage() {
                 <input
                   id="generate-skip"
                   type="checkbox"
-                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-solar-500 focus:ring-solar-500"
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300"
                   checked={generateForm.skipClosedDays}
                   onChange={(event) =>
                     setGenerateForm({ ...generateForm, skipClosedDays: event.target.checked })
@@ -1344,11 +1344,11 @@ export default function SlotsPage() {
             <p className="text-sm font-semibold text-grid-800">Generation finished</p>
             <div className="mt-2 flex flex-wrap gap-6">
               <div>
-                <p className="text-xl font-bold text-grid-800">{generateResult.created}</p>
+                <p className="text-xl font-semibold text-grid-800">{generateResult.created}</p>
                 <p className="text-xs font-medium text-grid-700">Slots created</p>
               </div>
               <div>
-                <p className="text-xl font-bold text-slate-700">{generateResult.skipped}</p>
+                <p className="text-xl font-semibold text-slate-700">{generateResult.skipped}</p>
                 <p className="text-xs font-medium text-slate-600">Skipped</p>
               </div>
             </div>

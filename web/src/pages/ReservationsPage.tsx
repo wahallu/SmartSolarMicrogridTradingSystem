@@ -367,7 +367,7 @@ export default function ReservationsPage() {
       {/* ---- Page header ---- */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Reservations</h1>
+          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Reservations</h1>
           <p className="mt-1 text-sm text-slate-500">
             Search, approve and manage energy slot bookings across every microgrid node.
           </p>
@@ -575,7 +575,7 @@ export default function ReservationsPage() {
                               {!isProsumer && isPending && (
                                 <button
                                   type="button"
-                                  className="btn-danger btn-sm"
+                                  className="btn-danger-quiet btn-sm"
                                   onClick={() => {
                                     setRejectTarget(reservation);
                                     setRejectReason('');

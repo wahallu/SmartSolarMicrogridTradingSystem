@@ -266,7 +266,7 @@ export default function MapPage() {
       {/* ---- Page header ---- */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Microgrid node map</h1>
+          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Microgrid node map</h1>
           <p className="mt-1 text-sm text-slate-500">
             Every solar node plotted on OpenStreetMap. Share your location to have the API list the
             nodes nearest to you first.
@@ -449,7 +449,7 @@ export default function MapPage() {
                     >
                       <Popup>
                         <div className="min-w-[200px] space-y-1">
-                          <p className="font-mono text-xs font-semibold text-slate-500">
+                          <p className="font-mono text-xs font-medium text-slate-600">
                             {station.stationCode}
                           </p>
                           <p className="text-sm font-semibold text-slate-900">{station.name}</p>

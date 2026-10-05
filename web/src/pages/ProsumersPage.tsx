@@ -361,7 +361,7 @@ export default function ProsumersPage() {
       {/* ---- Page header ---- */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Solar prosumers</h1>
+          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Solar prosumers</h1>
           <p className="mt-1 text-sm text-slate-500">
             Every prosumer account is identified by its NIC. Search, edit and manage the account life
             cycle from here.
@@ -496,7 +496,7 @@ export default function ProsumersPage() {
                                 Requested
                               </span>
                             ) : (
-                              <span className="text-xs text-slate-400">-</span>
+                              <span className="text-xs text-slate-500">-</span>
                             )}
                           </td>
                           <td className="whitespace-nowrap text-slate-600">
@@ -553,7 +553,7 @@ export default function ProsumersPage() {
                               {isBackoffice && (
                                 <button
                                   type="button"
-                                  className="btn-danger btn-sm"
+                                  className="btn-danger-quiet btn-sm"
                                   onClick={() => setDeleteTarget(prosumer)}
                                   disabled={busy}
                                 >
@@ -942,7 +942,7 @@ export default function ProsumersPage() {
 
           <p className="mt-4 text-xs text-slate-500">
             A Pending account joins the activation queue instead of signing in straight away, which is
-            how a self-registered prosumer arrives (rule R6).
+            how a self-registered prosumer arrives.
           </p>
         </form>
       </Modal>

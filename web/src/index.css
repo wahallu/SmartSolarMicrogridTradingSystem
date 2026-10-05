@@ -5,12 +5,16 @@
  * Description : Tailwind CSS entry point plus the handful of component classes
  *               that are reused often enough to deserve a name. Everything else
  *               is written as utility classes directly in the components.
+ *
+ *               Design rules these classes encode:
+ *                 - one accent (amber) with dark text on it, never white on amber
+ *                 - surfaces are separated by borders, not shadows
+ *                 - one radius scale: controls 6px, surfaces 8px, pills full
+ *                 - focus is always a high contrast ink ring
  * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
  * Created     : 2026-09-04
  * =============================================================================
  */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -19,39 +23,62 @@
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
     @apply bg-slate-50 text-slate-800 font-sans antialiased;
   }
 
-  /* In short: one shared focus ring for all interactive elements. */
+  h1,
+  h2,
+  h3 {
+    @apply tracking-tight;
+  }
+
+  /* One shared focus ring. Ink on light, near white on dark, visible on amber and white alike. */
   *:focus-visible {
-    @apply outline-none ring-2 ring-solar-500 ring-offset-2 ring-offset-white;
+    @apply outline-none ring-2 ring-slate-900 ring-offset-2 ring-offset-white;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    accent-color: rgb(var(--c-solar-500));
+  }
+
+  ::selection {
+    @apply bg-solar-200 text-slate-900;
   }
 }
 
 @layer components {
   /* ---- Buttons ---- */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold
-           transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
+           transition duration-150 ease-out active:translate-y-px
+           disabled:cursor-not-allowed disabled:opacity-50 disabled:active:translate-y-0;
   }
 
   .btn-primary {
-    @apply btn bg-solar-500 text-white hover:bg-solar-600 active:bg-solar-700;
+    @apply btn bg-accent text-accent-ink hover:bg-accent-hover active:bg-accent-press;
   }
 
   .btn-secondary {
-    @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 active:bg-slate-100;
+    @apply btn border border-slate-300 bg-white text-slate-800 hover:border-slate-400 hover:bg-slate-50;
   }
 
   .btn-success {
-    @apply btn bg-grid-600 text-white hover:bg-grid-700 active:bg-grid-800;
+    @apply btn bg-grid-700 text-white hover:bg-grid-800 active:bg-grid-900;
   }
 
   .btn-danger {
     @apply btn bg-red-600 text-white hover:bg-red-700 active:bg-red-800;
+  }
+
+  /* Destructive action inside a list row: outlined so a column of them stays calm. */
+  .btn-danger-quiet {
+    @apply btn border border-red-300 bg-white text-red-700 hover:border-red-400 hover:bg-red-50;
   }
 
   .btn-ghost {
@@ -59,26 +86,28 @@
   }
 
   .btn-sm {
-    @apply px-3 py-1.5 text-xs;
+    @apply gap-1.5 px-2.5 py-1.5 text-xs;
   }
 
   /* ---- Form controls ---- */
   .label {
-    @apply mb-1.5 block text-sm font-medium text-slate-700;
+    @apply mb-1.5 block text-sm font-medium text-slate-800;
   }
 
   .input {
-    @apply w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900
-           placeholder:text-slate-400 focus:border-solar-400 focus:ring-1 focus:ring-solar-500
-           disabled:bg-slate-100 disabled:text-slate-500;
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900
+           placeholder:text-slate-500 transition-colors
+           hover:border-slate-400
+           focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:ring-offset-0
+           disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500;
   }
 
   .input-error {
-    @apply border-red-400 focus:border-red-400 focus:ring-red-400;
+    @apply border-red-600 hover:border-red-600 focus:border-red-600 focus:ring-red-600;
   }
 
   .field-error {
-    @apply mt-1 text-xs font-medium text-red-400;
+    @apply mt-1.5 text-xs font-medium text-red-700;
   }
 
   .select {
@@ -87,48 +116,49 @@
 
   /* ---- Surfaces ---- */
   .card {
-    @apply rounded-xl border border-slate-200 bg-white shadow-card;
+    @apply rounded-xl border border-slate-200 bg-white;
   }
 
   .card-header {
-    @apply flex items-center justify-between gap-3 border-b border-slate-200 px-5 py-4;
+    @apply flex items-center justify-between gap-3 border-b border-slate-200 px-5 py-3.5;
   }
 
   .card-body {
     @apply px-5 py-4;
   }
 
-  /* ---- Status pills ---- */
+  /* ---- Status badges: tinted fill, matching hairline, readable text ---- */
   .badge {
-    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+    @apply inline-flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-0.5 text-xs font-medium
+           ring-1 ring-inset;
   }
 
   .badge-pending {
-    @apply badge bg-amber-100 text-amber-800;
+    @apply badge bg-solar-50 text-solar-800 ring-solar-300/70;
   }
 
   .badge-approved {
-    @apply badge bg-blue-100 text-blue-800;
+    @apply badge bg-blue-50 text-blue-800 ring-blue-300/70;
   }
 
   .badge-completed {
-    @apply badge bg-grid-100 text-grid-800;
+    @apply badge bg-grid-50 text-grid-800 ring-grid-300/70;
   }
 
   .badge-cancelled {
-    @apply badge bg-slate-200 text-slate-700;
+    @apply badge bg-slate-100 text-slate-700 ring-slate-300;
   }
 
   .badge-rejected {
-    @apply badge bg-red-100 text-red-800;
+    @apply badge bg-red-50 text-red-800 ring-red-300/70;
   }
 
   .badge-active {
-    @apply badge bg-grid-100 text-grid-800;
+    @apply badge bg-grid-50 text-grid-800 ring-grid-300/70;
   }
 
   .badge-inactive {
-    @apply badge bg-slate-200 text-slate-600;
+    @apply badge bg-slate-100 text-slate-600 ring-slate-300;
   }
 
   /* ---- Tables ---- */
@@ -137,32 +167,81 @@
   }
 
   .table thead th {
-    @apply whitespace-nowrap border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-semibold
-           uppercase tracking-wide text-slate-500;
+    @apply whitespace-nowrap border-b border-slate-200 bg-slate-50 px-4 py-2.5 text-xs font-medium
+           text-slate-600;
   }
 
   .table tbody td {
     @apply border-b border-slate-100 px-4 py-3 text-slate-700;
   }
 
+  .table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+
+  .table tbody tr {
+    @apply transition-colors;
+  }
+
   .table tbody tr:hover {
     @apply bg-slate-50;
   }
 
-  /* ---- Navigation ---- */
+  /* ---- Navigation (dark rail) ---- */
   .nav-link {
-    @apply flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600
-           transition-colors hover:bg-slate-100 hover:text-slate-900;
+    @apply relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-chrome-text
+           transition-colors hover:bg-chrome-line/5 hover:text-chrome-hi;
   }
 
   .nav-link-active {
-    @apply bg-solar-50 text-solar-700 hover:bg-solar-50 hover:text-solar-700;
+    @apply bg-chrome-line/10 text-chrome-hi hover:bg-chrome-line/10 hover:text-chrome-hi;
+  }
+
+  .nav-link-active::before {
+    content: '';
+    @apply absolute -left-3 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-accent;
+  }
+
+  /* ---- Loading skeleton ---- */
+  .skeleton {
+    @apply rounded-md bg-slate-200;
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(var(--c-white) / 0.55) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
   }
 }
 
-/* Leaflet renders its own container; this keeps the map inside rounded corners. */
+/* The rail keeps its own focus ring colours because it is always dark. */
+.rail *:focus-visible {
+  @apply ring-chrome-hi ring-offset-chrome;
+}
+
+/* Leaflet renders its own container; this keeps the map inside the surface radius. */
 .leaflet-container {
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   font-family: inherit;
   z-index: 0;
+}
+
+/* Everything that moves must be able to stop. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-shimmer,
+  .animate-spin {
+    animation: none !important;
+  }
+
+  .btn {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton {
+    animation: shimmer 1.6s linear infinite;
+  }
 }

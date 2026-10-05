@@ -232,7 +232,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_sm"
-                    android:text="This booking can no longer be changed. The Smart Solar API decided this and it is the only authority on the rule."
+                    android:text="@string/edit_booking_locked"
                     android:textAppearance="@style/TextAppearance.SmartSolar.Body"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
@@ -280,7 +280,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_xs"
-                    android:text="The picker suggests the next 7 days. The Smart Solar API enforces the booking window and the 12 hour notice rule."
+                    android:text="@string/edit_booking_window_hint"
                     android:textAppearance="@style/TextAppearance.SmartSolar.Caption"
                     tools:ignore="HardcodedText" />
 
@@ -337,7 +337,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/space_sm"
-                        android:text="No alternative slots are free at this node on the chosen date. Keep the current slot or try another date."
+                        android:text="@string/edit_booking_no_slots"
                         android:textAppearance="@style/TextAppearance.SmartSolar.Body"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
