@@ -209,6 +209,7 @@ bash gradlew installDebug
 
 Prosumers authenticate via their NIC, which is their primary key. Staff authenticate via a username. The login endpoint accepts any one of the three identifiers: a NIC, a username, or an e-mail address.
 
+
 ---
 
 ## Business rules

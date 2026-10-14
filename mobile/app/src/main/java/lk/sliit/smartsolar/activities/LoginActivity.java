@@ -170,23 +170,33 @@ public class LoginActivity extends BaseActivity {
         launchHome(ProsumerHomeActivity.class);
     }
 
-    /** Explains that the Backoffice console is the web client, and offers the operator view. */
+    /** Explains that Backoffice accounts must use the web client. */
     private void showBackofficeNotice() {
-        // The dialog is not cancellable so the account cannot silently stay on a dead screen.
+        // Do not route a Backoffice token into the operator workflow.
         new AlertDialog.Builder(this)
                 .setTitle("Backoffice console")
-                .setMessage("The Backoffice console is the web application. "
-                        + "You can continue to the operator view on this device, "
-                        + "or sign out and use the web client.")
+                .setMessage("The Backoffice console is available in the web application. "
+                        + "Please sign out here and use the web client.")
                 .setCancelable(false)
                 .setPositiveButton(R.string.action_confirm,
-                        (dialog, which) -> launchHome(OperatorHomeActivity.class))
+                        (dialog, which) -> {
+                            session.logout();
+                            returnToLogin();
+                        })
                 .setNegativeButton(R.string.action_logout, (dialog, which) -> {
                     // Clearing the SQLite session leaves the device signed out.
                     session.logout();
-                    dialog.dismiss();
+                    returnToLogin();
                 })
                 .show();
+    }
+
+    /** Returns to a clean login task after a role that is not supported on mobile signs in. */
+    private void returnToLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     /** Starts a home Activity as a fresh task and finishes the login screen. */
