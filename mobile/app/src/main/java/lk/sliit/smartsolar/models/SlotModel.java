@@ -1,14 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : SlotModel.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : models
- * Description : Client side representation of the SlotDto returned by the Web
- *               API. isBookable is decided by the SERVER (rule R8) and simply
- *               obeyed here, so the phone never has to reason about capacity,
- *               blocking or whether a slot has already started.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Models / Slot Model
+ * Description : Parses booking-slot details returned by the Web API.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-10
  * =============================================================================
  */
 

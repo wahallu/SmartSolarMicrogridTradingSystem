@@ -1,20 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : BookingSummaryActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : The shared confirmation page shown after every reservation
- *               action - create, change and cancel - which the marking scheme
- *               names as the "summary page after each action".
- *
- *               THIS SCREEN DECIDES NOTHING. The outcome flag, the headline and
- *               the message all arrive in the Intent from the screen that made
- *               the call, and the message itself is the WEB API's own wording.
- *               When the caller also passes the reservation JSON the API
- *               returned, the card below repeats that booking verbatim; no
- *               figure on this page is recomputed on the phone.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Booking Summary
+ * Description : Shows a clear result after a booking action is completed.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-16
  * =============================================================================
  */
 

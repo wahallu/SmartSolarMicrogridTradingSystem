@@ -1,21 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : BookingDetailActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Shows one energy trading reservation in full: its reference and
- *               status, the microgrid node, the booked slot, the traded energy,
- *               the QR code the operator scans and the audit trail staff wrote.
- *
- *               THIS SCREEN IS A UI LAYER ONLY. The "Change booking" and
- *               "Cancel booking" buttons are enabled purely from the canModify
- *               and canCancel booleans the Web API sends with the reservation:
- *               the 12 hour notice rule (R2 / R3) is evaluated in the FAT
- *               service layer and is never recomputed here. The QR image is
- *               rendered by the server too, and approve / reject are refused by
- *               the API for anyone who is not staff.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Booking Detail
+ * Description : Shows one booking and the actions still available for it.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-16
  * =============================================================================
  */
 
@@ -65,6 +54,9 @@ public class BookingDetailActivity extends BaseActivity {
 
     /** Reason recorded against a cancellation the account holder made on the phone. */
     private static final String CANCEL_REASON = "Cancelled by the account holder from the mobile app.";
+
+    /** Opacity of an action button the server has refused, so it reads as unavailable. */
+    private static final float DIMMED_ALPHA = 0.45f;
 
     // Screen states.
     private NestedScrollView scrollDetail;
@@ -463,8 +455,15 @@ public class BookingDetailActivity extends BaseActivity {
 
         btnEdit.setVisibility(open ? View.VISIBLE : View.GONE);
         btnCancel.setVisibility(open ? View.VISIBLE : View.GONE);
-        btnEdit.setEnabled(reservation.canModify());
-        btnCancel.setEnabled(reservation.canCancel());
+
+        // The buttons stay clickable on purpose. The theme's solid backgroundTint makes a
+        // disabled MaterialButton look identical to an enabled one, so setEnabled(false)
+        // left a button that silently ignored taps. Instead a refused action is dimmed and
+        // its click handler explains the server's verdict (see openEditScreen / confirmCancel).
+        btnEdit.setEnabled(true);
+        btnCancel.setEnabled(true);
+        btnEdit.setAlpha(reservation.canModify() ? 1f : DIMMED_ALPHA);
+        btnCancel.setAlpha(reservation.canCancel() ? 1f : DIMMED_ALPHA);
 
         boolean blockedByServer = open && (!reservation.canModify() || !reservation.canCancel());
         panelNotice.setVisibility(blockedByServer ? View.VISIBLE : View.GONE);
@@ -483,8 +482,8 @@ public class BookingDetailActivity extends BaseActivity {
     private void openEditScreen() {
         // The raw JSON travels so the edit screen starts from exactly what the API returned.
         if (reservation == null || !reservation.canModify()) {
-            // Belt and braces: the button is already disabled when the server said no.
-            info(getString(R.string.action_edit_booking), getString(R.string.notice_12_hour));
+            // The server said no, so the tap is answered with the reason instead of being ignored.
+            info(getString(R.string.action_edit_booking), refusalMessage());
             return;
         }
 
@@ -497,6 +496,12 @@ public class BookingDetailActivity extends BaseActivity {
 
     /** Asks the user to confirm the cancellation before any call is made. */
     private void confirmCancel() {
+        // The server's canCancel verdict decides; a refused tap is explained rather than ignored.
+        if (reservation == null || !reservation.canCancel()) {
+            info(getString(R.string.action_cancel_booking), refusalMessage());
+            return;
+        }
+
         // The wording of the confirmation lives in strings.xml so it can be reviewed once.
         confirm(getString(R.string.action_cancel_booking),
                 getString(R.string.confirm_cancel_booking),
@@ -589,6 +594,18 @@ public class BookingDetailActivity extends BaseActivity {
                         loadReservation();
                     }
                 });
+    }
+
+    /** Explains why the server refused a change or cancellation of this booking. */
+    private String refusalMessage() {
+        // The countdown is cosmetic; the refusal itself is the server's canModify / canCancel flag.
+        if (reservation == null) {
+            return getString(R.string.notice_12_hour);
+        }
+        // describeHoursUntil reads "in 8 hours" or "started 2 hours ago", hence the two lead-ins.
+        double hours = reservation.getHoursUntilStart();
+        String lead = hours < 0 ? "This booking's slot " : "This booking's slot starts ";
+        return lead + DateUtils.describeHoursUntil(hours) + ". " + getString(R.string.notice_12_hour);
     }
 
     /** Opens the shared summary screen after a successful cancellation. */

@@ -1,15 +1,11 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/components/ProtectedRoute.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Route guard for the authenticated area of the web application.
- *               It waits for the stored token to be re-validated, bounces an
- *               anonymous visitor to the login page (remembering where they were
- *               heading), and hides screens the signed in role may not use.
- *               Serves the "role based access - Backoffice / Grid Operator"
- *               marking requirement on the client side.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Components / Protected Route
+ * Description : Keeps signed-out or unauthorised users away from protected
+ *               pages.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-08
  * =============================================================================
  */
 
@@ -57,7 +53,7 @@ export function ProtectedRoute({ roles, children }: ProtectedRouteProps) {
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100">
               <ShieldAlert className="h-7 w-7 text-red-600" aria-hidden="true" />
             </div>
-            <h1 className="text-lg font-bold text-slate-900">
+            <h1 className="text-lg font-semibold text-slate-900">
               403 - You do not have access to this page
             </h1>
             <p className="mt-2 text-sm text-slate-600">

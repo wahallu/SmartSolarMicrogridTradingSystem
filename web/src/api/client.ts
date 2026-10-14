@@ -1,18 +1,11 @@
-/**
- * =============================================================================
- * File        : api/client.ts
+/* =============================================================================
+ * File        : src/api/client.ts
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The single axios instance every screen uses to reach the central
- *               C# Web API. The web application is a pure UI layer: it holds no
- *               business logic and never touches MongoDB - every read and every
- *               write goes through one of the calls defined here.
- *
- *               Two interceptors do the repetitive work:
- *                 request  - attaches the bearer token from local storage
- *                 response - unwraps the {success, message, data} envelope and
- *                            converts a failure into a typed ApiError
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Api / client
+ * Description : Configures HTTP requests, authentication and API error
+ *               handling.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-20
  * =============================================================================
  */
 
@@ -77,7 +70,7 @@ export const http: AxiosInstance = axios.create({
 
 // Attaches the bearer token to every outgoing request.
 http.interceptors.request.use((config) => {
-  // Reading from storage on each call means a fresh login takes effect immediately.
+  
   const token = localStorage.getItem(TOKEN_KEY);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -89,7 +82,7 @@ http.interceptors.request.use((config) => {
 http.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ApiResponse<unknown>>) => {
-    // No response at all means DNS, CORS, a timeout or a stopped API.
+    // The complete absence of any response indicates that the issue could be DNS failure, a CORS restriction, a timeout, or an API that has stopped runnin
     if (!error.response) {
       return Promise.reject(
         new ApiError(
@@ -132,6 +125,9 @@ export async function unwrap<T>(promise: Promise<{ data: ApiResponse<T> }>): Pro
 /**
  * Same as unwrap but also hands back the server's message, which several screens
  * display verbatim in a toast (for example the wording of a rule violation).
+ *
+ * In short: like unwrap, but also returns the server's message so screens can
+ * show it as-is in a toast.
  */
 export async function unwrapWithMessage<T>(
   promise: Promise<{ data: ApiResponse<T> }>,
@@ -147,7 +143,7 @@ export async function unwrapWithMessage<T>(
   return { data: body.data as T, message: body.message };
 }
 
-/** Drops empty, null and undefined values so optional filters can be passed freely. */
+/** It filters out empty, null, and undefined values so optional filters can be passed without worry. */
 export function cleanParams(params: Record<string, unknown>): Record<string, unknown> {
   // Without this every unset filter would be sent as "?status=" and confuse the API.
   return Object.fromEntries(

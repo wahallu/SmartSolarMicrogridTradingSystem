@@ -1,16 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : RegisterActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Self registration for a solar prosumer, satisfying the marked
- *               "EV owner / prosumer can create their own account with the NIC as
- *               the primary key" requirement. It collects the profile, gives
- *               immediate field level feedback and posts to POST /auth/register.
- *               The account is created Pending by the server under rule R6 and a
- *               duplicate NIC is refused by the server under rule R7.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Register
+ * Description : Collects and submits a new prosumer registration.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-03
  * =============================================================================
  */
 

@@ -1,20 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : ProsumerHomeActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Home screen for a Solar Prosumer. It shows the live counters
- *               returned by GET /reservations/dashboard (pending, approved and
- *               upcoming, completed, energy traded), four quick actions and the
- *               prosumer's next bookings.
- *
- *               This screen is a pure UI layer: every number and every booking
- *               row is read from the Web API response. Nothing is counted,
- *               filtered by rule or derived on the phone, which is what keeps
- *               the business logic in the FAT service as the assignment
- *               requires.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Prosumer Home
+ * Description : Presents the prosumer dashboard and main booking shortcuts.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-19
  * =============================================================================
  */
 

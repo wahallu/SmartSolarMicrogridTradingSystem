@@ -28,7 +28,7 @@
     android:background="@color/screen_background"
     android:orientation="vertical">
 
-    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <!-- The flat application bar, wired up by BaseActivity.setupToolbar. -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_stations_map"
         style="@style/Widget.SmartSolar.Toolbar"

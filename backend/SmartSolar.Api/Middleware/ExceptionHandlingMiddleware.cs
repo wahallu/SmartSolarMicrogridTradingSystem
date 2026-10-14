@@ -2,19 +2,9 @@
  * File        : ExceptionHandlingMiddleware.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Middleware
- * Description : Terminal try/catch wrapped around the whole request pipeline so
- *               that an exception nobody anticipated still leaves the server as
- *               the standard ApiResponse JSON envelope.
- *
- *               WHY THIS EXISTS: the React web client and the Android client
- *               both parse every response as ApiResponse JSON and nothing else.
- *               Without this filter an unhandled exception would return the
- *               developer exception HTML page (or an empty 500 body), which both
- *               clients would fail to deserialise - the user would see a parser
- *               crash instead of a readable error message. Catching here keeps
- *               the contract "every response is an ApiResponse" literally true.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Turns unhandled server errors into a consistent API response.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-19
  * =============================================================================
  */
 
@@ -33,9 +23,8 @@ public class ExceptionHandlingMiddleware
     private const string GenericMessage = "An unexpected error occurred while processing your request.";
 
     /// <summary>
-    /// Serialiser options shared by every failure written here. CamelCase is used so the
-    /// error envelope matches exactly the casing MVC emits for successful responses; a
-    /// PascalCase "Success" field would be read as null by both clients.
+    /// In short: CamelCase keeps the error envelope identical in casing to MVC's
+/// success responses; PascalCase "Success" would deserialise as null on both clients.
     /// </summary>
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {
@@ -72,7 +61,7 @@ public class ExceptionHandlingMiddleware
         }
         catch (Exception ex)
         {
-            // The method and path are logged with the exception so a 500 can be traced to one endpoint.
+            
             _logger.LogError(
                 ex,
                 "Unhandled exception while processing {Method} {Path}.",

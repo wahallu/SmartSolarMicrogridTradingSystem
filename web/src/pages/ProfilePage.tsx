@@ -1,16 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/ProfilePage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The signed in user's own account page, shared by all three roles.
- *               It shows the profile the API holds for the caller, lets them
- *               correct their contact details and lets them change their own
- *               password. Nothing is decided here: password strength, e-mail
- *               uniqueness, whether the account may be edited at all and the
- *               fate of a pending deactivation request are all API rulings, and
- *               this screen only forwards the request and renders the answer.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Profile
+ * Description : Lets the signed-in user review and update account details.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-03
  * =============================================================================
  */
 
@@ -83,7 +77,7 @@ function DetailRow({ label, value }: { label: string; value: string }) {
   // Every value shown is server state, rendered exactly as the API sent it.
   return (
     <div className="flex flex-col gap-0.5 border-b border-slate-100 py-2.5 last:border-b-0 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-      <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</dt>
+      <dt className="text-xs font-medium text-slate-600">{label}</dt>
       <dd className="break-words text-sm font-medium text-slate-800 sm:text-right">{value}</dd>
     </div>
   );
@@ -209,7 +203,7 @@ export default function ProfilePage() {
     <div className="space-y-5">
       {/* ---- Page header ---- */}
       <div>
-        <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">My profile</h1>
+        <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">My profile</h1>
         <p className="mt-1 text-sm text-slate-500">
           Review the account the Smart Solar service holds for you, update your contact details and
           change your password.
@@ -221,10 +215,10 @@ export default function ProfilePage() {
         <div className="card lg:col-span-1">
           <div className="card-body">
             <div className="flex flex-col items-center text-center">
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-solar-400 to-solar-600 text-3xl font-bold text-white shadow-card">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent text-3xl font-semibold text-accent-ink">
                 {initial}
               </div>
-              <h2 className="mt-4 text-lg font-bold text-slate-900">{user.fullName}</h2>
+              <h2 className="mt-4 text-lg font-semibold text-slate-900">{user.fullName}</h2>
               <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
                 <span
                   className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${ROLE_CHIPS[user.role]}`}

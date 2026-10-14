@@ -2,12 +2,9 @@
  * File        : UserDtos.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : DTOs / Users
- * Description : Contracts for web user administration (Backoffice and Grid
- *               Operator accounts) and for solar prosumer management, including
- *               the self service profile edit and the deactivation request that
- *               the Android application raises.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Contains the API models used for staff and prosumer accounts.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-06
  * =============================================================================
  */
 

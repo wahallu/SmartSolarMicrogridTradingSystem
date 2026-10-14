@@ -1,17 +1,10 @@
-/**
- * =============================================================================
- * File        : api/services.ts
+/* =============================================================================
+ * File        : src/api/services.ts
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : One typed function per Web API endpoint, grouped by resource.
- *               Screens import from here and never build a URL themselves, so
- *               the whole client surface can be reviewed in a single file and a
- *               route change is a one line edit.
- *
- *               Nothing in this file makes a decision - it only forwards. Every
- *               rule (the 7 day window, the 12 hour notice, role checks, QR
- *               validity) is enforced by the C# service layer.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Api / services
+ * Description : Groups the typed API calls used by the web screens.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-25
  * =============================================================================
  */
 
@@ -32,7 +25,7 @@ import type {
 } from '../types';
 
 /* ===========================================================================
- * Authentication
+ * Auth
  * =========================================================================== */
 
 export const authApi = {
@@ -110,7 +103,7 @@ export const usersApi = {
 };
 
 /* ===========================================================================
- * Solar prosumers (keyed by NIC)
+ * Solar prosumers 
  * =========================================================================== */
 
 export const prosumersApi = {
@@ -177,7 +170,7 @@ export const stationsApi = {
       }),
     ),
 
-  /** Registers a new node. */
+  /** Registers with a new node. */
   create: (payload: Record<string, unknown>) =>
     unwrapWithMessage<Station>(http.post<ApiResponse<Station>>('/stations', payload)),
 
@@ -209,7 +202,7 @@ export const stationsApi = {
 };
 
 /* ===========================================================================
- * Energy booking slots
+ * 
  * =========================================================================== */
 
 export const slotsApi = {
@@ -332,7 +325,7 @@ export const reservationsApi = {
       http.patch<ApiResponse<Reservation>>(`/reservations/${id}/reject`, { reason }),
     ),
 
-  /** Fetches the QR payload and rendered PNG for an approved booking. */
+  /** gets both the QR payload and its PNG image for an approved booking. */
   qr: (id: string) => unwrap<QrCode>(http.get<ApiResponse<QrCode>>(`/reservations/${id}/qr`)),
 
   /** Validates a scanned token against the server (rule R9). */

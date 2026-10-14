@@ -2,12 +2,9 @@
  * File        : ApiResponse.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Common
- * Description : The single JSON envelope every endpoint returns, success or
- *               failure. Because the shape never changes, the React client and
- *               the Android client each need exactly one deserialiser and one
- *               error handler instead of one per endpoint.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Defines the response shape returned by every API endpoint.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-24
  * =============================================================================
  */
 
@@ -32,7 +29,8 @@ public class ApiResponse<T>
     /// <summary>Builds a successful envelope around a payload.</summary>
     public static ApiResponse<T> Ok(T? data, string message = "Request completed successfully.")
     {
-        // A success envelope always clears the error fields so clients can branch on Success alone.
+        // success responses blank out the error fields, so clients only need
+// to check Success.
         return new ApiResponse<T> { Success = true, Message = message, Data = data };
     }
 
@@ -57,14 +55,15 @@ public static class ApiResponse
     /// <summary>Successful envelope with a null payload.</summary>
     public static ApiResponse<object?> Ok(string message = "Request completed successfully.")
     {
-        // Used by activate / deactivate style endpoints that only report an outcome.
+        
         return ApiResponse<object?>.Ok(null, message);
     }
 
     /// <summary>Failure envelope with a null payload.</summary>
     public static ApiResponse<object?> Fail(string message, string? errorCode = null)
     {
-        // Mirrors the generic overload for the no-payload case.
+        // the non-generic version of the same helper, for when there's no
+// payload to return.
         return ApiResponse<object?>.Fail(message, errorCode);
     }
 }

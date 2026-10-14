@@ -2,13 +2,9 @@
  * File        : AppSettings.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Configuration
- * Description : Strongly typed configuration option classes that are bound from
- *               appsettings.json at start-up. Keeping configuration in POCOs
- *               (rather than reading raw IConfiguration strings all over the
- *               code base) means a mis-spelled key fails once, at boot, instead
- *               of silently returning null deep inside a service.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Maps the MongoDB, JWT and CORS sections from configuration.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-21
  * =============================================================================
  */
 

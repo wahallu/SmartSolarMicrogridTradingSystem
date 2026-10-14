@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The warm header gradient used on the splash, login and home screens. -->
+<!-- The brand accent as a flat fill, used on the splash screen. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <gradient
-        android:startColor="@color/solar_600"
-        android:centerColor="@color/solar_500"
-        android:endColor="@color/solar_400"
-        android:angle="315" />
+    <solid android:color="@color/accent" />
 </shape>

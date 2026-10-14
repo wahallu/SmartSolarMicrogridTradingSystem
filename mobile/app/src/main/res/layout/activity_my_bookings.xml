@@ -20,7 +20,7 @@
     android:background="@color/screen_background"
     android:orientation="vertical">
 
-    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <!-- The flat application bar, wired up by BaseActivity.setupToolbar. -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_my_bookings"
         style="@style/Widget.SmartSolar.Toolbar"
@@ -36,11 +36,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:tabIndicatorColor="@color/solar_600"
-        app:tabIndicatorHeight="3dp"
+        app:tabIndicatorColor="@color/slate_900"
+        app:tabIndicatorHeight="2dp"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/solar_700"
-        app:tabTextColor="@color/slate_500">
+        app:tabSelectedTextColor="@color/slate_900"
+        app:tabTextColor="@color/slate_600">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab_bookings_current"

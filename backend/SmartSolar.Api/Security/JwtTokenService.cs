@@ -2,13 +2,9 @@
  * File        : JwtTokenService.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Security
- * Description : Issues the signed JSON Web Tokens that the React web client and
- *               the native Android client attach to every authenticated request.
- *               The token carries the caller's identity, role, NIC and assigned
- *               station so that authorisation decisions never need a database
- *               round trip on each call.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Creates signed access tokens for authenticated users.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-03
  * =============================================================================
  */
 

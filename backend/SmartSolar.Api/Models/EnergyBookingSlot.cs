@@ -1,14 +1,10 @@
 /* =============================================================================
  * File        : EnergyBookingSlot.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Models  (MongoDB collection: "EnergyBookingSlots")
- * Description : One bookable energy window at a microgrid node. A slot pins a
- *               battery bay to a time range; a prosumer reserves a slot in order
- *               to charge from, or drop energy off into, the node. StartUtc and
- *               EndUtc are the absolute instants every business rule is measured
- *               against - the "HH:mm" strings exist only for display.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Models
+ * Description : Represents a bookable energy window stored in MongoDB.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-13
  * =============================================================================
  */
 

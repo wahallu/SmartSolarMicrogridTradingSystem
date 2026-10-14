@@ -3,11 +3,13 @@
   =============================================================================
   File        : item_reservation.xml
   Project     : Smart Solar Microgrid Trading System - Android Client
-  Description : One booking card in the reservation lists. The reference sits on
-                the left in a monospace face so codes line up down the list, the
-                status pill sits on the right and is tinted at runtime by
-                ReservationAdapter, and the footer shows a cosmetic countdown
-                plus a chevron hinting the row opens the booking detail screen.
+  Description : One booking row in the reservation lists. The reference sits on
+                the left in a monospace face so codes line up down the list and
+                the status chip sits on the right, tinted at runtime by
+                ReservationAdapter. The node and window follow as plain text,
+                and the footer shows the energy, a QR marker when the server has
+                issued one, a cosmetic countdown and a chevron hinting the row
+                opens the booking detail screen.
   Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
   Created     : 2026-09-04
   =============================================================================
@@ -30,7 +32,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Reference and status pill -->
+        <!-- Reference and status chip -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +48,7 @@
                 android:fontFamily="monospace"
                 android:maxLines="1"
                 android:textColor="@color/slate_900"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -60,128 +62,80 @@
         </LinearLayout>
 
         <!-- Microgrid node -->
-        <LinearLayout
+        <TextView
+            android:id="@+id/text_station_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_sm"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="@dimen/icon_sm"
-                android:layout_height="@dimen/icon_sm"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_station"
-                app:tint="@color/slate_400" />
-
-            <TextView
-                android:id="@+id/text_station_name"
-                style="@style/TextAppearance.SmartSolar.Body"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_sm"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1" />
-
-        </LinearLayout>
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textColor="@color/slate_900"
+            android:textSize="16sp" />
 
         <!-- Slot day and window -->
-        <LinearLayout
+        <TextView
+            android:id="@+id/text_date_time"
+            style="@style/TextAppearance.SmartSolar.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_xs"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="@dimen/icon_sm"
-                android:layout_height="@dimen/icon_sm"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_clock"
-                app:tint="@color/slate_400" />
-
-            <TextView
-                android:id="@+id/text_date_time"
-                style="@style/TextAppearance.SmartSolar.Body"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_sm"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1" />
-
-        </LinearLayout>
-
-        <!-- Energy traded -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_xs"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="@dimen/icon_sm"
-                android:layout_height="@dimen/icon_sm"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_bolt"
-                app:tint="@color/solar_500" />
-
-            <TextView
-                android:id="@+id/text_energy"
-                style="@style/TextAppearance.SmartSolar.Body"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/space_sm"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/solar_700"
-                android:textStyle="bold" />
-
-        </LinearLayout>
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/slate_600" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/space_sm"
+            android:layout_marginTop="@dimen/space_md"
             android:background="@color/divider" />
 
-        <!-- Countdown, QR badge and the "opens detail" chevron -->
+        <!-- Energy, QR marker, countdown and the "opens detail" chevron -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_sm"
+            android:layout_marginTop="@dimen/space_md"
             android:gravity="center_vertical"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_energy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:textColor="@color/slate_900"
+                android:textSize="14sp" />
 
             <!-- Shown only when the server has issued a QR token for this booking. -->
             <ImageView
                 android:id="@+id/image_qr_badge"
                 android:layout_width="@dimen/icon_sm"
                 android:layout_height="@dimen/icon_sm"
-                android:layout_marginEnd="@dimen/space_sm"
+                android:layout_marginStart="@dimen/space_sm"
                 android:contentDescription="@string/cd_qr_code"
                 android:src="@drawable/ic_qr"
                 android:visibility="gone"
-                app:tint="@color/grid_600" />
+                app:tint="@color/grid_700" />
 
             <TextView
                 android:id="@+id/text_hours_until"
                 style="@style/TextAppearance.SmartSolar.Caption"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_sm"
                 android:layout_weight="1"
                 android:ellipsize="end"
+                android:gravity="end"
                 android:maxLines="1" />
 
             <ImageView
                 android:layout_width="@dimen/icon_sm"
                 android:layout_height="@dimen/icon_sm"
+                android:layout_marginStart="@dimen/space_xs"
                 android:contentDescription="@null"
                 android:src="@drawable/ic_chevron_right"
-                app:tint="@color/slate_400" />
+                app:tint="@color/slate_500" />
 
         </LinearLayout>
 

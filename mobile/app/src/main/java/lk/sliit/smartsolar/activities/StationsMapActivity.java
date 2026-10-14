@@ -1,21 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : StationsMapActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : The Google Maps screen. It centres a map on the signed in user,
- *               plots every nearby microgrid node as a marker and lists the same
- *               nodes underneath so they can be reached without pinching the map.
- *
- *               THIS SCREEN IS A UI LAYER ONLY. The nodes it draws, their order
- *               and the distance shown against each one all come from
- *               GET /stations/nearby. The phone sends its coordinates and a
- *               radius and paints the answer; it never measures a distance, never
- *               ranks the list and never decides which nodes fall inside the
- *               radius. That arithmetic is the Haversine implementation inside
- *               the FAT service layer of the Web API.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Stations Map
+ * Description : Displays nearby stations on Google Maps and in a list.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-12
  * =============================================================================
  */
 
@@ -140,6 +129,9 @@ public class StationsMapActivity extends BaseActivity implements OnMapReadyCallb
 
     /** Radius sent as ?radiusKm=, chosen with the spinner. */
     private int radiusKm = (int) Constants.DEFAULT_RADIUS_KM;
+
+    /** Identifies the newest nearby-node request so an older reply cannot replace it. */
+    private int stationRequestGeneration;
 
     /** Builds the screen, attaches the map fragment and starts the permission flow. */
     @Override
@@ -360,12 +352,9 @@ public class StationsMapActivity extends BaseActivity implements OnMapReadyCallb
         markerStations.clear();
         markersByStationId.clear();
 
+        // Latitude and longitude are validated by the API. Zero is a valid value for each
+        // coordinate, including the real intersection at 0,0, so it is never a missing-data sentinel.
         for (StationModel station : visibleStations) {
-            // A node with no coordinates cannot be plotted; it still appears in the list.
-            if (station.getLatitude() == 0 && station.getLongitude() == 0) {
-                continue;
-            }
-
             // Amber for a node in service, blue for one that is out of service, so the map
             // reads the same way as the dimmed cards in the list below it.
             float hue = station.isActive()
@@ -511,6 +500,8 @@ public class StationsMapActivity extends BaseActivity implements OnMapReadyCallb
      * is the server's distanceKm value, displayed verbatim.
      */
     private void loadStations() {
+        final int requestGeneration = ++stationRequestGeneration;
+
         // The loading state is shown first so a stale list is never left on screen.
         showOnly(progressStations, recyclerStations, textEmpty);
 
@@ -528,6 +519,13 @@ public class StationsMapActivity extends BaseActivity implements OnMapReadyCallb
             /** Receives the node list on the main thread. */
             @Override
             public void onResult(ApiResult result) {
+                // Radius changes can leave more than one request in flight. Only the newest
+                // response represents the spinner selection currently visible to the user.
+                if (requestGeneration != stationRequestGeneration
+                        || isFinishing() || isDestroyed()) {
+                    return;
+                }
+
                 // ApiClient posts callbacks to the main looper, so views are touched directly.
                 if (result.isSuccess()) {
                     handleLoadSuccess(result);

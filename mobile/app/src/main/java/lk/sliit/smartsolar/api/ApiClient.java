@@ -1,23 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : ApiClient.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : api
- * Description : The single gateway between this application and the central C#
- *               Web API. Every screen in the app reaches the server through this
- *               class and through no other route - there is no direct database
- *               access of any kind from the phone.
- *
- *               PURE NATIVE ANDROID: networking uses java.net.HttpURLConnection
- *               from the Java platform itself and org.json from the Android
- *               framework. No Retrofit, no OkHttp, no Volley, no cross platform
- *               framework. Work is pushed onto a small fixed thread pool and the
- *               callback is posted back to the main looper, which is the
- *               standard native pattern for keeping the UI thread free.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
- * References  : HttpURLConnection usage follows the Android developer guide at
- *               https://developer.android.com/reference/java/net/HttpURLConnection
+ * Module      : Api / Api Client
+ * Description : Sends authenticated JSON requests to the central Web API.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-20
  * =============================================================================
  */
 

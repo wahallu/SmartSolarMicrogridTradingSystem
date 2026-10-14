@@ -1,13 +1,11 @@
 /* =============================================================================
  * File        : SolarStationInfo.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Models  (MongoDB collection: "SolarStationInfo")
- * Description : A microgrid node (solar grid hub). Carries the GPS position used
- *               by the Google Maps "nearby stations" feature on Android, the
- *               generation capacity in kWh, the number of battery storage bays
- *               and the weekly operating schedule maintained by the back office.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Models
+ * Description : Represents a microgrid station, schedule and battery
+ *               availability.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-11
  * =============================================================================
  */
 

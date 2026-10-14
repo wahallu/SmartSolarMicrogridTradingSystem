@@ -3,17 +3,25 @@
   =============================================================================
   File        : colors.xml
   Project     : Smart Solar Microgrid Trading System - Android Client
-  Description : The application colour palette. The amber "solar" ramp is the
-                brand colour and the green "grid" ramp signals healthy grid
-                state, matching the web application so the two clients look
-                like one product.
+  Description : The application colour palette, shared with the web console so
+                the two clients read as one product.
+
+                One accent: amber, always with dark ink on top of it (white on
+                amber fails contrast). Grid green and red are reserved for
+                state. Neutrals are zinc. The solar_* and slate_* names are kept
+                so existing layouts and adapters keep resolving.
   Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
   Created     : 2026-09-04
   =============================================================================
 -->
 <resources>
 
-    <!-- Brand: solar amber -->
+    <!-- Accent: the single brand colour and the ink that sits on it -->
+    <color name="accent">#FBBF24</color>
+    <color name="accent_pressed">#F59E0B</color>
+    <color name="accent_ink">#18181B</color>
+
+    <!-- Amber ramp: tints, borders and text on tinted notices -->
     <color name="solar_50">#FFFBEB</color>
     <color name="solar_100">#FEF3C7</color>
     <color name="solar_200">#FDE68A</color>
@@ -24,7 +32,7 @@
     <color name="solar_700">#B45309</color>
     <color name="solar_800">#92400E</color>
 
-    <!-- Secondary: grid green -->
+    <!-- State: grid green -->
     <color name="grid_50">#ECFDF5</color>
     <color name="grid_100">#D1FAE5</color>
     <color name="grid_500">#10B981</color>
@@ -32,17 +40,17 @@
     <color name="grid_700">#047857</color>
     <color name="grid_800">#065F46</color>
 
-    <!-- Neutrals -->
-    <color name="slate_50">#F8FAFC</color>
-    <color name="slate_100">#F1F5F9</color>
-    <color name="slate_200">#E2E8F0</color>
-    <color name="slate_300">#CBD5E1</color>
-    <color name="slate_400">#94A3B8</color>
-    <color name="slate_500">#64748B</color>
-    <color name="slate_600">#475569</color>
-    <color name="slate_700">#334155</color>
-    <color name="slate_800">#1E293B</color>
-    <color name="slate_900">#0F172A</color>
+    <!-- Neutrals (zinc). 500 and darker pass 4.5:1 on white. -->
+    <color name="slate_50">#FAFAFA</color>
+    <color name="slate_100">#F4F4F5</color>
+    <color name="slate_200">#E4E4E7</color>
+    <color name="slate_300">#D4D4D8</color>
+    <color name="slate_400">#A1A1AA</color>
+    <color name="slate_500">#71717A</color>
+    <color name="slate_600">#52525B</color>
+    <color name="slate_700">#3F3F46</color>
+    <color name="slate_800">#27272A</color>
+    <color name="slate_900">#18181B</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
@@ -55,28 +63,33 @@
     <color name="status_approved_text">#1E40AF</color>
     <color name="status_completed_bg">#D1FAE5</color>
     <color name="status_completed_text">#065F46</color>
-    <color name="status_cancelled_bg">#E2E8F0</color>
-    <color name="status_cancelled_text">#334155</color>
+    <color name="status_cancelled_bg">#F4F4F5</color>
+    <color name="status_cancelled_text">#3F3F46</color>
     <color name="status_rejected_bg">#FEE2E2</color>
     <color name="status_rejected_text">#991B1B</color>
 
     <!-- Feedback -->
-    <color name="error_red">#DC2626</color>
-    <color name="error_red_bg">#FEE2E2</color>
-    <color name="warning_amber">#D97706</color>
-    <color name="warning_amber_bg">#FEF3C7</color>
-    <color name="success_green">#059669</color>
-    <color name="info_blue">#2563EB</color>
-    <color name="info_blue_bg">#DBEAFE</color>
+    <color name="error_red">#B91C1C</color>
+    <color name="error_red_bg">#FEF2F2</color>
+    <color name="error_red_stroke">#FCA5A5</color>
+    <color name="warning_amber">#B45309</color>
+    <color name="warning_amber_bg">#FFFBEB</color>
+    <color name="warning_amber_stroke">#FCD34D</color>
+    <color name="success_green">#047857</color>
+    <color name="success_green_bg">#ECFDF5</color>
+    <color name="success_green_stroke">#6EE7B7</color>
+    <color name="info_blue">#1D4ED8</color>
+    <color name="info_blue_bg">#EFF6FF</color>
+    <color name="info_blue_stroke">#93C5FD</color>
 
     <!-- Semantic aliases used throughout the layouts -->
-    <color name="colorPrimary">@color/solar_500</color>
+    <color name="colorPrimary">@color/slate_900</color>
     <color name="colorPrimaryDark">@color/solar_700</color>
-    <color name="colorAccent">@color/grid_500</color>
+    <color name="colorAccent">@color/grid_600</color>
     <color name="screen_background">@color/slate_50</color>
     <color name="surface">@color/white</color>
-    <color name="text_primary">@color/slate_800</color>
-    <color name="text_secondary">@color/slate_500</color>
+    <color name="text_primary">@color/slate_900</color>
+    <color name="text_secondary">@color/slate_600</color>
     <color name="divider">@color/slate_200</color>
 
 </resources>

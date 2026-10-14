@@ -2,16 +2,10 @@
  * File        : DataSeeder.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Data
- * Description : Writes the demonstration data set described in section 10 of the
- *               master contract: the four fixed staff logins, six solar prosumers
- *               (one Pending and one Deactivated so the activation and the
- *               reactivation screens both have a subject), six microgrid nodes
- *               with real Sri Lankan coordinates, three weeks of booking slots
- *               and roughly twenty five reservations spread over every status.
- *               The seeder runs on EVERY start-up, so each collection is written
- *               only when it is empty - see SeedAsync for the idempotence rule.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Creates the demonstration accounts, stations, slots and
+ *               bookings.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-19
  * =============================================================================
  */
 

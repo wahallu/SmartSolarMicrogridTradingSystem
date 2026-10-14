@@ -1,14 +1,9 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/UsersPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Back office web user management - the create, edit, activate,
- *               deactivate, reset password and delete screen for Backoffice and
- *               Grid Operator accounts. This serves the "EV Owner / web user
- *               management" marking criterion. Rule R10 (only Backoffice may
- *               touch these records) and the self delete guard live in the C#
- *               API; this screen only calls the endpoints and shows the verdict.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Module      : Pages / Users
+ * Description : Supports Backoffice management of staff accounts.
+ * Author      : IT22049872 - Chathushka
  * Created     : 2026-09-04
  * =============================================================================
  */
@@ -438,7 +433,7 @@ export default function UsersPage() {
       {/* ---- Page header ---- */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Web users</h1>
+          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Web users</h1>
           <p className="mt-1 text-sm text-slate-500">
             Back office officers and grid operators who sign in to the console.
           </p>
@@ -577,7 +572,7 @@ export default function UsersPage() {
                           <td className="whitespace-nowrap font-semibold text-slate-900">
                             {account.username}
                             {isSelf && (
-                              <span className="ml-2 text-xs font-medium text-slate-400">(you)</span>
+                              <span className="ml-2 text-xs font-medium text-slate-500">(you)</span>
                             )}
                           </td>
                           <td className="whitespace-nowrap">{account.fullName}</td>
@@ -650,7 +645,7 @@ export default function UsersPage() {
                                   CANNOT_DELETE_SELF and that message is shown. */}
                               <button
                                 type="button"
-                                className="btn-danger btn-sm"
+                                className="btn-danger-quiet btn-sm"
                                 onClick={() => setDeleteTarget(account)}
                                 disabled={busy}
                               >

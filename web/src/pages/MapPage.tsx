@@ -1,23 +1,11 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/MapPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Plots every microgrid node on a map so staff can see the network
- *               geographically and jump from a node straight to its bookings.
- *
- *               The web client draws the map with Leaflet over OpenStreetMap
- *               tiles, which need no API key and no billing account, so the map
- *               works on any marker's machine straight after "npm run dev". The
- *               Android client uses Google Maps, which is where the assignment
- *               asks for it.
- *
- *               Nothing geographic is computed here: when the browser grants a
- *               position the list comes from GET /stations/nearby and the
- *               distanceKm on every row is the Haversine figure calculated by
- *               StationService in the C# API. That is the fat-service rule - the
- *               browser only renders the numbers it is handed.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Map
+ * Description : Plots microgrid stations and nearby results on an interactive
+ *               map.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-13
  * =============================================================================
  */
 
@@ -278,7 +266,7 @@ export default function MapPage() {
       {/* ---- Page header ---- */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Microgrid node map</h1>
+          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Microgrid node map</h1>
           <p className="mt-1 text-sm text-slate-500">
             Every solar node plotted on OpenStreetMap. Share your location to have the API list the
             nodes nearest to you first.
@@ -461,7 +449,7 @@ export default function MapPage() {
                     >
                       <Popup>
                         <div className="min-w-[200px] space-y-1">
-                          <p className="font-mono text-xs font-semibold text-slate-500">
+                          <p className="font-mono text-xs font-medium text-slate-600">
                             {station.stationCode}
                           </p>
                           <p className="text-sm font-semibold text-slate-900">{station.name}</p>

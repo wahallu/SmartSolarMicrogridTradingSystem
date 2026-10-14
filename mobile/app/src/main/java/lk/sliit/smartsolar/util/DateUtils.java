@@ -1,15 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : DateUtils.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : util
- * Description : Parsing and formatting for the ISO-8601 UTC timestamps the Web
- *               API exchanges. These helpers are strictly presentational - they
- *               turn a server instant into something readable on a phone. No
- *               business rule is evaluated here; the 7 day window and the 12
- *               hour notice period are decided by the API and arrive as flags.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Util / Date Utils
+ * Description : Formats API dates and times for the Android screens.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-18
  * =============================================================================
  */
 

@@ -1,15 +1,11 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/components/ui.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The shared presentation primitives every screen is built from -
- *               spinners, loading / error / empty states, stat cards, status
- *               badges, a modal and confirm dialog, a toast system, pagination
- *               and a search box. Keeping them in one place is what makes the
- *               back office and operator screens look like one product, which
- *               the UI consistency and usability marks ask for.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Components / ui
+ * Description : Provides the reusable buttons, cards, fields and feedback
+ *               components.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-20
  * =============================================================================
  */
 
@@ -39,14 +35,14 @@ const SPINNER_SIZES: Record<'sm' | 'md' | 'lg', string> = {
   lg: 'h-10 w-10 border-[3px]',
 };
 
-/** A spinning ring in the solar brand colour. */
+/** A spinning ring that takes the colour of the text around it. */
 export function Spinner({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   // Purely decorative markup, so the accessible name lives on the role="status" wrapper.
   return (
     <span
       role="status"
       aria-label="Loading"
-      className={`inline-block animate-spin rounded-full border-solar-200 border-t-solar-500 ${SPINNER_SIZES[size]}`}
+      className={`inline-block animate-spin rounded-full border-current border-r-transparent ${SPINNER_SIZES[size]}`}
     />
   );
 }
@@ -57,11 +53,28 @@ export function Spinner({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
 
 /** Full panel loading state used while a screen's first request is in flight. */
 export function PageLoader() {
-  // Reserves vertical space so the layout does not jump when the data lands.
+  // Reserves the same vertical space the loaded screen will use so nothing jumps.
   return (
-    <div className="flex min-h-[300px] flex-col items-center justify-center gap-3">
-      <Spinner size="lg" />
-      <p className="text-sm font-medium text-slate-500">Loading...</p>
+    <div className="space-y-6" role="status" aria-label="Loading" aria-live="polite">
+      <div className="space-y-2">
+        <div className="skeleton h-7 w-56" />
+        <div className="skeleton h-4 w-80 max-w-full" />
+      </div>
+      <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-slate-200 bg-slate-200 lg:grid-cols-4">
+        {[0, 1, 2, 3].map((index) => (
+          <div key={index} className="space-y-3 bg-white p-5">
+            <div className="skeleton h-4 w-24" />
+            <div className="skeleton h-8 w-16" />
+          </div>
+        ))}
+      </div>
+      <div className="card">
+        <div className="space-y-3 p-5">
+          {[0, 1, 2, 3, 4].map((index) => (
+            <div key={index} className="skeleton h-9 w-full" />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -75,10 +88,10 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
   // The message is passed straight through: when it came from an ApiError it is
   // the API's own wording, and the API owns every business rule.
   return (
-    <div className="card border-red-200 bg-red-50">
+    <div className="card border-red-300 bg-red-50" role="alert">
       <div className="card-body flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-        <AlertCircle className="h-5 w-5 shrink-0 text-red-600" aria-hidden="true" />
-        <p className="flex-1 text-sm font-medium text-red-800">{message}</p>
+        <AlertCircle className="h-5 w-5 shrink-0 text-red-700" aria-hidden="true" />
+        <p className="flex-1 text-sm font-medium text-red-900">{message}</p>
         {onRetry && (
           <button type="button" className="btn-secondary btn-sm" onClick={onRetry}>
             <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
@@ -90,11 +103,9 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* Empty state                                                                 */
-/* -------------------------------------------------------------------------- */
 
-/** Friendly placeholder shown when a list came back with no records. */
+
+/** the message displayed when a list is empty. */
 export function EmptyState({
   icon: Icon,
   title,
@@ -109,11 +120,11 @@ export function EmptyState({
   // An empty list is a normal outcome, so this never looks like an error.
   return (
     <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
-      <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100">
-        <Icon className="h-7 w-7 text-slate-400" aria-hidden="true" />
+      <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-slate-50">
+        <Icon className="h-5 w-5 text-slate-500" aria-hidden="true" />
       </div>
-      <h3 className="text-base font-semibold text-slate-800">{title}</h3>
-      <p className="mt-1 max-w-sm text-sm text-slate-500">{message}</p>
+      <h3 className="text-base font-semibold text-slate-900">{title}</h3>
+      <p className="mt-1 max-w-sm text-sm text-slate-600">{message}</p>
       {action && <div className="mt-5">{action}</div>}
     </div>
   );
@@ -126,14 +137,15 @@ export function EmptyState({
 /**
  * Tone is resolved through an explicit map rather than by building a class name
  * from a template literal, because Tailwind only ships classes it can find as
- * complete strings in the source.
+ * complete strings in the source. Tone colours only the icon: the figure itself
+ * stays ink so a row of stats reads as one instrument strip.
  */
 const STAT_TONES: Record<'solar' | 'grid' | 'blue' | 'slate' | 'red', string> = {
-  solar: 'bg-solar-100 text-solar-700',
-  grid: 'bg-grid-100 text-grid-700',
-  blue: 'bg-blue-100 text-blue-700',
-  slate: 'bg-slate-100 text-slate-600',
-  red: 'bg-red-100 text-red-700',
+  solar: 'text-solar-600',
+  grid: 'text-grid-600',
+  blue: 'text-blue-600',
+  slate: 'text-slate-500',
+  red: 'text-red-600',
 };
 
 /** A single dashboard figure with its label and icon. */
@@ -151,20 +163,34 @@ export function StatCard({
   hint?: string;
 }) {
   // Every figure shown here is calculated by the API; the card only renders it.
+  // Rendered as a cell so a StatGroup can lay several of them out in one frame.
   return (
-    <div className="card">
-      <div className="card-body flex items-start gap-4">
-        <div
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${STAT_TONES[tone]}`}
-        >
-          <Icon className="h-5 w-5" aria-hidden="true" />
-        </div>
-        <div className="min-w-0">
-          <p className="truncate text-2xl font-bold leading-tight text-slate-900">{value}</p>
-          <p className="mt-0.5 text-sm font-medium text-slate-500">{label}</p>
-          {hint && <p className="mt-1 text-xs text-slate-400">{hint}</p>}
-        </div>
+    <div className="bg-white px-5 py-4">
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-sm font-medium leading-snug text-slate-600">{label}</p>
+        <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${STAT_TONES[tone]}`} aria-hidden="true" />
       </div>
+      <p className="mt-2 text-2xl font-semibold tabular-nums leading-none tracking-tight text-slate-900 sm:text-3xl">
+        {value}
+      </p>
+      {hint && <p className="mt-2 text-xs text-slate-600">{hint}</p>}
+    </div>
+  );
+}
+
+/**
+ * Frames several StatCards in one bordered strip. The 1px gaps show the frame's
+ * background, which draws the dividers without a border on every cell.
+ */
+export function StatGroup({ children, columns = 4 }: { children: ReactNode; columns?: 3 | 4 }) {
+  // Two columns on phones, the full count from the lg breakpoint up.
+  return (
+    <div
+      className={`grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-slate-200 bg-slate-200 ${
+        columns === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'
+      }`}
+    >
+      {children}
     </div>
   );
 }
@@ -236,7 +262,7 @@ export function Modal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-black/40"
+        className="absolute inset-0 bg-slate-950/60"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -244,7 +270,7 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className={`relative z-10 w-full ${MODAL_SIZES[size]} animate-fade-in rounded-xl bg-white shadow-card-hover`}
+        className={`relative z-10 w-full ${MODAL_SIZES[size]} animate-fade-in rounded-xl border border-slate-200 bg-white shadow-card-hover`}
       >
         <div className="card-header">
           <h2 className="text-base font-semibold text-slate-900">{title}</h2>
@@ -353,9 +379,9 @@ const TOAST_ICONS: Record<ToastKind, LucideIcon> = {
 
 /** Colours per toast kind, written out in full for Tailwind's scanner. */
 const TOAST_TONES: Record<ToastKind, string> = {
-  success: 'border-grid-200 bg-grid-50 text-grid-800',
-  error: 'border-red-200 bg-red-50 text-red-800',
-  info: 'border-blue-200 bg-blue-50 text-blue-800',
+  success: 'border-grid-300 bg-grid-50 text-grid-900',
+  error: 'border-red-300 bg-red-50 text-red-900',
+  info: 'border-blue-300 bg-blue-50 text-blue-900',
 };
 
 /** How long a toast stays on screen, in milliseconds. */
@@ -495,7 +521,7 @@ export function SearchInput({
   return (
     <div className="relative">
       <Search
-        className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+        className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
         aria-hidden="true"
       />
       <input
@@ -508,7 +534,7 @@ export function SearchInput({
       {value.length > 0 && (
         <button
           type="button"
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-slate-400 transition-colors hover:text-slate-700"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-slate-500 transition-colors hover:text-slate-900"
           onClick={() => onChange('')}
           aria-label="Clear search"
         >

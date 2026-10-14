@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Adaptive launcher foreground: a white sun over the amber background layer.
+<!-- Adaptive launcher foreground: an ink sun over the amber background layer.
      Using a vector avoids shipping five sets of PNG density buckets. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
     <group android:scaleX="2.2" android:scaleY="2.2" android:translateX="27" android:translateY="27">
-        <path android:fillColor="#FFFFFF"
+        <path android:fillColor="#18181B"
             android:pathData="M12,7c-2.76,0 -5,2.24 -5,5s2.24,5 5,5 5,-2.24 5,-5 -2.24,-5 -5,-5z" />
-        <path android:strokeColor="#FFFFFF" android:strokeWidth="1.8" android:strokeLineCap="round"
+        <path android:strokeColor="#18181B" android:strokeWidth="1.8" android:strokeLineCap="round"
             android:pathData="M12,1.6v2.6M12,19.8v2.6M1.6,12h2.6M19.8,12h2.6M4.6,4.6l1.9,1.9M17.5,17.5l1.9,1.9M19.4,4.6l-1.9,1.9M6.5,17.5l-1.9,1.9" />
     </group>
 </vector>

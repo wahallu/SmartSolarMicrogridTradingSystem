@@ -1,20 +1,10 @@
 /* =============================================================================
  * File        : ProsumersController.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Controllers / Prosumers
- * Description : HTTP surface for solar prosumer management, keyed by the National
- *               Identity Card number rather than by a Mongo identifier: listing,
- *               the pending activation queue, profile read and edit, the account
- *               life cycle (activate / deactivate / self service deactivation
- *               request raised from the Android app) and hard delete. The
- *               controller is deliberately THIN - it binds a DTO, calls exactly
- *               one IProsumerService method and maps the returned ServiceResult
- *               onto a status code. Rules R5, R10 and R11 are declared here only
- *               as coarse role gates and are truly enforced inside the FAT
- *               service, so neither the React client nor the Android client can
- *               bypass them.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Controllers / Prosumers Controller
+ * Description : Exposes the back-office and self-service prosumer endpoints.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-05
  * =============================================================================
  */
 

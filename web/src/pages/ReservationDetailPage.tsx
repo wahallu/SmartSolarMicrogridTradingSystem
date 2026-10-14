@@ -1,16 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/ReservationDetailPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The full record of one energy reservation, reached at
- *               /reservations/:id. It shows the booking, the prosumer, an audit
- *               trail and the approved QR code, and hosts the approve, reject,
- *               edit and cancel actions. Every action button is enabled purely
- *               from a server verdict (status, canModify, canCancel), which is
- *               how the marking scheme's "web app holds no business logic"
- *               requirement is satisfied.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Reservation Detail
+ * Description : Shows one reservation with its history, QR code and actions.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-17
  * =============================================================================
  */
 
@@ -65,7 +59,7 @@ function DetailRow({ label, value }: { label: string; value: ReactNode }) {
   // Stacks on a phone and becomes two columns from the sm breakpoint upwards.
   return (
     <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-4">
-      <dt className="w-44 shrink-0 text-xs font-semibold uppercase tracking-wide text-slate-400">
+      <dt className="w-44 shrink-0 text-xs font-semibold text-slate-500">
         {label}
       </dt>
       <dd className="min-w-0 break-words text-sm font-medium text-slate-800">{value}</dd>
@@ -420,7 +414,7 @@ export default function ReservationDetailPage() {
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
               {reservation.reservationNo}
             </h1>
             <Badge status={reservation.status} kind="reservation" />

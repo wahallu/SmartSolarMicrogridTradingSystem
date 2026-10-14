@@ -2,16 +2,9 @@
  * File        : ReservationDtos.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : DTOs / Reservations
- * Description : Contracts for the reservation workflow: create, update, cancel,
- *               approve, QR issue, QR verification and completion, plus the
- *               dashboard counters read live by both clients.
- *
- *               Note CanModify / CanCancel on ReservationDto. The 12 hour rule
- *               is evaluated on the server and the answer is shipped to the
- *               clients as a boolean, so no client ever re-implements the rule -
- *               it only enables or disables a button.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Contains the API models used by reservation and QR operations.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-15
  * =============================================================================
  */
 
@@ -162,7 +155,7 @@ public class DashboardDto
     public long ActiveStations { get; set; }
     public long TotalStations { get; set; }
 
-    /// <summary>Prosumers awaiting activation - staff only, zero for a prosumer caller.</summary>
+    /// <summary>his count is visible only to staff; a prosumer caller always.</summary>
     public long PendingProsumerActivations { get; set; }
 
     public long TotalProsumers { get; set; }

@@ -1,25 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : ScannerActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : The grid operator's QR scanning screen, and the first half of
- *               the "read QR code and update the job as done" requirement.
- *
- *               The camera decodes the prosumer's booking QR code and the raw
- *               text is posted straight to POST /reservations/verify-qr. The
- *               phone makes NO judgement about whether the code is valid: the
- *               server owns rule R9 (token exists, booking is Approved, and the
- *               scan falls inside the allowed window) and this screen simply
- *               reports whichever answer comes back.
- *
- *               An "enter code manually" path exists because an emulator has no
- *               usable camera; the typed token travels through exactly the same
- *               verification call, so nothing about the flow is simulated.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
- * References  : CaptureManager wiring follows the ZXing Android Embedded guide at
- *               https://github.com/journeyapps/zxing-android-embedded
+ * Module      : Activities / Scanner
+ * Description : Scans or accepts a booking token for server verification.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-25
  * =============================================================================
  */
 
@@ -127,10 +112,7 @@ public class ScannerActivity extends BaseActivity {
             /** Reports the corner points ZXing is currently tracking in the frame. */
             @Override
             public void possibleResultPoints(List<ResultPoint> resultPoints) {
-                // Intentionally empty: the library's own viewfinder already draws these
-                // points, and this screen adds no overlay of its own that must follow them.
-                // The method is implemented explicitly so the callback satisfies every
-                // version of the BarcodeCallback interface.
+                
             }
         });
     }

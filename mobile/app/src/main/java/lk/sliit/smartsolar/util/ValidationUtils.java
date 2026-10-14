@@ -1,18 +1,9 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : ValidationUtils.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : util
- * Description : Field level input checks used by the registration, profile and
- *               booking forms.
- *
- *               SCOPE: these checks exist only to give the user immediate
- *               feedback while typing. They are NOT the system's validation -
- *               the Web API re-validates everything and is the only authority.
- *               Nothing here duplicates a business rule; the 7 day window, the
- *               12 hour notice period and slot availability are all decided by
- *               the server.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
+ * Module      : Util / Validation Utils
+ * Description : Validates account and profile form input before submission.
+ * Author      : IT22049872 - Chathushka
  * Created     : 2026-09-04
  * =============================================================================
  */

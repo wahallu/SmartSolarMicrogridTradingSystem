@@ -1,15 +1,10 @@
 /* =============================================================================
  * File        : EnergyReservation.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Models  (MongoDB collection: "EnergyReservation")
- * Description : A power trading reservation placed by a solar prosumer against a
- *               booking slot. This document is the subject of the two headline
- *               business rules - it must start within 7 days, and it may only be
- *               updated or cancelled while at least 12 hours of notice remain.
- *               Once approved it carries the QR token a grid operator scans in
- *               the field to finalise the energy transfer.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Models
+ * Description : Represents a prosumer booking and its transfer history.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-17
  * =============================================================================
  */
 
@@ -74,7 +69,7 @@ public class EnergyReservation
     [BsonRepresentation(BsonType.String)]
     public SlotType SlotType { get; set; } = SlotType.Charging;
 
-    /// <summary>Energy the prosumer asked to trade, in kWh.</summary>
+    /// <summary></summary>
     [BsonElement("energyKwh")]
     public double EnergyKwh { get; set; }
 

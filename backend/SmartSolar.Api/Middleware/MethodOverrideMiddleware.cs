@@ -2,22 +2,9 @@
  * File        : MethodOverrideMiddleware.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Middleware
- * Description : Translates a POST carrying an X-HTTP-Method-Override header back
- *               into the verb it names, before routing runs.
- *
- *               WHY THIS EXISTS: the Android client sends PATCH for the approve,
- *               reject, cancel, activate and deactivate operations. Android's
- *               HttpURLConnection normally accepts PATCH, but a small number of
- *               older or vendor modified implementations reject it with a
- *               ProtocolException. The client falls back to POST plus this header
- *               in that case, and this middleware makes the fallback transparent
- *               to the controllers - they still only ever see [HttpPatch].
- *
- *               Only PATCH, PUT and DELETE are honoured, and only on a POST, so
- *               the header cannot be used to reach an endpoint that would
- *               otherwise be unreachable.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Supports clients that send an HTTP method override header.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-20
  * =============================================================================
  */
 

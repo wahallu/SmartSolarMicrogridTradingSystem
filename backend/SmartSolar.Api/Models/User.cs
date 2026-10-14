@@ -1,14 +1,10 @@
 /* =============================================================================
  * File        : User.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Models  (MongoDB collection: "Users")
- * Description : A single Users collection stores every principal in the system:
- *               Backoffice officers, Grid Operators and Solar Prosumers. Using
- *               one collection keeps authentication uniform, while the Nic
- *               field carries the National Identity Card number that the
- *               specification names as the primary key for prosumers.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Models
+ * Description : Represents staff and prosumer account data stored in MongoDB.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-05
  * =============================================================================
  */
 

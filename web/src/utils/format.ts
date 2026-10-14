@@ -1,16 +1,10 @@
-/**
- * =============================================================================
- * File        : utils/format.ts
+/* =============================================================================
+ * File        : src/utils/format.ts
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Presentation helpers shared by every screen: date formatting for
- *               the API's UTC timestamps, badge class lookups and small label
- *               builders.
- *
- *               These are display concerns only. No business rule is evaluated
- *               here - the 12 hour notice rule arrives from the server as the
- *               canModify / canCancel booleans and is simply obeyed.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Utils / format
+ * Description : Formats dates, energy values and labels for display.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-25
  * =============================================================================
  */
 

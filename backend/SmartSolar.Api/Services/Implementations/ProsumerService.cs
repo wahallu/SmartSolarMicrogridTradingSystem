@@ -2,16 +2,9 @@
  * File        : ProsumerService.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Implementations
- * Description : Fat service for solar prosumer accounts. Prosumers are addressed
- *               by their National Identity Card number rather than by a Mongo id,
- *               so every lookup here goes through one anchored, case insensitive
- *               NIC filter. The file also owns the account life cycle rules the
- *               back office depends on: R5 (only a Backoffice officer may return
- *               an account to Active), R7 (NIC is unique), R10 (only Backoffice
- *               may create, activate, deactivate or delete) and R11 (a prosumer
- *               may only read or edit their own profile).
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Implements prosumer lookup, profile and account-state changes.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-06
  * =============================================================================
  */
 

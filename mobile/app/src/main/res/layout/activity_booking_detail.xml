@@ -33,7 +33,7 @@
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
-    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <!-- The flat application bar, wired up by BaseActivity.setupToolbar. -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_booking_detail"
         style="@style/Widget.SmartSolar.Toolbar"
@@ -197,7 +197,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/space_md"
-                            android:text="Time window" />
+                            android:text="@string/label_time_window" />
 
                         <TextView
                             android:id="@+id/text_detail_time"
@@ -212,7 +212,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/space_md"
-                            android:text="Transfer type" />
+                            android:text="@string/label_transfer_type" />
 
                         <TextView
                             android:id="@+id/text_detail_type"
@@ -288,7 +288,7 @@
                             style="@style/TextAppearance.SmartSolar.SectionTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Booking QR code" />
+                            android:text="@string/label_booking_qr" />
 
                         <!-- Spinner shown while GET /reservations/{id}/qr is in flight. -->
                         <ProgressBar
@@ -386,7 +386,7 @@
                     android:text="@string/action_edit_booking"
                     android:visibility="gone"
                     app:icon="@drawable/ic_edit"
-                    app:iconTint="@color/white"
+                    app:iconTint="@color/accent_ink"
                     tools:visibility="visible" />
 
                 <com.google.android.material.button.MaterialButton
@@ -423,7 +423,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/space_sm"
                         android:layout_weight="1"
-                        android:text="Approve"
+                        android:text="@string/action_approve"
                         app:icon="@drawable/ic_check_circle"
                         app:iconTint="@color/white" />
 
@@ -433,7 +433,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Reject"
+                        android:text="@string/action_reject"
                         app:icon="@drawable/ic_close"
                         app:iconTint="@color/white" />
                 </LinearLayout>
@@ -462,7 +462,7 @@
                             style="@style/TextAppearance.SmartSolar.SectionTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Audit trail" />
+                            android:text="@string/label_audit_trail" />
 
                         <TextView
                             android:id="@+id/text_detail_approved"

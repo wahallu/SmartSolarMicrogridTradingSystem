@@ -1,14 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : Constants.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : util
- * Description : Every literal shared across the application: API paths, intent
- *               extra keys, role and status names and the error codes returned
- *               by the central Web API. Keeping them here means a typo is a
- *               compile error rather than a silent runtime mismatch.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Util / Constants
+ * Description : Keeps shared route, role, status and intent-extra names.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-24
  * =============================================================================
  */
 

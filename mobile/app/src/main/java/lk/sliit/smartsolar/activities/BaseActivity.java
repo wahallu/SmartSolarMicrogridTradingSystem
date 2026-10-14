@@ -1,23 +1,18 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : BaseActivity.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : activities
- * Description : Common behaviour every screen inherits: the shared ApiClient,
- *               the SQLite session and cache, toolbar wiring, toast helpers and
- *               a single place that handles an expired session.
- *
- *               Centralising this means an individual Activity contains only the
- *               logic for its own screen, and a cross cutting change (for example
- *               how a 401 is handled) is made once.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Activities / Base
+ * Description : Shares API, session, toolbar and error handling across
+ *               screens.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-19
  * =============================================================================
  */
 
 package lk.sliit.smartsolar.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -82,6 +78,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         if (showBack) {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+            // The bar is white, so the arrow is tinted ink. mutate() keeps the tint off the
+            // shared drawable state that every other screen's back arrow draws from.
+            Drawable arrow = toolbar.getNavigationIcon();
+            if (arrow != null) {
+                arrow = arrow.mutate();
+                arrow.setTint(ContextCompat.getColor(this, R.color.slate_900));
+                toolbar.setNavigationIcon(arrow);
+            }
             toolbar.setNavigationOnClickListener(v -> finish());
         }
     }

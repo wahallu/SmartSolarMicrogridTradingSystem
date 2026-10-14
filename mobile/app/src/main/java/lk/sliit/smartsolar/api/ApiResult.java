@@ -1,14 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : ApiResult.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : api
- * Description : The parsed form of the JSON envelope that every Web API endpoint
- *               returns. Because the server always answers with the same shape
- *               ({success, message, data, errorCode, errors}), the whole app
- *               needs exactly one result type and one error handling path.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Api / Api Result
+ * Description : Carries either parsed API data or a request error.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-24
  * =============================================================================
  */
 

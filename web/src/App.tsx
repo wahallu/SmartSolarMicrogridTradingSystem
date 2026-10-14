@@ -1,19 +1,11 @@
-/**
- * =============================================================================
- * File        : App.tsx
+/* =============================================================================
+ * File        : src/App.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Route table for the whole application. The public home page and
- *               the login page sit outside the shell; every other route is
- *               wrapped in ProtectedRoute, which redirects an unauthenticated
- *               visitor to the login page and refuses a role that is not
- *               permitted.
- *
- *               The role lists here mirror the [Authorize] attributes on the C#
- *               controllers. They keep the UI honest, but the API is the real
- *               enforcement point - a request from the wrong role is rejected
- *               server side regardless of what the browser does.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Application Shell
+ * Description : Defines the public pages and role-protected application
+ *               routes.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-24
  * =============================================================================
  */
 

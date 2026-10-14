@@ -2,11 +2,9 @@
  * File        : PagedResult.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Common
- * Description : Page of results plus the counters both clients need to render a
- *               pager. Paging is done in MongoDB with Skip/Limit so a large
- *               reservation history never has to travel to a phone in one lump.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Packages a page of records with its paging information.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-22
  * =============================================================================
  */
 

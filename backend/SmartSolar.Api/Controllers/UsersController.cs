@@ -1,18 +1,11 @@
 /* =============================================================================
  * File        : UsersController.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Controllers / Users
- * Description : HTTP surface for back office administration of the web user
- *               accounts (Backoffice officers and Grid Operators): listing,
- *               reading, creating, editing, activating, deactivating, password
- *               reset and hard delete. The controller is deliberately THIN - it
- *               binds a DTO, calls exactly one IUserService method and maps the
- *               returned ServiceResult onto a status code. Rule R10 (only a
- *               Backoffice officer may create or modify web users and toggle
- *               account state) is declared here as a role gate and re-enforced
- *               inside the FAT service, so no client can bypass it.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Controllers / Users Controller
+ * Description : Handles administration of Backoffice and Grid Operator
+ *               accounts.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-03
  * =============================================================================
  */
 

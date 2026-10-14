@@ -2,17 +2,9 @@
  * File        : SlotService.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Implementations
- * Description : Everything that may be done to an energy booking slot lives here:
- *               the paged slot browser, the "what can I book right now" list that
- *               rule R8 defines, single slot publication, the bulk generator that
- *               lays out a whole date range for a node in one call, and the edit /
- *               block / delete life cycle. Rule R8 (a slot is bookable only while
- *               it is Available, still has free capacity, starts in the future and
- *               belongs to an Active node) and the guard that refuses to move a
- *               slot that already carries bookings are enforced here and nowhere
- *               else - the FAT service keeps the web and Android clients pure UI.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Implements slot searches, generation and maintenance rules.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-12
  * =============================================================================
  */
 
@@ -277,6 +269,13 @@ public class SlotService : ISlotService
             return ServiceResult<SlotDto>.NotFound("Microgrid node not found.");
         }
 
+        if (!CanManageSlotsAt(caller, request.StationId))
+        {
+            return ServiceResult<SlotDto>.Forbidden(
+                "A Grid Operator may only publish slots at their assigned microgrid node.",
+                ErrorCodes.Forbidden);
+        }
+
         try
         {
             var station = await _db.Stations
@@ -405,6 +404,13 @@ public class SlotService : ISlotService
             return ServiceResult<GenerateSlotsResultDto>.NotFound("Microgrid node not found.");
         }
 
+        if (!CanManageSlotsAt(caller, request.StationId))
+        {
+            return ServiceResult<GenerateSlotsResultDto>.Forbidden(
+                "A Grid Operator may only generate slots at their assigned microgrid node.",
+                ErrorCodes.Forbidden);
+        }
+
         try
         {
             var station = await _db.Stations
@@ -422,6 +428,15 @@ public class SlotService : ISlotService
                 return ServiceResult<GenerateSlotsResultDto>.Invalid(
                     "This microgrid node is not in service, so no booking slots can be generated for it.",
                     ErrorCodes.StationInactive);
+            }
+
+            // One generated row is published per requested battery bay. Refuse a request that
+            // names bays the node does not physically own rather than storing impossible slot data.
+            if (request.BatterySlots > station.TotalBatterySlots)
+            {
+                return ServiceResult<GenerateSlotsResultDto>.Invalid(
+                    $"Cannot generate {request.BatterySlots} battery slot(s) per window because this node " +
+                    $"has only {station.TotalBatterySlots} battery slot(s).");
             }
 
             var fromDate = request.FromDate.Date;
@@ -614,6 +629,30 @@ public class SlotService : ISlotService
                 return ServiceResult<SlotDto>.NotFound("Booking slot not found.");
             }
 
+            if (!CanManageSlotsAt(caller, existing.StationId))
+            {
+                return ServiceResult<SlotDto>.Forbidden(
+                    "A Grid Operator may only edit slots at their assigned microgrid node.",
+                    ErrorCodes.Forbidden);
+            }
+
+            var station = await _db.Stations
+                .Find(Builders<SolarStationInfo>.Filter.Eq(s => s.Id, existing.StationId))
+                .FirstOrDefaultAsync(ct);
+
+            if (station is null)
+            {
+                return ServiceResult<SlotDto>.NotFound("The slot's microgrid node no longer exists.");
+            }
+
+            // Editing must enforce the same physical bay limit as publishing a new slot.
+            if (request.BatterySlotNumber > station.TotalBatterySlots)
+            {
+                return ServiceResult<SlotDto>.Invalid(
+                    $"Battery slot number {request.BatterySlotNumber} does not exist at this node, " +
+                    $"which has {station.TotalBatterySlots} battery slot(s).");
+            }
+
             // Moving a slot that prosumers have already booked would silently change the instant they
             // agreed to, so the time window and the battery bay are frozen once a booking exists.
             var movesTheSlot =
@@ -739,6 +778,19 @@ public class SlotService : ISlotService
             // already exist on the slot - those prosumers keep their agreement and must be cancelled
             // explicitly through the reservation workflow, which applies the 12 hour notice rule R3.
             var idFilter = Builders<EnergyBookingSlot>.Filter.Eq(s => s.Id, id);
+            var existing = await _db.Slots.Find(idFilter).FirstOrDefaultAsync(ct);
+            if (existing is null)
+            {
+                return ServiceResult<SlotDto>.NotFound("Booking slot not found.");
+            }
+
+            if (!CanManageSlotsAt(caller, existing.StationId))
+            {
+                return ServiceResult<SlotDto>.Forbidden(
+                    "A Grid Operator may only block slots at their assigned microgrid node.",
+                    ErrorCodes.Forbidden);
+            }
+
             var update = Builders<EnergyBookingSlot>.Update
                 .Set(s => s.Status, SlotStatus.Blocked)
                 .Set(s => s.UpdatedAt, _clock.UtcNow)
@@ -800,6 +852,13 @@ public class SlotService : ISlotService
                 return ServiceResult<bool>.NotFound("Booking slot not found.");
             }
 
+            if (!CanManageSlotsAt(caller, existing.StationId))
+            {
+                return ServiceResult<bool>.Forbidden(
+                    "A Grid Operator may only delete slots at their assigned microgrid node.",
+                    ErrorCodes.Forbidden);
+            }
+
             // Deleting a booked slot would orphan the reservations that point at it, so the slot is
             // kept and the operator is told to block it instead.
             if (existing.BookedCount > 0)
@@ -832,6 +891,18 @@ public class SlotService : ISlotService
     // =========================================================================
     // Private helpers
     // =========================================================================
+
+    /// <summary>Checks whether a staff caller may mutate slots at one microgrid node.</summary>
+    /// <param name="caller">Authenticated staff caller.</param>
+    /// <param name="stationId">Node that owns the slot or generation request.</param>
+    /// <returns>True for Backoffice, or for a Grid Operator assigned to this exact node.</returns>
+    private static bool CanManageSlotsAt(CurrentUser caller, string stationId)
+    {
+        return caller.IsBackoffice ||
+               (caller.IsGridOperator &&
+                !string.IsNullOrWhiteSpace(caller.AssignedStationId) &&
+                string.Equals(caller.AssignedStationId, stationId, StringComparison.OrdinalIgnoreCase));
+    }
 
     /// <summary>
     /// Turns a calendar day plus a "HH:mm" wall clock string into the absolute instant

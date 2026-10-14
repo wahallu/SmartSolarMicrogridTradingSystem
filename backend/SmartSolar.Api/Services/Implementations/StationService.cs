@@ -2,20 +2,13 @@
  * File        : StationService.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
  * Module      : Services / Implementations
- * Description : Every operation that may be performed on a microgrid node lives
- *               here: listing and searching nodes, the map "nearby" projection
- *               whose great circle distances are computed on the SERVER, node
- *               registration, schedule and battery bay maintenance, and the
- *               activate / deactivate / delete life cycle. Rule R4 (a node that
- *               still holds future Pending or Approved reservations may not be
- *               deactivated) and rule R10 (only a Backoffice officer may create
- *               or modify a node) are enforced here and nowhere else, which is
- *               what keeps this a FAT service and the clients purely UI.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Description : Implements station management, schedules and nearby searches.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-12
  * =============================================================================
  */
 
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
@@ -223,6 +216,19 @@ public class StationService : IStationService
                 "Available battery slots cannot exceed the total number of battery slots.");
         }
 
+        var operatingHoursError = ValidateTimeWindow(
+            request.OperatingHours.OpenTime, request.OperatingHours.CloseTime);
+        if (operatingHoursError is not null)
+        {
+            return ServiceResult<StationDto>.Invalid(
+                "The default operating hours are invalid.",
+                ErrorCodes.ValidationFailed,
+                new Dictionary<string, List<string>>
+                {
+                    ["operatingHours"] = new List<string> { operatingHoursError }
+                });
+        }
+
         // A caller supplied schedule must be complete; otherwise a sensible open-all-week default is generated.
         List<DaySchedule> weeklySchedule;
         if (request.WeeklySchedule is { Count: > 0 })
@@ -311,6 +317,19 @@ public class StationService : IStationService
                 "Available battery slots cannot exceed the total number of battery slots.");
         }
 
+        var operatingHoursError = ValidateTimeWindow(
+            request.OperatingHours.OpenTime, request.OperatingHours.CloseTime);
+        if (operatingHoursError is not null)
+        {
+            return ServiceResult<StationDto>.Invalid(
+                "The default operating hours are invalid.",
+                ErrorCodes.ValidationFailed,
+                new Dictionary<string, List<string>>
+                {
+                    ["operatingHours"] = new List<string> { operatingHoursError }
+                });
+        }
+
         var newName = (request.Name ?? string.Empty).Trim();
 
         // StationCode is deliberately absent from UpdateStationRequest: it is the business key that slots and
@@ -395,6 +414,13 @@ public class StationService : IStationService
             return ServiceResult<StationDto>.NotFound("Microgrid node not found.");
         }
 
+        if (!CanManageOperationsAt(caller, id))
+        {
+            return ServiceResult<StationDto>.Forbidden(
+                "A Grid Operator may only change the schedule of their assigned microgrid node.",
+                ErrorCodes.Forbidden);
+        }
+
         var idFilter = Builders<SolarStationInfo>.Filter.Eq(s => s.Id, id);
         var existing = await _db.Stations.Find(idFilter).FirstOrDefaultAsync(ct);
         if (existing is null)
@@ -413,23 +439,22 @@ public class StationService : IStationService
 
         // On every day the node is open the closing time must genuinely come after the opening time.
         var timeErrors = new Dictionary<string, List<string>>();
+        var operatingHoursError = ValidateTimeWindow(
+            request.OperatingHours.OpenTime, request.OperatingHours.CloseTime);
+        if (operatingHoursError is not null)
+        {
+            timeErrors["operatingHours"] = new List<string> { operatingHoursError };
+        }
+
         foreach (var day in request.WeeklySchedule.Where(d => d.IsOpen))
         {
             var field = $"weeklySchedule[{day.DayOfWeek}]";
-            if (!TimeSpan.TryParse(day.OpenTime, out var open) || !TimeSpan.TryParse(day.CloseTime, out var close))
+            var dayError = ValidateTimeWindow(day.OpenTime, day.CloseTime);
+            if (dayError is not null)
             {
                 timeErrors[field] = new List<string>
                 {
-                    $"{DomainMapper.DayName(day.DayOfWeek)} has an opening or closing time that is not in HH:mm format."
-                };
-                continue;
-            }
-
-            if (close <= open)
-            {
-                timeErrors[field] = new List<string>
-                {
-                    $"{DomainMapper.DayName(day.DayOfWeek)} closing time must be later than its opening time."
+                    $"{DomainMapper.DayName(day.DayOfWeek)}: {dayError}"
                 };
             }
         }
@@ -488,6 +513,13 @@ public class StationService : IStationService
         if (!ObjectId.TryParse(id, out _))
         {
             return ServiceResult<StationDto>.NotFound("Microgrid node not found.");
+        }
+
+        if (!CanManageOperationsAt(caller, id))
+        {
+            return ServiceResult<StationDto>.Forbidden(
+                "A Grid Operator may only update availability at their assigned microgrid node.",
+                ErrorCodes.Forbidden);
         }
 
         var idFilter = Builders<SolarStationInfo>.Filter.Eq(s => s.Id, id);
@@ -751,6 +783,35 @@ public class StationService : IStationService
     {
         // Kept as a named helper so the Haversine formula above reads like the textbook version.
         return degrees * Math.PI / 180.0;
+    }
+
+    /// <summary>Checks whether a staff caller may maintain operational data for one node.</summary>
+    /// <param name="caller">Authenticated staff caller.</param>
+    /// <param name="stationId">Node whose schedule or availability would change.</param>
+    /// <returns>True for Backoffice, or for a Grid Operator assigned to this exact node.</returns>
+    private static bool CanManageOperationsAt(CurrentUser caller, string stationId)
+    {
+        return caller.IsBackoffice ||
+               (caller.IsGridOperator &&
+                !string.IsNullOrWhiteSpace(caller.AssignedStationId) &&
+                string.Equals(caller.AssignedStationId, stationId, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>Validates one same-day opening and closing time pair.</summary>
+    /// <param name="openTime">Opening time in HH:mm form.</param>
+    /// <param name="closeTime">Closing time in HH:mm form.</param>
+    /// <returns>A field error when invalid, otherwise null.</returns>
+    private static string? ValidateTimeWindow(string openTime, string closeTime)
+    {
+        const string format = @"hh\:mm";
+
+        if (!TimeSpan.TryParseExact(openTime, format, CultureInfo.InvariantCulture, out var open) ||
+            !TimeSpan.TryParseExact(closeTime, format, CultureInfo.InvariantCulture, out var close))
+        {
+            return "Opening and closing times must use HH:mm.";
+        }
+
+        return close <= open ? "Closing time must be later than opening time." : null;
     }
 
     /// <summary>Checks that a weekly schedule carries exactly seven distinct days numbered 0 to 6.</summary>

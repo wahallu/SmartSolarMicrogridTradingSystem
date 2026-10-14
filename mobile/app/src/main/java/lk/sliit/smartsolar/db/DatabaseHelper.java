@@ -1,29 +1,10 @@
-/*
- * =============================================================================
+/* =============================================================================
  * File        : DatabaseHelper.java
  * Project     : Smart Solar Microgrid Trading System - Android Client
- * Module      : db
- * Description : The local SQLite database required by the assignment. It is
- *               created and upgraded through android.database.sqlite.SQLiteOpenHelper
- *               directly - no Room, no ORM, no cross platform persistence layer.
- *
- *               WHAT IT IS FOR: this database is a session store and an offline
- *               cache, never the system of record. The MongoDB database behind
- *               the central Web API remains the single source of truth; SQLite
- *               holds the signed in user's session so the app can resume without
- *               a fresh login, plus the last known copy of the reference data so
- *               the dashboard and station list still render something useful when
- *               the phone briefly loses connectivity.
- *
- *               Tables:
- *                 session      - the signed in user and their JWT (single row)
- *                 stations     - cached microgrid nodes for the map and pickers
- *                 reservations - cached bookings for the list screens
- *                 sync_log     - an audit trail of what was cached and when
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
- * References  : SQLiteOpenHelper usage follows the Android developer guide at
- *               https://developer.android.com/training/data-storage/sqlite
+ * Module      : Db / Database Helper
+ * Description : Creates and upgrades the local SQLite tables.
+ * Author      : IT22049872 - Chathushka
+ * Created     : 2026-09-03
  * =============================================================================
  */
 

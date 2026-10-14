@@ -1,15 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/ReservationsPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The slot booking management screen. Lists energy reservations
- *               with the server side filter criteria the marking scheme asks
- *               for (search, status, node, date range) and offers the approve,
- *               reject, cancel and create actions. Every rule - the 12 hour
- *               notice, the 7 day window, slot capacity - is decided by the C#
- *               API; this screen only obeys the verdict it is handed.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Reservations
+ * Description : Lists, filters and manages energy reservations.
+ * Author      : IT22228062 - Akash
+ * Created     : 2026-09-17
  * =============================================================================
  */
 
@@ -372,7 +367,7 @@ export default function ReservationsPage() {
       {/* ---- Page header ---- */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Reservations</h1>
+          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Reservations</h1>
           <p className="mt-1 text-sm text-slate-500">
             Search, approve and manage energy slot bookings across every microgrid node.
           </p>
@@ -580,7 +575,7 @@ export default function ReservationsPage() {
                               {!isProsumer && isPending && (
                                 <button
                                   type="button"
-                                  className="btn-danger btn-sm"
+                                  className="btn-danger-quiet btn-sm"
                                   onClick={() => {
                                     setRejectTarget(reservation);
                                     setRejectReason('');

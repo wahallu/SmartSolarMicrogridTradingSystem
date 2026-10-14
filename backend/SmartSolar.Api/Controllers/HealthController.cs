@@ -1,17 +1,11 @@
 /* =============================================================================
  * File        : HealthController.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Controllers / Health
- * Description : The single anonymous "is the system up" endpoint, and the first
- *               request anyone - a marker, a load balancer or the Android
- *               application on start up - sends after a deployment. It pings
- *               MongoDB through MongoDbContext and reports the process identity
- *               (database name, environment, version) plus the server's UTC
- *               clock, so a client that sees odd booking behaviour can prove in
- *               one call whether the API is alive, which database it opened and
- *               whether its clock agrees with the caller's.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Controllers / Health Controller
+ * Description : Reports whether the API and its MongoDB connection are
+ *               healthy.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-19
  * =============================================================================
  */
 
@@ -66,9 +60,8 @@ public class HealthController : ControllerBase
     /// is answering but the database is not reachable.
     /// </returns>
     /// <remarks>
-    /// The two outcomes are deliberately distinguished. A 503 here means the web
-    /// tier is alive and the fault is downstream in MongoDB, which is a very
-    /// different diagnosis from no response at all (process or container down).
+    /// In short: a 503 points to MongoDB being down while the web tier is up;
+/// no response at all means the process or container itself is down.
     /// The payload is intentionally richer than a bare "OK": databaseName proves
     /// which database the configured connection string actually opened,
     /// environment proves which appsettings profile won, and utcNow lets a client
@@ -108,7 +101,8 @@ public class HealthController : ControllerBase
                     "DATABASE_UNAVAILABLE"));
         }
 
-        // 200 with the full envelope: clients branch on Success exactly as they do for every other endpoint.
+        // always returns 200 with the standard envelope, so clients just
+// check Success like they do everywhere else.
         return Ok(ApiResponse<object>.Ok(payload, "Smart Solar Microgrid API is running."));
     }
 }

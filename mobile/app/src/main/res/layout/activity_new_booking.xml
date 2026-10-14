@@ -83,7 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_xs"
-                        android:text="The date picker only suggests these days. The Smart Solar API enforces the rule and will reject any request outside the window."
+                        android:text="@string/booking_window_notice"
                         android:textAppearance="@style/TextAppearance.SmartSolar.Caption"
                         tools:ignore="HardcodedText" />
                 </LinearLayout>
@@ -199,7 +199,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/space_sm"
-                    android:text="No energy slots are available at this node for the chosen date. Try another date or another node."
+                    android:text="@string/new_booking_no_slots"
                     android:textAppearance="@style/TextAppearance.SmartSolar.Body"
                     tools:ignore="HardcodedText" />
             </LinearLayout>

@@ -1,15 +1,10 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/SlotsPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Energy booking slot management for Backoffice officers and Grid
- *               Operators. Lists a node's slots for a chosen day with server
- *               side filters, and offers create, bulk generate, edit, block and
- *               delete. This is the "manage booking slots" marking requirement.
- *               Availability (rule R8) and the delete guard are decided by the
- *               C# API - this screen only renders and obeys those verdicts.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Slots
+ * Description : Creates and maintains booking slots for a selected station.
+ * Author      : IT22207272 - Nisal
+ * Created     : 2026-09-10
  * =============================================================================
  */
 
@@ -135,7 +130,7 @@ function describeError(err: unknown): string {
 export default function SlotsPage() {
   // Grid Operators are pinned to their own node; Backoffice officers pick any.
   const toast = useToast();
-  const { user } = useAuth();
+  const { user, isGridOperator } = useAuth();
   const assignedStationId: string = user?.assignedStationId ?? '';
 
   /* ---- lookup data ---- */
@@ -187,8 +182,8 @@ export default function SlotsPage() {
     setReloadKey((current) => current + 1);
   }
 
-  // Loads the node list once, then pre-selects the operator's own node when they
-  // have one and otherwise the first node in the list.
+  // A Grid Operator receives only their assigned node. Backoffice officers keep
+  // the full selector because they are allowed to manage every node.
   useEffect(() => {
     let cancelled = false;
 
@@ -197,17 +192,36 @@ export default function SlotsPage() {
       setStationsError(null);
 
       try {
+        if (isGridOperator) {
+          if (assignedStationId === '') {
+            setStations([]);
+            setStationId('');
+            setStationsError('This Grid Operator account is not assigned to a microgrid node.');
+            return;
+          }
+
+          const assignedStation = await stationsApi.get(assignedStationId);
+          if (cancelled) return;
+
+          setStations([assignedStation]);
+          setStationId(assignedStation.id);
+          return;
+        }
+
         const paged = await stationsApi.list({ pageSize: 100 });
         if (cancelled) return;
 
         setStations(paged.items);
         const fallback = paged.items.length > 0 ? paged.items[0].id : '';
-        const preferred = paged.items.some((station) => station.id === assignedStationId)
-          ? assignedStationId
-          : fallback;
-        setStationId((current) => (current === '' ? preferred : current));
+        setStationId((current) =>
+          paged.items.some((station) => station.id === current) ? current : fallback,
+        );
       } catch (err) {
-        if (!cancelled) setStationsError(describeError(err));
+        if (!cancelled) {
+          setStations([]);
+          setStationId('');
+          setStationsError(describeError(err));
+        }
       } finally {
         if (!cancelled) setStationsLoading(false);
       }
@@ -217,7 +231,7 @@ export default function SlotsPage() {
     return () => {
       cancelled = true;
     };
-  }, [assignedStationId]);
+  }, [assignedStationId, isGridOperator]);
 
   // Re-runs whenever a filter or the page changes. The cancelled guard stops a
   // slow reply from writing into a component that has already been unmounted.
@@ -460,7 +474,7 @@ export default function SlotsPage() {
       {/* ---- Page header ---- */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">Booking slots</h1>
+          <h1 className="text-xl font-semibold text-slate-900 sm:text-2xl">Booking slots</h1>
           <p className="mt-1 text-sm text-slate-500">
             Publish and maintain the energy windows prosumers can reserve at each microgrid node.
           </p>
@@ -498,7 +512,7 @@ export default function SlotsPage() {
               id="slot-station"
               className="select"
               value={stationId}
-              disabled={stationsLoading || stations.length === 0}
+              disabled={stationsLoading || stations.length === 0 || isGridOperator}
               onChange={(event) => {
                 setStationId(event.target.value);
                 setPage(1);
@@ -720,7 +734,7 @@ export default function SlotsPage() {
 
                               <button
                                 type="button"
-                                className="btn-danger btn-sm"
+                                className="btn-danger-quiet btn-sm"
                                 onClick={() => setDeleteTarget(slot)}
                                 disabled={busy}
                               >
@@ -1311,7 +1325,7 @@ export default function SlotsPage() {
                 <input
                   id="generate-skip"
                   type="checkbox"
-                  className="mt-0.5 h-4 w-4 rounded border-slate-300 text-solar-500 focus:ring-solar-500"
+                  className="mt-0.5 h-4 w-4 rounded border-slate-300"
                   checked={generateForm.skipClosedDays}
                   onChange={(event) =>
                     setGenerateForm({ ...generateForm, skipClosedDays: event.target.checked })
@@ -1330,11 +1344,11 @@ export default function SlotsPage() {
             <p className="text-sm font-semibold text-grid-800">Generation finished</p>
             <div className="mt-2 flex flex-wrap gap-6">
               <div>
-                <p className="text-xl font-bold text-grid-800">{generateResult.created}</p>
+                <p className="text-xl font-semibold text-grid-800">{generateResult.created}</p>
                 <p className="text-xs font-medium text-grid-700">Slots created</p>
               </div>
               <div>
-                <p className="text-xl font-bold text-slate-700">{generateResult.skipped}</p>
+                <p className="text-xl font-semibold text-slate-700">{generateResult.skipped}</p>
                 <p className="text-xs font-medium text-slate-600">Skipped</p>
               </div>
             </div>

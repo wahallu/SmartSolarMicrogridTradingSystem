@@ -1,17 +1,19 @@
-/**
- * =============================================================================
- * File        : main.tsx
+/* =============================================================================
+ * File        : src/main.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : Browser entry point. Mounts the React tree into #root and pulls
- *               in the Tailwind stylesheet.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Application Bootstrap
+ * Description : Starts React and mounts the application in the browser.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-23
  * =============================================================================
  */
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import '@fontsource-variable/geist';
+import '@fontsource-variable/geist-mono';
 import App from './App';
+import './styles/tokens.css';
 import './index.css';
 
 // The root element is declared in index.html; a missing one is a wiring error.

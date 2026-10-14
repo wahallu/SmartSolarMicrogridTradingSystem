@@ -1,17 +1,10 @@
 /* =============================================================================
  * File        : Program.cs
  * Project     : Smart Solar Microgrid Trading System - Central Web API
- * Module      : Host / Composition root
- * Description : Application entry point. Binds configuration, registers every
- *               service in the dependency injection container, configures JWT
- *               bearer authentication and CORS for the two clients, wires the
- *               HTTP pipeline and runs the MongoDB index and seed routines once
- *               at start-up.
- *
- *               This is the only file that knows how the pieces fit together;
- *               the services themselves depend on interfaces only.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Application Bootstrap
+ * Description : Configures the API services, security, middleware and routes.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-23
  * =============================================================================
  */
 
@@ -86,8 +79,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 
-// Swagger doubles as the API documentation the report references, so it is
-// configured with a bearer scheme that lets a marker try the secured endpoints.
+// In short: Swagger is both the live API docs and the report's reference, so a
+// bearer scheme is added to let a marker call the secured endpoints.
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -146,7 +139,8 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 
-    // A rejected token must still produce the standard JSON envelope.
+    // even a rejected token gets the same standard JSON envelope as
+// everything else.
     options.Events = new JwtBearerEvents
     {
         OnChallenge = async context =>

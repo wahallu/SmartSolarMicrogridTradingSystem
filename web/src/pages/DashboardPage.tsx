@@ -1,29 +1,16 @@
-/**
- * =============================================================================
+/* =============================================================================
  * File        : src/pages/DashboardPage.tsx
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : The operational home screen for every signed in role. Every
- *               figure on it is read live from GET /reservations/dashboard, which
- *               is what the marking scheme asks for: the pending reservation
- *               count and the count of approved future reservations are server
- *               computed and simply displayed here, never derived in the browser.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Pages / Dashboard
+ * Description : Shows live booking totals and upcoming reservation activity.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-20
  * =============================================================================
  */
 
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import { Bar, BarChart, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import {
   ArrowRight,
   CalendarCheck,
@@ -39,7 +26,7 @@ import {
 import { reservationsApi } from '../api/services';
 import { ApiError } from '../api/client';
 import { useAuth } from '../context/AuthContext';
-import { EmptyState, ErrorState, PageLoader, StatCard } from '../components/ui';
+import { EmptyState, ErrorState, PageLoader, StatCard, StatGroup } from '../components/ui';
 import { formatDateTime, kwh, reservationBadgeClass } from '../utils/format';
 import type { Dashboard, UserRole } from '../types';
 
@@ -59,7 +46,7 @@ function greetingFor(hour: number): string {
   return 'Good evening';
 }
 
-/** Expands a role code into the wording used on screen. */
+/** turns a role code into its display label.. */
 function roleLabel(role: UserRole): string {
   // The API's enum names are not phrases to put in front of a user.
   switch (role) {
@@ -97,8 +84,8 @@ export default function DashboardPage() {
     user?.role === 'GridOperator' && user.assignedStationId ? user.assignedStationId : undefined;
 
   useEffect(() => {
-    // The guard stops a slow response from setting state after the user has
-    // navigated away from the dashboard.
+    // it prevents late responses from updating state after the user
+// has left the dashboard.
     let cancelled = false;
 
     async function load(): Promise<void> {
@@ -126,7 +113,8 @@ export default function DashboardPage() {
     };
   }, [scopedStationId, reloadIndex]);
 
-  // Re-runs the effect above; the spinner on the button follows `refreshing`.
+  // triggers the effect again, and the button's spinner reflects the
+// `refreshing` flag.
   const handleRefresh = useCallback(() => {
     setRefreshing(true);
     setReloadIndex((index) => index + 1);
@@ -144,31 +132,32 @@ export default function DashboardPage() {
   const showOperatorNode = user?.role === 'GridOperator' && user.assignedStationCode;
   const needsActivations = isBackoffice && dashboard.pendingProsumerActivations > 0;
 
-  // The four bars are the same numbers as the stat cards, only drawn.
+  // The four bars are the same numbers as the stat cards, only drawn. Each status
+  // keeps the colour of its badge so the chart reads without a legend.
   const chartData: StatusDatum[] = [
-    { name: 'Pending', count: dashboard.pendingReservations, fill: '#fbbf24' },
-    { name: 'Approved', count: dashboard.approvedFutureReservations, fill: '#f59e0b' },
-    { name: 'Completed', count: dashboard.completedReservations, fill: '#d97706' },
-    { name: 'Cancelled', count: dashboard.cancelledReservations, fill: '#b45309' },
+    { name: 'Pending', count: dashboard.pendingReservations, fill: 'rgb(var(--c-solar-500))' },
+    { name: 'Approved', count: dashboard.approvedFutureReservations, fill: 'rgb(var(--c-blue-500))' },
+    { name: 'Completed', count: dashboard.completedReservations, fill: 'rgb(var(--c-grid-600))' },
+    { name: 'Cancelled', count: dashboard.cancelledReservations, fill: 'rgb(var(--c-slate-400))' },
   ];
 
   return (
     <div className="animate-fade-in space-y-6">
       {/* ---- Greeting ---- */}
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl font-semibold text-slate-900">
             {greeting}, {firstNameOf(user?.fullName ?? '')}
           </h1>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-600">
             {user ? roleLabel(user.role) : 'Signed in'}
-            {showOperatorNode ? ` - node ${user?.assignedStationCode}` : ''}
+            {showOperatorNode ? `, node ${user?.assignedStationCode}` : ''}
           </p>
         </div>
 
         <button
           type="button"
-          className="btn-secondary self-start"
+          className="btn-secondary self-start sm:self-auto"
           onClick={handleRefresh}
           disabled={refreshing}
         >
@@ -179,15 +168,15 @@ export default function DashboardPage() {
 
       {/* ---- Back office call to action ---- */}
       {needsActivations && (
-        <div className="flex flex-col gap-3 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 rounded-xl border border-solar-300 bg-solar-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
-            <UserCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden="true" />
+            <UserCheck className="mt-0.5 h-5 w-5 shrink-0 text-solar-700" aria-hidden="true" />
             <div>
-              <p className="text-sm font-semibold text-amber-900">
+              <p className="text-sm font-semibold text-solar-900">
                 {dashboard.pendingProsumerActivations} prosumer account
                 {dashboard.pendingProsumerActivations === 1 ? '' : 's'} waiting for activation
               </p>
-              <p className="mt-0.5 text-sm text-amber-800">
+              <p className="mt-0.5 text-sm text-solar-800">
                 A new prosumer cannot book energy until the back office approves the account.
               </p>
             </div>
@@ -199,102 +188,113 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* ---- Reservation counters (read live from the API) ---- */}
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          label="Pending reservations"
-          value={dashboard.pendingReservations}
-          icon={Clock}
-          tone="solar"
-        />
-        <StatCard
-          label="Approved and upcoming"
-          value={dashboard.approvedFutureReservations}
-          icon={CalendarCheck}
-          tone="blue"
-        />
-        <StatCard
-          label="Completed transfers"
-          value={dashboard.completedReservations}
-          icon={CheckCircle2}
-          tone="grid"
-        />
-        <StatCard
-          label="Energy delivered"
-          value={kwh(dashboard.totalEnergyKwh)}
-          icon={Zap}
-          tone="grid"
-        />
-      </section>
-
-      {/* ---- Estate wide counters, meaningful to the back office only ---- */}
-      {isBackoffice && (
-        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* ---- The reservation totals, fetched live from the API. ---- */}
+      <section aria-label="Reservation totals" className="space-y-3">
+        <StatGroup>
           <StatCard
-            label="Pending activations"
-            value={dashboard.pendingProsumerActivations}
-            icon={UserCheck}
-            tone="red"
-          />
-          <StatCard
-            label="Registered prosumers"
-            value={dashboard.totalProsumers}
-            icon={Users}
-            tone="slate"
-          />
-          <StatCard
-            label="Active nodes"
-            value={`${dashboard.activeStations} / ${dashboard.totalStations}`}
-            icon={MapPin}
+            label="Pending reservations"
+            value={dashboard.pendingReservations}
+            icon={Clock}
             tone="solar"
           />
           <StatCard
-            label="Today's bookings"
-            value={dashboard.todayReservations}
-            icon={CalendarDays}
+            label="Approved and upcoming"
+            value={dashboard.approvedFutureReservations}
+            icon={CalendarCheck}
             tone="blue"
           />
-        </section>
-      )}
+          <StatCard
+            label="Completed transfers"
+            value={dashboard.completedReservations}
+            icon={CheckCircle2}
+            tone="grid"
+          />
+          <StatCard
+            label="Energy delivered"
+            value={kwh(dashboard.totalEnergyKwh)}
+            icon={Zap}
+            tone="grid"
+          />
+        </StatGroup>
 
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+        {/* ---- Estate-wide totals that only matter to the back office. ---- */}
+        {isBackoffice && (
+          <StatGroup>
+            <StatCard
+              label="Pending activations"
+              value={dashboard.pendingProsumerActivations}
+              icon={UserCheck}
+              tone={dashboard.pendingProsumerActivations > 0 ? 'red' : 'slate'}
+            />
+            <StatCard
+              label="Registered prosumers"
+              value={dashboard.totalProsumers}
+              icon={Users}
+              tone="slate"
+            />
+            <StatCard
+              label="Active nodes"
+              value={`${dashboard.activeStations} / ${dashboard.totalStations}`}
+              icon={MapPin}
+              tone="slate"
+            />
+            <StatCard
+              label="Today's bookings"
+              value={dashboard.todayReservations}
+              icon={CalendarDays}
+              tone="blue"
+            />
+          </StatGroup>
+        )}
+      </section>
+
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-5">
         {/* ---- Reservation mix ---- */}
-        <div className="card">
+        <div className="card xl:col-span-2">
           <div className="card-header">
             <h2 className="text-sm font-semibold text-slate-900">Reservation mix</h2>
-            <span className="text-xs font-medium text-slate-500">
+            <span className="text-xs font-medium tabular-nums text-slate-600">
               {dashboard.totalReservations} in total
             </span>
           </div>
           <div className="card-body">
-            <div className="h-72 w-full">
+            <div className="h-64 w-full" role="img" aria-label="Reservations by status">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
-                  <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" vertical={false} />
-                  <XAxis
-                    dataKey="name"
-                    tickLine={false}
-                    axisLine={false}
-                    tick={{ fontSize: 12, fill: '#64748b' }}
-                  />
+                <BarChart
+                  data={chartData}
+                  layout="vertical"
+                  margin={{ top: 4, right: 36, left: 0, bottom: 4 }}
+                  barCategoryGap={14}
+                >
+                  <XAxis type="number" hide allowDecimals={false} />
                   <YAxis
-                    allowDecimals={false}
+                    type="category"
+                    dataKey="name"
+                    width={84}
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fontSize: 12, fill: '#64748b' }}
+                    tick={{ fontSize: 13, fill: 'rgb(var(--c-slate-700))' }}
                   />
                   <Tooltip
-                    cursor={{ fill: '#fffbeb' }}
+                    cursor={{ fill: 'rgb(var(--c-slate-100))' }}
                     contentStyle={{
                       borderRadius: '0.5rem',
-                      border: '1px solid #e2e8f0',
+                      border: '1px solid rgb(var(--c-slate-200))',
+                      background: 'rgb(var(--c-white))',
+                      color: 'rgb(var(--c-slate-900))',
                       fontSize: '0.8125rem',
+                      boxShadow: 'none',
                     }}
                   />
-                  <Bar dataKey="count" name="Reservations" radius={[6, 6, 0, 0]} maxBarSize={72}>
+                  <Bar dataKey="count" name="Reservations" radius={[0, 4, 4, 0]} maxBarSize={28}>
                     {chartData.map((datum) => (
                       <Cell key={datum.name} fill={datum.fill} />
                     ))}
+                    <LabelList
+                      dataKey="count"
+                      position="right"
+                      style={{ fontSize: 13, fontWeight: 600, fill: 'rgb(var(--c-slate-900))' }}
+                    />
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
@@ -302,13 +302,13 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ---- Upcoming reservations ---- */}
-        <div className="card">
+        {/* Reservations that have not started yet. */}
+        <div className="card xl:col-span-3">
           <div className="card-header">
             <h2 className="text-sm font-semibold text-slate-900">Upcoming reservations</h2>
             <Link
               to="/reservations"
-              className="text-xs font-semibold text-solar-700 hover:text-solar-800"
+              className="text-xs font-semibold text-solar-800 underline-offset-4 hover:underline"
             >
               View all
             </Link>
@@ -340,7 +340,7 @@ export default function DashboardPage() {
                       <td>
                         <Link
                           to={`/reservations/${reservation.id}`}
-                          className="font-mono text-xs font-semibold text-solar-700 hover:text-solar-800"
+                          className="whitespace-nowrap font-mono text-xs font-medium text-solar-800 underline-offset-4 hover:underline"
                         >
                           {reservation.reservationNo}
                         </Link>
@@ -349,12 +349,11 @@ export default function DashboardPage() {
                         {reservation.prosumerName}
                       </td>
                       <td className="whitespace-nowrap">{reservation.stationCode}</td>
-                      <td className="whitespace-nowrap">
+                      <td className="whitespace-nowrap tabular-nums">
                         {formatDateTime(reservation.reservationStartUtc)}
                       </td>
                       <td>
-                        {/* The status pill is exactly what the server reported - the UI
-                            never recomputes a booking's state. */}
+                        {/* The UI never recomputes a booking's state. */}
                         <span className={reservationBadgeClass(reservation.status)}>
                           {reservation.status}
                         </span>

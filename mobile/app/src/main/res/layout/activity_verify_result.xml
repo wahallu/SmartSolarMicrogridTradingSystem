@@ -33,7 +33,7 @@
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
-    <!-- The amber application bar, wired up by BaseActivity.setupToolbar. -->
+    <!-- The flat application bar, wired up by BaseActivity.setupToolbar. -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_verify_result"
         style="@style/Widget.SmartSolar.Toolbar"
@@ -91,7 +91,7 @@
                         style="@style/TextAppearance.SmartSolar.SectionTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Booking verified"
+                        android:text="@string/verify_ok_title"
                         android:textColor="@color/grid_800" />
 
                     <TextView
@@ -99,7 +99,7 @@
                         style="@style/TextAppearance.SmartSolar.Caption"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="The server accepted this QR code. Confirm the details before finalising."
+                        android:text="@string/verify_ok_message"
                         android:textColor="@color/grid_700" />
                 </LinearLayout>
             </LinearLayout>

@@ -1,14 +1,10 @@
-/**
- * =============================================================================
- * File        : types/index.ts
+/* =============================================================================
+ * File        : src/types/index.ts
  * Project     : Smart Solar Microgrid Trading System - Web Application
- * Description : TypeScript mirrors of every DTO the C# Web API returns. These
- *               interfaces are the client side half of docs/API_CONTRACT.md - if
- *               a field is renamed on the server it must be renamed here too,
- *               and the compiler will then point at every screen that needs
- *               updating.
- * Author      : Smart Solar Microgrid Team - SE4040 Enterprise Application Dev
- * Created     : 2026-09-04
+ * Module      : Types / index
+ * Description : Defines the TypeScript models shared by API calls and screens.
+ * Author      : IT22246332 - Sandun
+ * Created     : 2026-09-21
  * =============================================================================
  */
 
@@ -33,7 +29,7 @@ export interface PagedResult<T> {
   hasNext: boolean;
 }
 
-/** The three principals recognised by the system. */
+
 export type UserRole = 'Backoffice' | 'GridOperator' | 'Prosumer';
 
 /** Life cycle state of any account. */
@@ -144,7 +140,7 @@ export interface Slot {
   bookedCount: number;
   remainingCapacity: number;
   status: SlotStatus;
-  /** Server verdict on rule R8 - obeyed by the UI, never recomputed. */
+  /** Server verdict on rule R8 -  */
   isBookable: boolean;
 }
 
@@ -201,7 +197,13 @@ export interface QrCode {
   issuedAt: string | null;
 }
 
-/** Live counters shown on the dashboards. */
+/**
+ * Live counters shown on the dashboards.
+ *
+ * These are the real-time figures surfaced on the dashboard screens, kept
+ * up to date as the underlying data changes so the user always sees the
+ * current state at a glance.
+ */
 export interface Dashboard {
   pendingReservations: number;
   /** The "count of approved future reservations" the marking scheme names. */

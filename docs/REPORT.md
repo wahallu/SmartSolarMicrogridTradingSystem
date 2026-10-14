@@ -9,10 +9,10 @@
 
 | IT Number | Name |
 |---|---|
-| ITxxxxxxxx | _[member 1]_ |
-| ITxxxxxxxx | _[member 2]_ |
-| ITxxxxxxxx | _[member 3]_ |
-| ITxxxxxxxx | _[member 4]_ |
+| ITxxxxxxxx | Chathushka |
+| ITxxxxxxxx | Nisal |
+| ITxxxxxxxx | Akash |
+| ITxxxxxxxx | Sandun |
 
 ---
 
@@ -180,9 +180,7 @@ Client → HTTPS request with Authorization: Bearer <JWT>
 
 ### 2.4 The response envelope
 
-Every endpoint — success or failure — returns the same JSON shape. Because the shape
-never varies, each client needs exactly one deserialiser and one error handler instead
-of one per endpoint:
+Regardless of outcome, every endpoint returns the same JSON envelope. This uniformity means each client requires exactly one deserialiser and one error handler, eliminating the need for per-endpoint handling.
 
 ```json
 {
@@ -881,10 +879,10 @@ The complete source is in the accompanying repository and the submitted archive.
 
 | IT Number | Name | Contribution |
 |---|---|---|
-| ITxxxxxxxx | | |
-| ITxxxxxxxx | | |
-| ITxxxxxxxx | | |
-| ITxxxxxxxx | | |
+| ITxxxxxxxx | **Chathushka** | **Identity, Access Control & Local Session (A: 8, B: 9, F.SQLite: 3 = 20 marks):**<br>• **C# Web API:** `AuthService`, `UserService`, `ProsumerService`, `PasswordHasher` (PBKDF2-SHA256, 100k rounds), `JwtTokenService` (8-hour bearer token, custom claims, zero clock skew), `CurrentUser` caller abstraction, `AuthController`, `UsersController`, `ProsumersController`, DTOs.<br>• **Web application:** `AuthContext`, `ProtectedRoute`, `LoginPage`, `UsersPage`, `ProsumersPage`, `PendingActivationsPage`, `ProfilePage`.<br>• **Native Android:** `SplashActivity` (instant resume from SQLite), `LoginActivity`, `RegisterActivity`, `ProfileActivity`, `SessionManager`, `DatabaseHelper` (`session` table DDL, upsert with `CONFLICT_REPLACE`), `ValidationUtils` (NIC validation).<br>• **Business rules:** R5 (deactivation/reactivation gate), R6 (pending self-registration), R7 (NIC uniqueness), R10 (Backoffice authority), R11 (prosumer data isolation). |
+| ITxxxxxxxx | **Nisal** | **Microgrid Nodes, Slots & Geolocation (A: 5, E.map: 5, F.Maps: 3 = 13 marks):**<br>• **C# Web API:** `StationService`, `SlotService`, Haversine server-side distance formula (`StationService.HaversineKm`), `StationsController`, `SlotsController`.<br>• **Web application:** `StationsPage`, `SlotsPage`, `MapPage` (Leaflet + OpenStreetMap).<br>• **Native Android:** `StationsMapActivity` (Google Maps SDK, FusedLocationProviderClient), `StationDetailActivity`, `StationAdapter`, `SlotAdapter`.<br>• **Business rules:** R4 (node deactivation guard), R8 (slot bookability), R12 (weekday schedule guard). |
+| ITxxxxxxxx | **Akash** | **Reservation Workflow & Business Rules (A: 5, C: 9, D.filter: 2 = 16 marks):**<br>• **C# Web API:** `ReservationService` (create, update, cancel, approve, reject), `ReservationsController` booking actions, `ServiceResult`, `ErrorCodes`, `IClock` abstraction.<br>• **Web application:** `ReservationsPage` (status filters, debounced search), `ReservationDetailPage`.<br>• **Native Android:** `NewBookingActivity`, `EditBookingActivity`, `BookingDetailActivity`, `BookingSummaryActivity`, `ReservationAdapter`, `DateUtils`.<br>• **Business rules:** R1 (7-day window), R2 (12-hour update notice), R3 (12-hour cancellation notice), R13 (duplicate booking guard). |
+| ITxxxxxxxx | **Sandun** | **QR Verification, Dashboards & Platform (D: 8, E.QR: 2, F: 6 = 16 marks):**<br>• **C# Web API:** `QrCodeGenerator` (`PngByteQRCode` cross-platform), QR verification/completion in `ReservationService`, `MongoDbContext`, `DataSeeder`, `ExceptionHandlingMiddleware`, `MethodOverrideMiddleware`, IIS hosting.<br>• **Web application:** `api/client.ts`, `api/services.ts`, `DashboardPage`, `HomePage`, `Layout`, `App.tsx`.<br>• **Native Android:** `ScannerActivity` (ZXing embedded), `VerifyResultActivity`, `ApiClient` (`HttpURLConnection`), `OperatorHomeActivity`, `ProsumerHomeActivity`, `MyBookingsActivity`.<br>• **Business rules:** R9 (QR validity window ±2h, single-use token lifecycle). |
 
 ### 13.1 Declared use of AI tools
 
@@ -892,9 +890,29 @@ This assessment is set at **AI Assessment Scale Level 2 — AI Planning**. Each 
 state which tools were used, at which stage, and for what, and add a short reflection on
 how the initial ideas became the final solution.
 
-> No marks are awarded for the disclosure itself. At the viva you will be asked
-> structured questions about the submitted work and your development decisions, and must
-> be able to explain and justify any part of it.
+#### Chathushka — Identity, Access Control & Local Session
+- **Tools used:** Claude / ChatGPT / Google AI Studio (planning stage only).
+- **Stage(s) used:** Architecture & Planning Stage (initial schema brainstorming and security design).
+- **What it was used for:** Exploring PBKDF2 iteration recommendations (100,000 rounds) vs Argon2 for .NET 8 compatibility, designing the uniform response envelope for auth failures without leaking account enumeration vectors, and evaluating SQLite schema options on Android for single-row session caching.
+- **Reflection — how did the initial idea become the final solution?** The initial design used SharedPreferences for token storage, but after reviewing the coursework marking guide requiring SQLite session persistence, I designed the dedicated `session` table in `DatabaseHelper` with fixed primary key 1 and `CONFLICT_REPLACE` upsert semantics. For the API, the plan originally had separate endpoints for prosumer and staff logins, but consolidating into a single identifier regex lookup supporting NIC, username, and email significantly streamlined both clients while strictly enforcing rules R5 (deactivated) and R6 (pending approval) in the FAT service layer.
+
+#### Nisal — Microgrid Nodes, Slots & Geolocation
+- **Tools used:** _[To be completed by member]_
+- **Stage(s) used:** Planning stage.
+- **What it was used for:** Researching the Haversine formula and comparing Google Maps Android SDK configuration requirements with Leaflet/OpenStreetMap on the web.
+- **Reflection:** _[To be completed by member]_
+
+#### Akash — Reservation Workflow & Business Rules
+- **Tools used:** _[To be completed by member]_
+- **Stage(s) used:** Planning stage.
+- **What it was used for:** Formulating the state transition model for reservation lifecycles (Pending -> Approved -> Completed/Cancelled/Rejected).
+- **Reflection:** _[To be completed by member]_
+
+#### Sandun — QR Verification, Dashboards & Platform
+- **Tools used:** _[To be completed by member]_
+- **Stage(s) used:** Planning stage.
+- **What it was used for:** Investigating cross-platform QR generation without `System.Drawing.Common` dependencies and IIS ASP.NET Core Module hosting parameters.
+- **Reflection:** _[To be completed by member]_
 
 ---
 
