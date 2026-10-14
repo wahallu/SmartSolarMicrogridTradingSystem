@@ -5,7 +5,6 @@
  * Description : Shows one reservation with its history, QR code and actions.
  * Author      : IT22228062 - Akash
  * Created     : 2026-09-17
- * Updated     : 2026-10-02 (Refinements for keyboard navigation & UI contrast)
  * =============================================================================
  */
 
@@ -37,12 +36,9 @@ import type { QrCode, Reservation, Slot, Station } from '../types';
 /** Which action is currently in flight, so only that button shows a spinner. */
 type ActionKey = 'approve' | 'reject' | 'edit' | 'cancel';
 
-/** Audit trail event stage identifiers. */
-export type TimelineStage = 'created' | 'approved' | 'completed' | 'cancelled' | 'rejected';
-
-/** One dot on the audit trail representing an immutable state transition. */
-export interface TimelineEntry {
-  key: TimelineStage;
+/** One dot on the audit trail. */
+interface TimelineEntry {
+  key: string;
   title: string;
   timestamp: string | null;
   detail: string | null;
@@ -58,14 +54,8 @@ function errorMessage(err: unknown): string {
   return err instanceof ApiError ? err.message : 'Something went wrong';
 }
 
-/** Props for DetailRow component rendering structured description list pairs. */
-interface DetailRowProps {
-  label: string;
-  value: ReactNode;
-}
-
-/** One label / value pair inside a details card with responsive flex layout. */
-function DetailRow({ label, value }: DetailRowProps) {
+/** One label / value pair inside a details card. */
+function DetailRow({ label, value }: { label: string; value: ReactNode }) {
   // Stacks on a phone and becomes two columns from the sm breakpoint upwards.
   return (
     <div className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-4">
@@ -77,11 +67,7 @@ function DetailRow({ label, value }: DetailRowProps) {
   );
 }
 
-/**
- * Collects whichever audit fields the server actually populated.
- * Records state transitions (Created -> Approved -> Completed/Cancelled/Rejected)
- * with associated actor and timestamp details for full auditability.
- */
+/** Collects whichever audit fields the server actually populated. */
 function buildTimeline(reservation: Reservation): TimelineEntry[] {
   // Nothing is inferred here - an entry appears only when the API sent its field.
   const entries: TimelineEntry[] = [
@@ -421,11 +407,7 @@ export default function ReservationDetailPage() {
     <div className="space-y-6">
       {/* ---- Header ---- */}
       <div className="space-y-3">
-        <Link
-          to="/reservations"
-          className="btn-ghost btn-sm w-fit"
-          aria-label="Back to reservations listing"
-        >
+        <Link to="/reservations" className="btn-ghost btn-sm w-fit">
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to reservations
         </Link>
@@ -438,8 +420,7 @@ export default function ReservationDetailPage() {
             <Badge status={reservation.status} kind="reservation" />
             {loading && <Spinner size="sm" />}
           </div>
-          {/* hoursUntilStart is calculated centrally by the API (DomainMapper);
-              the UI only renders the human-friendly phrasing, adhering to the FAT-service rule. */}
+          {/* hoursUntilStart is calculated by the API; this only phrases it. */}
           <p className="text-sm font-medium text-slate-500">
             Starts {describeHoursUntil(reservation.hoursUntilStart)}
           </p>
@@ -450,11 +431,9 @@ export default function ReservationDetailPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           {/* ---- Booking details ---- */}
-          <section className="card" aria-labelledby="booking-details-heading">
+          <section className="card">
             <div className="card-header">
-              <h2 id="booking-details-heading" className="text-base font-semibold text-slate-900">
-                Booking details
-              </h2>
+              <h2 className="text-base font-semibold text-slate-900">Booking details</h2>
             </div>
             <dl className="card-body space-y-3">
               <DetailRow
@@ -576,7 +555,6 @@ export default function ReservationDetailPage() {
                   onClick={openEdit}
                   disabled={!reservation.canModify || busy !== null}
                   title={reservation.canModify ? undefined : NOTICE_HINT}
-                  aria-disabled={!reservation.canModify || busy !== null}
                 >
                   <Pencil className="h-4 w-4" aria-hidden="true" />
                   Edit reservation
@@ -591,7 +569,6 @@ export default function ReservationDetailPage() {
                   onClick={() => setCancelOpen(true)}
                   disabled={!reservation.canCancel || busy !== null}
                   title={reservation.canCancel ? undefined : NOTICE_HINT}
-                  aria-disabled={!reservation.canCancel || busy !== null}
                 >
                   <Ban className="h-4 w-4" aria-hidden="true" />
                   Cancel reservation
@@ -635,19 +612,13 @@ export default function ReservationDetailPage() {
                   <div className="space-y-3">
                     <img
                       src={qrDataUri}
-                      alt={`Verification QR code for reservation ${qr.reservationNo}`}
-                      className="w-full max-w-[220px] mx-auto rounded border border-slate-100 p-1"
-                      loading="lazy"
+                      alt={`QR code for reservation ${qr.reservationNo}`}
+                      className="w-full max-w-[220px] mx-auto"
                     />
                     <p className="text-center font-mono text-sm font-semibold text-slate-800">
                       {qr.reservationNo}
                     </p>
-                    <a
-                      className="btn-secondary btn-sm w-full"
-                      href={qrDataUri}
-                      download={`${qr.reservationNo}.png`}
-                      aria-label={`Download QR code for reservation ${qr.reservationNo} as PNG`}
-                    >
+                    <a className="btn-secondary btn-sm w-full" href={qrDataUri} download={`${qr.reservationNo}.png`}>
                       <Download className="h-3.5 w-3.5" aria-hidden="true" />
                       Download PNG
                     </a>
@@ -790,7 +761,6 @@ export default function ReservationDetailPage() {
               type="number"
               min="0.1"
               step="0.1"
-              aria-label="Energy amount in kilowatt-hours"
               className={editError ? 'input input-error' : 'input'}
               value={editEnergy}
               onChange={(event) => {
@@ -801,11 +771,11 @@ export default function ReservationDetailPage() {
             {editError && <p className="field-error">{editError}</p>}
           </div>
 
-          {/* Business rule R2: Updates require >= 12 hours notice prior to slot start time.
-              The backend service checks this rule and the target slot capacity before committing changes. */}
+          {/* The dialog only assembles a request; the API re-checks rule R2 and the
+              slot capacity before it accepts the change. */}
           <p className="text-xs text-slate-500">
-            The service enforces rule R2 (12-hour notice period) and validates slot capacity again
-            when saving. Direct API requests that violate the notice window are rejected with HTTP 400.
+            The service checks the 12 hour notice period and the slot capacity again when this is
+            saved, and will refuse the change with its own message if either rule blocks it.
           </p>
         </div>
       </Modal>
@@ -860,4 +830,5 @@ export default function ReservationDetailPage() {
       </Modal>
     </div>
   );
+}
 }

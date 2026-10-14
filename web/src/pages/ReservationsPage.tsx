@@ -5,7 +5,6 @@
  * Description : Lists, filters and manages energy reservations.
  * Author      : IT22228062 - Akash
  * Created     : 2026-09-17
- * Updated     : 2026-10-02 (Refinements for keyboard navigation & UI contrast)
  * =============================================================================
  */
 
@@ -34,12 +33,6 @@ import type { PagedResult, Reservation, ReservationStatus, Slot, Station, User }
 /** How many rows the list requests per page. */
 const PAGE_SIZE = 10;
 
-/** How many milliseconds to debounce text input in the search field to avoid excessive API requests. */
-const SEARCH_DEBOUNCE_MS = 400;
-
-/** Default starting page for paginated reservation queries. */
-const INITIAL_PAGE = 1;
-
 /** The status values the filter offers, mirroring the ReservationStatus union. */
 const STATUS_OPTIONS: ReservationStatus[] = [
   'Pending',
@@ -51,21 +44,6 @@ const STATUS_OPTIONS: ReservationStatus[] = [
 
 /** Recorded on the booking so the audit trail shows where the cancellation came from. */
 const CANCEL_REASON = 'Cancelled by staff from the web console.';
-
-/**
- * Filter parameters supported by the reservation query endpoints.
- * Note: Under rule R11, prosumer callers are scoped server-side to their own NIC
- * regardless of query criteria, while staff have access to multi-node filters.
- */
-export interface ReservationFilterQuery {
-  search?: string;
-  status?: string;
-  stationId?: string;
-  fromDate?: string;
-  toDate?: string;
-  page: number;
-  pageSize: number;
-}
 
 /**
  * Wording shown on a disabled Cancel button. The UI never works out whether the
@@ -153,13 +131,13 @@ export default function ReservationsPage() {
   }
 
   // Debounces the search box: without this every keystroke would fire its own
-  // request. The cleanup clears the pending timer, so only the last SEARCH_DEBOUNCE_MS of
-  // typing reaches the API. The page returns to INITIAL_PAGE because the result set changes.
+  // request. The cleanup clears the pending timer, so only the last 400ms of
+  // typing reaches the API. The page returns to 1 because the result set changes.
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setSearch(searchInput.trim());
-      setPage(INITIAL_PAGE);
-    }, SEARCH_DEBOUNCE_MS);
+      setPage(1);
+    }, 400);
 
     return () => window.clearTimeout(timer);
   }, [searchInput]);
@@ -229,9 +207,7 @@ export default function ReservationsPage() {
 
     async function loadProsumers() {
       try {
-        // Enforce business rules R5 & R6: only prosumers with status 'Active'
-        // are eligible to hold slot reservations. Pending and Deactivated accounts
-        // are excluded by the backend query filter.
+        // Only Active accounts may hold a booking (rule R5 is enforced server side).
         const paged = await prosumersApi.list({ status: 'Active', pageSize: 100 });
         if (!cancelled) setProsumers(paged.items);
       } catch (err) {
@@ -258,9 +234,7 @@ export default function ReservationsPage() {
       setSlotsLoading(true);
       try {
         const available = await slotsApi.available(node);
-        // Under business rule R8, the backend DomainMapper flags isBookable = true only when:
-        // node is active, slot status is Available, remaining capacity > 0, and startUtc > now.
-        // The UI filters on isBookable without duplicating scheduling rules in the browser.
+        // isBookable is the server's rule R8 verdict; the UI only hides the rest.
         if (!cancelled) setSlots(available.filter((slot) => slot.isBookable));
       } catch (err) {
         if (!cancelled) {
@@ -278,7 +252,7 @@ export default function ReservationsPage() {
     };
   }, [createOpen, form.stationId]);
 
-  // Returns every filter criteria to its default value and resets view to INITIAL_PAGE.
+  // Returns every filter to its default and goes back to the first page.
   function clearFilters() {
     setSearchInput('');
     setSearch('');
@@ -286,11 +260,10 @@ export default function ReservationsPage() {
     setStationId('');
     setFromDate('');
     setToDate('');
-    setPage(INITIAL_PAGE);
+    setPage(1);
   }
 
-  // Approves a Pending booking; the API issues the cryptographically secure QR token
-  // and returns confirmation wording. Only Backoffice and GridOperator may invoke this.
+  // Approves a Pending booking; the API issues the QR token and returns the wording.
   async function handleApprove(reservation: Reservation) {
     setBusyId(reservation.id);
     try {
@@ -329,9 +302,8 @@ export default function ReservationsPage() {
     }
   }
 
-  // Cancels a booking. Business rule R3 (requiring >= 12 hours notice before slot
-  // start) is enforced strictly by the backend ReservationService. If the notice
-  // period has expired, the API returns HTTP 400 with error code RES_CANCEL_12H.
+  // Cancels a booking. The 12 hour rule R3 lives in the API: if it refuses with
+  // RES_CANCEL_12H the server's own sentence is shown, never a guess made here.
   async function handleCancel() {
     if (!cancelTarget) return;
 
@@ -500,15 +472,10 @@ export default function ReservationsPage() {
         </div>
 
         <div className="flex items-center justify-between gap-3 border-t border-slate-200 px-5 py-3">
-          <p className="text-xs font-medium text-slate-500" aria-live="polite">
+          <p className="text-xs font-medium text-slate-500">
             {result ? `${result.totalCount} matching reservation(s)` : 'Applying filters...'}
           </p>
-          <button
-            type="button"
-            className="btn-secondary btn-sm"
-            onClick={clearFilters}
-            disabled={!hasFilters}
-          >
+          <button type="button" className="btn-secondary btn-sm" onClick={clearFilters}>
             Clear filters
           </button>
         </div>
@@ -543,7 +510,7 @@ export default function ReservationsPage() {
           {!loading && rows.length > 0 && (
             <>
               <div className="overflow-x-auto">
-                <table className="table" aria-label="Energy slot reservations list">
+                <table className="table">
                   <thead>
                     <tr>
                       <th>Reservation No</th>
@@ -595,8 +562,6 @@ export default function ReservationsPage() {
                                   className="btn-success btn-sm"
                                   onClick={() => void handleApprove(reservation)}
                                   disabled={busy}
-                                  aria-label={`Approve reservation ${reservation.reservationNo}`}
-                                  aria-busy={busy}
                                 >
                                   {busy ? (
                                     <Spinner size="sm" />
@@ -715,13 +680,11 @@ export default function ReservationsPage() {
         }
       >
         <label className="label" htmlFor="reject-reason">
-          Reason <span className="text-red-500">*</span>
+          Reason
         </label>
         <textarea
           id="reject-reason"
           rows={3}
-          aria-required="true"
-          aria-invalid={rejectError !== null}
           className={rejectError ? 'input input-error' : 'input'}
           value={rejectReason}
           placeholder="Explain why this booking cannot be honoured."
@@ -740,7 +703,7 @@ export default function ReservationsPage() {
       <ConfirmDialog
         open={cancelTarget !== null}
         title="Cancel reservation"
-        message={`Cancel ${cancelTarget?.reservationNo ?? ''} for ${cancelTarget?.prosumerName ?? ''}? Note: Rule R3 requires at least 12 hours notice prior to slot start. Upon cancellation, the slot is released back to the node immediately.`}
+        message={`Cancel ${cancelTarget?.reservationNo ?? ''} for ${cancelTarget?.prosumerName ?? ''}? The slot is released back to the node straight away.`}
         confirmLabel="Cancel booking"
         tone="danger"
         busy={busyId !== null}
@@ -785,14 +748,13 @@ export default function ReservationsPage() {
           <div className="space-y-4">
             <div>
               <label className="label" htmlFor="create-prosumer">
-                Prosumer <span className="text-red-500">*</span>
+                Prosumer
               </label>
               <select
                 id="create-prosumer"
                 className="select"
                 value={form.prosumerNic}
                 required
-                aria-label="Select registered active prosumer"
                 onChange={(event) => setForm({ ...form, prosumerNic: event.target.value })}
               >
                 <option value="">Select an active prosumer</option>
@@ -834,14 +796,13 @@ export default function ReservationsPage() {
 
             <div>
               <label className="label" htmlFor="create-slot">
-                Energy slot <span className="text-red-500">*</span>
+                Energy slot
               </label>
               <select
                 id="create-slot"
                 className="select"
                 value={form.slotId}
                 required
-                aria-label="Select bookable energy slot"
                 disabled={form.stationId === '' || slotsLoading}
                 onChange={(event) => setForm({ ...form, slotId: event.target.value })}
               >
