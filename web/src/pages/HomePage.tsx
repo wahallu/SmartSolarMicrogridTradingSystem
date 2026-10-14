@@ -37,7 +37,6 @@ interface RolePanel {
 /** A seeded account a marker can sign in with straight away. */
 interface DemoAccount {
   identifier: string;
-  password: string;
   role: string;
   note: string;
 }
@@ -117,19 +116,16 @@ const ROLES: RolePanel[] = [
 const DEMO_ACCOUNTS: DemoAccount[] = [
   {
     identifier: 'admin',
-    password: 'Admin@123',
     role: 'Back office',
     note: 'Full administration',
   },
   {
     identifier: 'operator1',
-    password: 'Operator@123',
     role: 'Grid operator',
     note: 'Assigned to node STN-001',
   },
   {
     identifier: '200112301234',
-    password: 'Prosumer@123',
     role: 'Prosumer',
     note: 'Signs in with a NIC',
   },
@@ -416,10 +412,6 @@ export default function HomePage() {
                     <div className="flex gap-2">
                       <dt className="text-slate-600">ID</dt>
                       <dd className="font-medium text-slate-900">{account.identifier}</dd>
-                    </div>
-                    <div className="flex gap-2">
-                      <dt className="text-slate-600">Password</dt>
-                      <dd className="font-medium text-slate-900">{account.password}</dd>
                     </div>
                   </dl>
                 </li>

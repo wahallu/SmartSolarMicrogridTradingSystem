@@ -8,6 +8,14 @@ publish/
 node_modules/
 web/dist/
 .env.local
+.env
+.env.*
+!.env.example
+**/secrets.json
+**/appsettings.Local.json
+**/appsettings.Production.json
+*.db
+*.sqlite
 
 # ---- Android ----
 mobile/.gradle/

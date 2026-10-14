@@ -24,6 +24,28 @@ using SmartSolar.Api.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Coolify supplies environment variables directly. Map the deployment-friendly
+// names to the existing strongly typed configuration sections.
+var environmentMappings = new Dictionary<string, string?>
+{
+    ["MongoDbSettings:ConnectionString"] = builder.Configuration["MONGODB_URI"],
+    ["MongoDbSettings:DatabaseName"] = builder.Configuration["MONGODB_DATABASE"],
+    ["JwtSettings:Secret"] = builder.Configuration["JWT_SECRET"],
+    ["JwtSettings:Issuer"] = builder.Configuration["JWT_ISSUER"],
+    ["JwtSettings:Audience"] = builder.Configuration["JWT_AUDIENCE"],
+    ["JwtSettings:ExpiryHours"] = builder.Configuration["JWT_EXPIRY_HOURS"],
+    ["SeedData:Enabled"] = builder.Configuration["SEED_DATA_ENABLED"],
+    ["SeedData:DefaultPassword"] = builder.Configuration["SEED_DEFAULT_PASSWORD"]
+};
+
+foreach (var (key, value) in environmentMappings)
+{
+    if (!string.IsNullOrWhiteSpace(value))
+    {
+        builder.Configuration[key] = value;
+    }
+}
+
 // -----------------------------------------------------------------------------
 // 1. Configuration binding - a mis-spelled key now fails here rather than deep
 //    inside a service at request time.
@@ -33,13 +55,30 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSett
 builder.Services.Configure<BusinessRuleSettings>(builder.Configuration.GetSection(BusinessRuleSettings.SectionName));
 builder.Services.Configure<SeedDataSettings>(builder.Configuration.GetSection(SeedDataSettings.SectionName));
 
+var mongoSettings = builder.Configuration.GetSection(MongoDbSettings.SectionName).Get<MongoDbSettings>()
+    ?? new MongoDbSettings();
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>() ?? new JwtSettings();
+var seedDataSettings = builder.Configuration.GetSection(SeedDataSettings.SectionName).Get<SeedDataSettings>()
+    ?? new SeedDataSettings();
+
+if (string.IsNullOrWhiteSpace(mongoSettings.ConnectionString) ||
+    string.IsNullOrWhiteSpace(mongoSettings.DatabaseName))
+{
+    throw new InvalidOperationException(
+        "MongoDB configuration is missing. Set MONGODB_URI and MONGODB_DATABASE before starting the API.");
+}
 
 // The signing secret must be long enough for HMAC-SHA256; refuse to start otherwise.
 if (string.IsNullOrWhiteSpace(jwtSettings.Secret) || jwtSettings.Secret.Length < 32)
 {
     throw new InvalidOperationException(
-        "JwtSettings:Secret is missing or too short. Provide at least 32 characters in appsettings.json.");
+        "JWT configuration is missing or too short. Set JWT_SECRET to at least 32 characters before starting the API.");
+}
+
+if (seedDataSettings.Enabled && string.IsNullOrWhiteSpace(seedDataSettings.DefaultPassword))
+{
+    throw new InvalidOperationException(
+        "Seed data is enabled but no seed password was supplied. Set SEED_DEFAULT_PASSWORD or disable SEED_DATA_ENABLED.");
 }
 
 // -----------------------------------------------------------------------------

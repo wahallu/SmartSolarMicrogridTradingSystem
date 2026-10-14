@@ -33,14 +33,13 @@ interface LoginFailure {
 interface DemoAccount {
   label: string;
   identifier: string;
-  password: string;
 }
 
 /** The accounts the API's seeder creates, so a marker can sign in immediately. */
 const DEMO_ACCOUNTS: DemoAccount[] = [
-  { label: 'Back office', identifier: 'admin', password: 'Admin@123' },
-  { label: 'Grid operator', identifier: 'operator1', password: 'Operator@123' },
-  { label: 'Prosumer', identifier: '200112301234', password: 'Prosumer@123' },
+  { label: 'Back office', identifier: 'admin' },
+  { label: 'Grid operator', identifier: 'operator1' },
+  { label: 'Prosumer', identifier: '200112301234' },
 ];
 
 /**
@@ -118,7 +117,7 @@ export default function LoginPage() {
   // Copies a seeded account into the form so the portal can be demonstrated fast.
   function quickFill(account: DemoAccount) {
     setIdentifier(account.identifier);
-    setPassword(account.password);
+    setPassword('');
     setErrors({ identifier: null, password: null });
     setFailure(null);
   }

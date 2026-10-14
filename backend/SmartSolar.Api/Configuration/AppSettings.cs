@@ -18,8 +18,8 @@ public class MongoDbSettings
 {
     public const string SectionName = "MongoDbSettings";
 
-    public string ConnectionString { get; set; } = "mongodb://localhost:27017";
-    public string DatabaseName { get; set; } = "SmartSolarMicrogridDb";
+    public string ConnectionString { get; set; } = string.Empty;
+    public string DatabaseName { get; set; } = string.Empty;
 
     // The four collections required by the assignment specification.
     public string UsersCollection { get; set; } = "Users";
@@ -75,5 +75,6 @@ public class SeedDataSettings
 {
     public const string SectionName = "SeedData";
 
-    public bool Enabled { get; set; } = true;
+    public bool Enabled { get; set; } = false;
+    public string DefaultPassword { get; set; } = string.Empty;
 }

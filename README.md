@@ -277,6 +277,28 @@ Full detail, including every endpoint and DTO, is in
 `web.config` in the project root configures the ASP.NET Core Module (in-process
 hosting) and is copied automatically by `dotnet publish`.
 
+## Deploying the API to Coolify with Docker
+
+Use the repository root as the Coolify base directory. Select Dockerfile
+deployment, set the Dockerfile location to `/Dockerfile`, and expose container
+port `8080`. The image uses .NET 8 and listens on `0.0.0.0:8080`; Coolify's
+reverse proxy should terminate public HTTPS.
+
+Set these Coolify environment variables:
+
+* `MONGODB_URI` (required): MongoDB connection URL.
+* `MONGODB_DATABASE` (required): MongoDB database name.
+* `JWT_SECRET` (required): random secret of at least 32 characters.
+* `ASPNETCORE_ENVIRONMENT=Production` (recommended).
+* `ASPNETCORE_URLS=http://0.0.0.0:8080` (recommended).
+* `JWT_ISSUER`, `JWT_AUDIENCE` and `JWT_EXPIRY_HOURS` (optional overrides).
+* `SEED_DATA_ENABLED=false` (recommended). If enabled for a new demo
+  database, also set `SEED_DEFAULT_PASSWORD` as a Coolify secret.
+
+The API fails during startup with a non-sensitive error if MongoDB or JWT
+configuration is missing. The anonymous readiness endpoint is
+`/api/v1/health`.
+
 ---
 
 ## Video demonstration

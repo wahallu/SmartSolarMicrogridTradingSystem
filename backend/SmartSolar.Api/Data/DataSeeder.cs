@@ -11,9 +11,11 @@
 
 using System.Globalization;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SmartSolar.Api.Common;
+using SmartSolar.Api.Configuration;
 using SmartSolar.Api.Models;
 using SmartSolar.Api.Models.Enums;
 using SmartSolar.Api.Security;
@@ -49,6 +51,7 @@ public class DataSeeder
     private readonly IQrCodeGenerator _qr;
     private readonly IClock _clock;
     private readonly ILogger<DataSeeder> _logger;
+    private readonly SeedDataSettings _settings;
 
     /// <summary>Captures the data context, the hasher, the QR generator, the clock and the logger.</summary>
     /// <param name="db">Access to the four MongoDB collections.</param>
@@ -61,7 +64,8 @@ public class DataSeeder
         IPasswordHasher hasher,
         IQrCodeGenerator qr,
         IClock clock,
-        ILogger<DataSeeder> logger)
+        ILogger<DataSeeder> logger,
+        IOptions<SeedDataSettings> settings)
     {
         // Dependencies are captured once; nothing is resolved lazily so a mis-registration fails at boot.
         _db = db;
@@ -69,6 +73,7 @@ public class DataSeeder
         _qr = qr;
         _clock = clock;
         _logger = logger;
+        _settings = settings.Value;
     }
 
     // =========================================================================
@@ -187,11 +192,9 @@ public class DataSeeder
     // =========================================================================
 
     /// <summary>
-    /// Creates the four fixed staff logins and the six solar prosumers. The exact
-    /// user names and passwords are quoted in the project report and used during
-    /// the live demonstration, so they must not be altered. Every password is put
-    /// through the injected <see cref="IPasswordHasher"/> - no clear text and no
-    /// pre-computed hash is ever stored.
+    /// Creates the fixed demonstration accounts. The password is supplied through
+    /// configuration and every account is hashed independently; no clear text or
+    /// pre-computed hash is stored.
     /// </summary>
     /// <param name="ct">Cancellation token flowed through to MongoDB.</param>
     /// <returns>Number of account documents inserted by this run; zero when the collection was already populated.</returns>
@@ -217,29 +220,29 @@ public class DataSeeder
         var seeds = new List<UserSeed>
         {
             // ---- staff: the login name is the username --------------------------------------------------
-            new(null, "admin", "Admin@123", "System Administrator", "admin@smartsolar.lk", "0112345000",
+            new(null, "admin", "System Administrator", "admin@smartsolar.lk", "0112345000",
                 "No. 1, Sir Baron Jayatilaka Mawatha, Colombo 01", UserRole.Backoffice, AccountStatus.Active, null),
-            new(null, "backoffice2", "Back@123", "Nimali Fernando", "nimali@smartsolar.lk", "0112345001",
+            new(null, "backoffice2", "Nimali Fernando", "nimali@smartsolar.lk", "0112345001",
                 "No. 24, Ward Place, Colombo 07", UserRole.Backoffice, AccountStatus.Active, null),
-            new(null, "operator1", "Operator@123", "Kasun Perera", "kasun@smartsolar.lk", "0112345002",
+            new(null, "operator1", "Kasun Perera", "kasun@smartsolar.lk", "0112345002",
                 "No. 102, Kaduwela Road, Malabe", UserRole.GridOperator, AccountStatus.Active, "STN-001"),
-            new(null, "operator2", "Operator@123", "Dilani Silva", "dilani@smartsolar.lk", "0112345003",
+            new(null, "operator2", "Dilani Silva", "dilani@smartsolar.lk", "0112345003",
                 "No. 56, Galle Face Terrace, Colombo 03", UserRole.GridOperator, AccountStatus.Active, "STN-002"),
 
             // ---- prosumers: the NIC IS the login, so Username is a copy of Nic ---------------------------
-            new("200112301234", "200112301234", "Prosumer@123", "Sanduni Jayawardena", "sanduni@gmail.com", "0771234567",
+            new("200112301234", "200112301234", "Sanduni Jayawardena", "sanduni@gmail.com", "0771234567",
                 "No. 78, Temple Road, Maharagama", UserRole.Prosumer, AccountStatus.Active, null),
-            new("199845600789", "199845600789", "Prosumer@123", "Ruwan Bandara", "ruwan@gmail.com", "0719876543",
+            new("199845600789", "199845600789", "Ruwan Bandara", "ruwan@gmail.com", "0719876543",
                 "No. 15, Station Road, Dehiwala", UserRole.Prosumer, AccountStatus.Active, null),
             // Left Pending on purpose - this account is the subject of the pending-activation demonstration (R6).
-            new("200234501122", "200234501122", "Prosumer@123", "Chamodi Weerasinghe", "chamodi@gmail.com", "0763334455",
+            new("200234501122", "200234501122", "Chamodi Weerasinghe", "chamodi@gmail.com", "0763334455",
                 "No. 91, Hokandara Road, Thalawathugoda", UserRole.Prosumer, AccountStatus.Pending, null),
             // Left Deactivated on purpose - this account is the subject of the reactivation demonstration (R5).
-            new("199756403311", "199756403311", "Prosumer@123", "Tharindu Rajapaksa", "tharindu@gmail.com", "0755556677",
+            new("199756403311", "199756403311", "Tharindu Rajapaksa", "tharindu@gmail.com", "0755556677",
                 "No. 3, Lake Drive, Rajagiriya", UserRole.Prosumer, AccountStatus.Deactivated, null),
-            new("200356701199", "200356701199", "Prosumer@123", "Ishara Gunawardena", "ishara@gmail.com", "0741112233",
+            new("200356701199", "200356701199", "Ishara Gunawardena", "ishara@gmail.com", "0741112233",
                 "No. 140, Horana Road, Piliyandala", UserRole.Prosumer, AccountStatus.Active, null),
-            new("199912305566", "199912305566", "Prosumer@123", "Malith Senanayake", "malith@gmail.com", "0728889900",
+            new("199912305566", "199912305566", "Malith Senanayake", "malith@gmail.com", "0728889900",
                 "No. 62, Kandy Road, Kiribathgoda", UserRole.Prosumer, AccountStatus.Active, null)
         };
 
@@ -247,7 +250,7 @@ public class DataSeeder
         foreach (var seed in seeds)
         {
             // Each account receives its own random salt, exactly as a real registration would.
-            var (hash, salt) = _hasher.Hash(seed.Password);
+            var (hash, salt) = _hasher.Hash(_settings.DefaultPassword);
 
             var user = new User
             {
@@ -875,7 +878,6 @@ public class DataSeeder
     private sealed record UserSeed(
         string? Nic,
         string Username,
-        string Password,
         string FullName,
         string Email,
         string Phone,
