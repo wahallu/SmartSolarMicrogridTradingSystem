@@ -17,7 +17,7 @@ export const TOKEN_KEY = 'smartsolar.token';
 export const USER_KEY = 'smartsolar.user';
 
 /** Base URL of the Web API; overridable per environment through Vite. */
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5218/api/v1';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://cdpyk21iglrjj4bdyksuuogc.62.171.163.6.sslip.io/api/v1';
 
 /**
  * A failure returned by the API, carrying the server's stable error code so

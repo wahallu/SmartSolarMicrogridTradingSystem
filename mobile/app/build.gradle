@@ -37,8 +37,9 @@ def mapsApiKey = localProperties.getProperty('MAPS_API_KEY', '')
 
 // The API base URL is also configurable per build type so a debug build can point
 // at a developer machine while a release build points at the IIS deployment.
-def debugApiBaseUrl = localProperties.getProperty('API_BASE_URL_DEBUG', 'http://10.0.2.2:5218/api/v1/')
-def releaseApiBaseUrl = localProperties.getProperty('API_BASE_URL_RELEASE', 'http://10.0.2.2:5218/api/v1/')
+def deployedApiBaseUrl = 'http://cdpyk21iglrjj4bdyksuuogc.62.171.163.6.sslip.io/api/v1/'
+def debugApiBaseUrl = localProperties.getProperty('API_BASE_URL_DEBUG', deployedApiBaseUrl)
+def releaseApiBaseUrl = localProperties.getProperty('API_BASE_URL_RELEASE', deployedApiBaseUrl)
 
 android {
     namespace 'lk.sliit.smartsolar'

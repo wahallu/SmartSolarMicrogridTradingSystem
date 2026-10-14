@@ -15,8 +15,9 @@ import { Link } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
 import { ArrowRight, Check, ExternalLink, ScanLine, ShieldCheck, Sun } from 'lucide-react';
 
-/** the dev URL for the API's interactive docs. */
-const SWAGGER_URL = 'http://localhost:5218/swagger';
+/** API base URL supplied by the Vite environment. */
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://cdpyk21iglrjj4bdyksuuogc.62.171.163.6.sslip.io/api/v1';
+const SWAGGER_URL = `${API_BASE_URL.replace(/\/api\/v1\/?$/, '')}/swagger`;
 
 /** One step of the prosumer journey. The title is the action, so no numbering is needed. */
 interface JourneyStep {

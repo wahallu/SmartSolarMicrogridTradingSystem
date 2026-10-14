@@ -12,8 +12,8 @@ sign-in screen and the signed-in console for Backoffice officers and Grid Operat
 | `npm run lint` | Oxlint |
 | `npm run tokens` | Regenerate `src/styles/tokens.css` from the palette in `scripts/gen-tokens.mjs` |
 
-The API address comes from `VITE_API_BASE_URL` and defaults to
-`http://localhost:5218/api/v1`.
+The API address comes from `VITE_API_BASE_URL`, configured for the deployed
+backend in `web/.env`.
 
 ## Design system
 
