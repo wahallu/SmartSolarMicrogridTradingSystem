@@ -9,6 +9,7 @@
  */
 
 using Microsoft.Extensions.Options;
+using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using SmartSolar.Api.Configuration;
 using SmartSolar.Api.Models;
@@ -20,6 +21,19 @@ public class MongoDbContext
 {
     private readonly IMongoDatabase _database;
     private readonly ILogger<MongoDbContext> _logger;
+
+    /// <summary>
+    /// Several API builds share one Atlas database. Ignoring unknown fields lets a build
+    /// read documents written by a newer one (e.g. timeSemanticsVersion) instead of
+    /// failing every query with a deserialisation error.
+    /// </summary>
+    static MongoDbContext()
+    {
+        ConventionRegistry.Register(
+            "IgnoreExtraElements",
+            new ConventionPack { new IgnoreExtraElementsConvention(true) },
+            _ => true);
+    }
 
     /// <summary>Opens the client, resolves the database and caches the collections.</summary>
     public MongoDbContext(IOptions<MongoDbSettings> settings, ILogger<MongoDbContext> logger)
