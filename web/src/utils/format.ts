@@ -10,10 +10,11 @@
 
 import type { AccountStatus, ReservationStatus, SlotType, StationStatus } from '../types';
 
+const BUSINESS_TIME_ZONE = 'Asia/Colombo';
+
 /** Formats an ISO instant as "04 Sep 2026". */
 export function formatDate(iso: string | null | undefined): string {
-  // Every timestamp the API sends is UTC, so it is rendered as UTC for consistency
-  // with the slot times an operator reads at the node itself.
+  // API values are UTC instants; slot labels are Sri Lankan wall-clock values.
   if (!iso) return '-';
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return '-';
@@ -21,7 +22,7 @@ export function formatDate(iso: string | null | undefined): string {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-    timeZone: 'UTC',
+    timeZone: BUSINESS_TIME_ZONE,
   });
 }
 
@@ -35,11 +36,11 @@ export function formatDateTime(iso: string | null | undefined): string {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-    timeZone: 'UTC',
+    timeZone: BUSINESS_TIME_ZONE,
   })}, ${date.toLocaleTimeString('en-GB', {
     hour: '2-digit',
     minute: '2-digit',
-    timeZone: 'UTC',
+    timeZone: BUSINESS_TIME_ZONE,
   })}`;
 }
 
@@ -53,14 +54,22 @@ export function formatDayDate(iso: string | null | undefined): string {
     weekday: 'short',
     day: '2-digit',
     month: 'short',
-    timeZone: 'UTC',
+    timeZone: BUSINESS_TIME_ZONE,
   });
 }
 
 /** Converts a Date into the "yyyy-MM-dd" string the API's date filters expect. */
 export function toApiDate(date: Date): string {
   // Slot queries take a plain calendar day rather than a full instant.
-  return date.toISOString().slice(0, 10);
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: BUSINESS_TIME_ZONE,
+  }).formatToParts(date);
+  const value = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((part) => part.type === type)?.value ?? '';
+  return `${value('year')}-${value('month')}-${value('day')}`;
 }
 
 /** Today as "yyyy-MM-dd". */
@@ -72,9 +81,9 @@ export function today(): string {
 /** A date this many days from today as "yyyy-MM-dd". */
 export function daysFromToday(days: number): string {
   // Used to cap a date picker at the 7 day booking window the API enforces.
-  const date = new Date();
+  const date = new Date(`${today()}T00:00:00Z`);
   date.setUTCDate(date.getUTCDate() + days);
-  return toApiDate(date);
+  return date.toISOString().slice(0, 10);
 }
 
 /** Turns the server's hoursUntilStart figure into "in 3 days" style text. */

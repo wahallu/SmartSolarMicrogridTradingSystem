@@ -54,6 +54,10 @@ public class EnergyBookingSlot
     [BsonElement("endUtc")]
     public DateTime EndUtc { get; set; }
 
+    /// <summary>Version 1 means StartUtc/EndUtc were converted from Asia/Colombo wall time.</summary>
+    [BsonElement("timeSemanticsVersion")]
+    public int TimeSemanticsVersion { get; set; }
+
     [BsonElement("slotType")]
     [BsonRepresentation(BsonType.String)]
     public SlotType SlotType { get; set; } = SlotType.Charging;

@@ -192,9 +192,9 @@ open "Nearby nodes" once and tap **Allow** for location.
   above run it with `dotnet run`. If your team has a working IIS site on port
   8080, show that in the first shot and change the phone/web URLs to match. If not,
   do not claim IIS in the video. Say "for the demo I'm running it locally".
-* **Slot times are in UTC.** Sri Lanka is UTC+5:30, so a slot shown as `17:00`
-  starts at 22:30 on your laptop clock. Never say "the slot is at five o'clock"
-  without "UTC".
+* **Slot times use Sri Lankan local time.** The API converts `Asia/Colombo` wall
+  time to UTC for storage and rule checks, so a slot shown as `17:00` starts at
+  17:00 in Sri Lanka regardless of the phone or PC time-zone setting.
 
 ### 2.5 Recording setup (simplest way to get one clean video)
 
@@ -270,23 +270,22 @@ slots**. Set **From date** and **To date** to today, **Slot length (hours)** `2`
 > "Now I publish booking slots for this node. One call creates every window in the
 > range. The API checks the request and inserts them in a single batch."
 
-**How to choose the Start hour and End hour (times are in UTC):**
+**How to choose the Start hour and End hour (Sri Lankan local time):**
 
-1. Take the laptop clock and subtract 5 h 30 min. That is UTC now.
+1. Read the current Sri Lankan time.
 2. Round **up** to the next whole hour.
 3. Add 1. That is the **Start hour**.
 4. **End hour** = Start hour + 4. (That gives two 2-hour slots.)
 
-Example: laptop says 21:05 → UTC 15:35 → round up to 16 → +1 = **17**, so Start `17`,
-End `21`. The first slot starts about 1 h 25 min from now.
+Example: Sri Lankan time is 14:05 → round up to 15:00 → +1 = **16**, so Start `16`,
+End `20`. The first slot starts about 1 h 55 min from now.
 
 Why: **the first slot must start 1 to 2 hours from now.** That keeps the booking
 valid under R1 (it must be in the future), makes its QR code scannable straight
 away under R9 (the scan window opens 2 h before the start), and keeps it inside the
 12-hour notice period so shot 8 works. This rule always lands between 1 and 2 hours
-ahead. **Use today's date, and record during the day**: the API treats the date as
-a UTC date, so between midnight and 5:30 am on the laptop clock "today" is wrong.
-Once you have generated the slots, book within about 30 minutes.
+ahead. Use today's Sri Lankan calendar date. Once you have generated the slots,
+book within about 30 minutes.
 
 ### Shot 4 · Phone: register a prosumer (1:35 – 2:10) ⏱
 

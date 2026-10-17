@@ -596,6 +596,7 @@ public class ReservationService : IReservationService
                 SlotCode = slot.SlotCode,
                 ReservationStartUtc = slot.StartUtc,
                 ReservationEndUtc = slot.EndUtc,
+                TimeSemanticsVersion = BookingTime.CurrentSemanticsVersion,
                 StartTime = slot.StartTime,
                 EndTime = slot.EndTime,
                 SlotType = slot.SlotType,
@@ -770,6 +771,8 @@ public class ReservationService : IReservationService
                 updates.Add(updateBuilder.Set(r => r.StationName, newStation.Name));
                 updates.Add(updateBuilder.Set(r => r.ReservationStartUtc, newSlot.StartUtc));
                 updates.Add(updateBuilder.Set(r => r.ReservationEndUtc, newSlot.EndUtc));
+                updates.Add(updateBuilder.Set(
+                    r => r.TimeSemanticsVersion, BookingTime.CurrentSemanticsVersion));
                 updates.Add(updateBuilder.Set(r => r.StartTime, newSlot.StartTime));
                 updates.Add(updateBuilder.Set(r => r.EndTime, newSlot.EndTime));
                 updates.Add(updateBuilder.Set(r => r.SlotType, newSlot.SlotType));
@@ -1486,7 +1489,7 @@ public class ReservationService : IReservationService
         {
             return ServiceResult<EnergyReservation>.Invalid(
                 "This QR code is outside its valid scan window. It can only be used between " +
-                $"{FormatUtc(windowOpensUtc)} and {FormatUtc(windowClosesUtc)}.",
+                $"{BookingTime.FormatLocal(windowOpensUtc)} and {BookingTime.FormatLocal(windowClosesUtc)}.",
                 ErrorCodes.QrOutOfWindow);
         }
 
@@ -1632,12 +1635,4 @@ public class ReservationService : IReservationService
         return value.ToString("0.##", CultureInfo.InvariantCulture);
     }
 
-    /// <summary>Formats a UTC instant for a user facing message.</summary>
-    /// <param name="value">The instant to render.</param>
-    /// <returns>A readable "yyyy-MM-dd HH:mm UTC" string.</returns>
-    private static string FormatUtc(DateTime value)
-    {
-        // The suffix is spelled out so an operator reading the message on a phone is in no doubt about the zone.
-        return value.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture) + " UTC";
-    }
 }

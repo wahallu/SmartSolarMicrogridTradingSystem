@@ -335,9 +335,9 @@ public class DataSeeder
 
         var now = _clock.UtcNow;
 
-        // Every date is anchored to UTC midnight of today, read from the injected clock rather than
-        // DateTime.UtcNow, so the whole seeded calendar shifts together under a frozen test clock.
-        var today = DateTime.SpecifyKind(now.Date, DateTimeKind.Utc);
+        // SlotDate is a UTC-midnight calendar key, but "today" is the Sri Lankan
+        // business day. The injected clock keeps the entire seeded calendar testable.
+        var today = BookingTime.LocalCalendarDate(now);
 
         // The five two hour windows published at every node, in wall clock order.
         var windows = new[]
@@ -386,10 +386,10 @@ public class DataSeeder
                             SlotDate = slotDate,
                             StartTime = window.StartTime,
                             EndTime = window.EndTime,
-                            // SpecifyKind marks the composed instant as UTC so the driver stores it without
-                            // applying a local time zone conversion on the way into MongoDB.
-                            StartUtc = DateTime.SpecifyKind(slotDate.Date.AddHours(window.StartHour), DateTimeKind.Utc),
-                            EndUtc = DateTime.SpecifyKind(slotDate.Date.AddHours(window.EndHour), DateTimeKind.Utc),
+                            // Wall-clock labels are converted from Asia/Colombo to real UTC instants.
+                            StartUtc = BookingTime.ToUtc(slotDate, window.StartTime),
+                            EndUtc = BookingTime.ToUtc(slotDate, window.EndTime),
+                            TimeSemanticsVersion = BookingTime.CurrentSemanticsVersion,
                             // Types alternate slot by slot so every day offers both directions of energy trade.
                             SlotType = slotIndex % 2 == 0 ? SlotType.Charging : SlotType.DropOff,
                             EnergyCapacityKwh = SlotEnergyCapacityKwh,
@@ -445,7 +445,7 @@ public class DataSeeder
         }
 
         var now = _clock.UtcNow;
-        var today = DateTime.SpecifyKind(now.Date, DateTimeKind.Utc);
+        var today = BookingTime.LocalCalendarDate(now);
 
         // Only ACTIVE prosumers may hold bookings. The Pending account has never been able to log in and the
         // Deactivated one is blocked by rule R5, so giving either of them history would contradict the rules.
@@ -743,6 +743,7 @@ public class DataSeeder
             // later edit to the slot can never silently change what the prosumer believes they booked.
             ReservationStartUtc = slot.StartUtc,
             ReservationEndUtc = slot.EndUtc,
+            TimeSemanticsVersion = BookingTime.CurrentSemanticsVersion,
             StartTime = slot.StartTime,
             EndTime = slot.EndTime,
             SlotType = slot.SlotType,

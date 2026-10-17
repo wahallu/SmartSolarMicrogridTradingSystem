@@ -19,10 +19,11 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-/** Formats the API's UTC timestamps for display. */
+/** Parses API timestamps as UTC and displays them in the node's Sri Lankan time zone. */
 public final class DateUtils {
 
     private static final String TAG = "DateUtils";
+    private static final TimeZone BUSINESS_TIME_ZONE = TimeZone.getTimeZone("Asia/Colombo");
 
     /** Utility class - never instantiated. */
     private DateUtils() {
@@ -86,28 +87,28 @@ public final class DateUtils {
     public static String formatDate(String iso) {
         // Used on booking cards and history rows.
         Date date = parseIso(iso);
-        return date == null ? "" : utcFormat("dd MMM yyyy").format(date);
+        return date == null ? "" : businessFormat("dd MMM yyyy").format(date);
     }
 
     /** Formats an instant as "04 Sep 2026, 08:00". */
     public static String formatDateTime(String iso) {
         // Used wherever the exact slot start matters.
         Date date = parseIso(iso);
-        return date == null ? "" : utcFormat("dd MMM yyyy, HH:mm").format(date);
+        return date == null ? "" : businessFormat("dd MMM yyyy, HH:mm").format(date);
     }
 
     /** Formats an instant as "Fri, 04 Sep". */
     public static String formatDayDate(String iso) {
         // Used as a section header in the booking lists.
         Date date = parseIso(iso);
-        return date == null ? "" : utcFormat("EEE, dd MMM").format(date);
+        return date == null ? "" : businessFormat("EEE, dd MMM").format(date);
     }
 
     /** Formats an instant as "08:00". */
     public static String formatTime(String iso) {
         // Used when the date is already displayed elsewhere on the row.
         Date date = parseIso(iso);
-        return date == null ? "" : utcFormat("HH:mm").format(date);
+        return date == null ? "" : businessFormat("HH:mm").format(date);
     }
 
     /** Formats a Date as the "yyyy-MM-dd" string the API's date filters expect. */
@@ -116,7 +117,7 @@ public final class DateUtils {
         if (date == null) {
             return "";
         }
-        return utcFormat("yyyy-MM-dd").format(date);
+        return businessFormat("yyyy-MM-dd").format(date);
     }
 
     /** Today's date in the "yyyy-MM-dd" form the API expects. */
@@ -128,7 +129,7 @@ public final class DateUtils {
     /** A date this many days after today, in "yyyy-MM-dd" form. */
     public static String daysFromToday(int days) {
         // Used to cap the booking date picker at the 7 day window the API enforces.
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        Calendar calendar = Calendar.getInstance(BUSINESS_TIME_ZONE);
         calendar.add(Calendar.DAY_OF_YEAR, days);
         return toApiDate(calendar.getTime());
     }
@@ -163,12 +164,12 @@ public final class DateUtils {
         return "in " + days + (days == 1 ? " day" : " days");
     }
 
-    /** Builds a UTC SimpleDateFormat for the given pattern. */
-    private static SimpleDateFormat utcFormat(String pattern) {
-        // Every timestamp in this system is UTC, so the display is UTC too and stays
-        // consistent with the slot times the operator reads at the node.
+    /** Builds a formatter for the wall-clock time used at every microgrid node. */
+    private static SimpleDateFormat businessFormat(String pattern) {
+        // Instants travel over the API in UTC, but people enter and read slot times
+        // in Sri Lankan local time. Device and PC time-zone settings cannot change it.
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
-        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        format.setTimeZone(BUSINESS_TIME_ZONE);
         return format;
     }
 }

@@ -207,6 +207,7 @@ builder.Services.AddScoped<IStationService, StationService>();
 builder.Services.AddScoped<ISlotService, SlotService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<DataSeeder>();
+builder.Services.AddScoped<BookingTimeDataNormalizer>();
 
 var app = builder.Build();
 
@@ -250,7 +251,7 @@ app.MapGet("/", () => Results.Ok(new
 })).AllowAnonymous();
 
 // -----------------------------------------------------------------------------
-// 7. Start-up work: verify indexes, then seed the demonstration data set.
+// 7. Start-up work: verify indexes, repair legacy booking timestamps, then seed.
 // -----------------------------------------------------------------------------
 using (var scope = app.Services.CreateScope())
 {
@@ -260,6 +261,12 @@ using (var scope = app.Services.CreateScope())
     {
         var context = scope.ServiceProvider.GetRequiredService<MongoDbContext>();
         await context.EnsureIndexesAsync();
+
+        // Older builds stored an entered 08:00 Sri Lankan slot as 08:00Z instead
+        // of the real instant 02:30Z. Repair before seeding so any reservations
+        // newly derived from existing slots copy already-corrected instants.
+        var timeNormalizer = scope.ServiceProvider.GetRequiredService<BookingTimeDataNormalizer>();
+        await timeNormalizer.NormalizeAsync();
 
         var seedSettings = scope.ServiceProvider
             .GetRequiredService<Microsoft.Extensions.Options.IOptions<SeedDataSettings>>().Value;

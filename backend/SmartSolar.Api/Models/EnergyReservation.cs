@@ -59,6 +59,10 @@ public class EnergyReservation
     [BsonElement("reservationEndUtc")]
     public DateTime ReservationEndUtc { get; set; }
 
+    /// <summary>Version 1 means the reservation instants use real UTC semantics.</summary>
+    [BsonElement("timeSemanticsVersion")]
+    public int TimeSemanticsVersion { get; set; }
+
     [BsonElement("startTime")]
     public string StartTime { get; set; } = string.Empty;
 

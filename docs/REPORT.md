@@ -317,7 +317,9 @@ handles explicitly with an `UpdateManyAsync` over the affected slots and reserva
 
 Every persisted instant is UTC. Slot wall-clock times are stored twice: as
 `"HH:mm"` strings for display, and as absolute `startUtc` / `endUtc` values. **Every
-business rule compares only against the absolute values.** The service layer never calls
+operator-entered wall time is interpreted in `Asia/Colombo` and converted to UTC;
+the device or server time zone does not affect it. Every business rule compares only
+against the absolute values.** The service layer never calls
 `DateTime.UtcNow` directly inside a rule; it reads the current instant from an injected
 `IClock`, which makes each rule testable with a frozen clock.
 

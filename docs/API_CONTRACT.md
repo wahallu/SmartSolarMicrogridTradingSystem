@@ -97,8 +97,8 @@ Smart Solar Microgrid Trading System/
 | `stationCode` | string | denormalised |
 | `slotCode` | string | `S1`… unique **within** station+date |
 | `slotDate` | DateTime | UTC midnight of the slot's day |
-| `startTime` / `endTime` | string | `"08:00"` / `"10:00"` (node local wall-clock) |
-| `startUtc` / `endUtc` | DateTime | absolute instants — all rules use these |
+| `startTime` / `endTime` | string | `"08:00"` / `"10:00"` (`Asia/Colombo` wall-clock) |
+| `startUtc` / `endUtc` | DateTime | wall-clock values converted to absolute UTC instants — all rules use these |
 | `slotType` | string | `Charging` \| `DropOff` |
 | `energyCapacityKwh` | double | |
 | `batterySlotNumber` | int | which battery bay |

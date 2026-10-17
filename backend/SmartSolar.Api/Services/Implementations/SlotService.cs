@@ -355,6 +355,7 @@ public class SlotService : ISlotService
                 EndTime = request.EndTime,
                 StartUtc = ComposeUtc(slotDate, request.StartTime),
                 EndUtc = ComposeUtc(slotDate, request.EndTime),
+                TimeSemanticsVersion = BookingTime.CurrentSemanticsVersion,
                 SlotType = request.SlotType,
                 EnergyCapacityKwh = request.EnergyCapacityKwh,
                 BatterySlotNumber = request.BatterySlotNumber,
@@ -548,6 +549,7 @@ public class SlotService : ISlotService
                             EndTime = endTime,
                             StartUtc = ComposeUtc(slotDate, startTime),
                             EndUtc = ComposeUtc(slotDate, endTime),
+                            TimeSemanticsVersion = BookingTime.CurrentSemanticsVersion,
                             SlotType = request.SlotType,
                             EnergyCapacityKwh = request.EnergyCapacityKwh,
                             BatterySlotNumber = bay,
@@ -717,6 +719,7 @@ public class SlotService : ISlotService
                 .Set(s => s.EndTime, request.EndTime)
                 .Set(s => s.StartUtc, startUtc)
                 .Set(s => s.EndUtc, endUtc)
+                .Set(s => s.TimeSemanticsVersion, BookingTime.CurrentSemanticsVersion)
                 .Set(s => s.SlotType, request.SlotType)
                 .Set(s => s.EnergyCapacityKwh, request.EnergyCapacityKwh)
                 .Set(s => s.BatterySlotNumber, request.BatterySlotNumber)
@@ -908,10 +911,9 @@ public class SlotService : ISlotService
     /// Turns a calendar day plus a "HH:mm" wall clock string into the absolute instant
     /// the business rules compare against.
     ///
-    /// This project treats a microgrid node's wall clock time as UTC. Sri Lanka has one
-    /// fixed offset and no daylight saving, so introducing a time zone database would add
-    /// nothing but ambiguity to the demonstration - a slot labelled "08:00" is therefore
-    /// stored as 08:00 UTC and every client renders exactly what the operator typed.
+    /// Operators enter Sri Lankan wall-clock time. The value is converted through the
+    /// Asia/Colombo time zone before it is stored, so a slot labelled 08:00 is persisted
+    /// as the real instant 02:30 UTC rather than being incorrectly relabelled 08:00 UTC.
     ///
     /// StartUtc and EndUtc produced here are the ONLY fields any business rule ever
     /// compares against: the 7 day window (R1), the 12 hour notice (R2 / R3), the
@@ -923,9 +925,7 @@ public class SlotService : ISlotService
     /// <returns>The composed instant, explicitly tagged as UTC.</returns>
     private static DateTime ComposeUtc(DateTime slotDate, string hhmm)
     {
-        // SpecifyKind rather than ToUniversalTime: the value is already UTC by definition here,
-        // so converting it would shift it by the server's local offset.
-        return DateTime.SpecifyKind(slotDate.Date.Add(TimeSpan.Parse(hhmm)), DateTimeKind.Utc);
+        return BookingTime.ToUtc(slotDate, hhmm);
     }
 
     /// <summary>
